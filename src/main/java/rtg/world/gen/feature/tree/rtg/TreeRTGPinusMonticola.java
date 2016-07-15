@@ -3,10 +3,13 @@ package rtg.world.gen.feature.tree.rtg;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 
 /**
  * Pinus Monticola (California Mountain Pine)
@@ -47,8 +50,9 @@ public class TreeRTGPinusMonticola extends TreeRTG
     }
 
     @Override
-    public boolean generate(World p_76484_1_, Random p_76484_2_, int p_76484_3_, int p_76484_4_, int p_76484_5_)
+    public boolean generate(World p_76484_1_, Random p_76484_2_, BlockPos pos)
     {
+    	int p_76484_3_ = pos.getX(); int p_76484_4_ = pos.getY(); int p_76484_5_ = pos.getZ();
     	this.height = this.trunkSize + this.crownSize;
     	
         int l = p_76484_2_.nextInt(this.height * 2) + this.height * 2;
@@ -81,9 +85,12 @@ public class TreeRTGPinusMonticola extends TreeRTG
                     {
                         if (l1 >= 0 && l1 < 256)
                         {
-                            Block block = p_76484_1_.getBlock(i2, l1, j2);
+                        	BlockPos pos2 = new BlockPos(new BlockPos(i2, l1, j2));
+                            IBlockState block = p_76484_1_.getBlockState(pos2);
 
-                            if (!block.isAir(p_76484_1_, i2, l1, j2) && !block.isLeaves(p_76484_1_, i2, l1, j2) && block != Blocks.snow_layer)
+                            if (!block.getBlock().isAir(p_76484_1_.getBlockState(pos2), p_76484_1_, pos2)
+                            	&& !block.getBlock().isLeaves(p_76484_1_.getBlockState(pos2), p_76484_1_, pos2)
+                            	&& block != Blocks.SNOW_LAYER.getDefaultState())
                             {
                                 flag = false;
                             }
@@ -102,12 +109,13 @@ public class TreeRTGPinusMonticola extends TreeRTG
             }
             else
             {
-                Block block1 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
+            	BlockPos pos3 = new BlockPos(p_76484_3_, p_76484_4_ - 1, p_76484_5_);
+                IBlockState block1 = p_76484_1_.getBlockState(pos3);
 
-                boolean isSoil = block1.canSustainPlant(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, ForgeDirection.UP, (BlockSapling)Blocks.sapling);
+                boolean isSoil = block1.getBlock().canSustainPlant(p_76484_1_.getBlockState(pos3.up()), p_76484_1_, pos3, EnumFacing.UP, (IPlantable)block1);
                 if (isSoil && p_76484_4_ < 256 - l - 1)
                 {
-                    block1.onPlantGrow(p_76484_1_, p_76484_3_, p_76484_4_ - 1, p_76484_5_, p_76484_3_, p_76484_4_, p_76484_5_);
+                    block1.getBlock().onPlantGrow(p_76484_1_.getBlockState(pos3.down()), p_76484_1_, pos3.down(), pos3);
                     l3 = p_76484_2_.nextInt(2);
                     i2 = 1;
                     byte b0 = 0;
@@ -125,11 +133,13 @@ public class TreeRTGPinusMonticola extends TreeRTG
                             for (int j3 = p_76484_5_ - l3; j3 <= p_76484_5_ + l3; ++j3)
                             {
                                 int k3 = j3 - p_76484_5_;
+                                BlockPos pos5 = new BlockPos(l2, k2, j3);
 
-                                if ((Math.abs(i3) != l3 || Math.abs(k3) != l3 || l3 <= 0) && p_76484_1_.getBlock(l2, k2, j3).canBeReplacedByLeaves(p_76484_1_, l2, k2, j3))
+                                if ((Math.abs(i3) != l3 || Math.abs(k3) != l3 || l3 <= 0)
+                                	&& p_76484_1_.getBlockState(pos5).getBlock().canBeReplacedByLeaves(p_76484_1_.getBlockState(pos5), p_76484_1_, pos5))
                                 {
                                 	if (!this.noLeaves) {
-                                		p_76484_1_.setBlock(l2, k2, j3, this.leavesBlock, this.leavesMeta, this.generateFlag);
+                                		p_76484_1_.setBlockState(new BlockPos(l2, k2, j3), this.leavesBlock, this.generateFlag);
                                 	}
                                 }
                             }
@@ -156,11 +166,14 @@ public class TreeRTGPinusMonticola extends TreeRTG
 
                     for (k2 = 0; k2 < l - i4; ++k2)
                     {
-                        Block block2 = p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + k2, p_76484_5_);
-
-                        if (block2.isAir(p_76484_1_, p_76484_3_, p_76484_4_ + k2, p_76484_5_) || block2.isLeaves(p_76484_1_, p_76484_3_, p_76484_4_ + k2, p_76484_5_) || block2 == Blocks.snow_layer)
+                        IBlockState block2 = p_76484_1_.getBlockState(new BlockPos(p_76484_3_, p_76484_4_ + k2, p_76484_5_));
+                        BlockPos pos4 = new BlockPos(p_76484_3_, p_76484_4_ + k2, p_76484_5_);
+                        
+                        if (block2.getBlock().isAir(p_76484_1_.getBlockState(pos4), p_76484_1_, pos4)
+                        	|| block2.getBlock().isLeaves(p_76484_1_.getBlockState(pos4), p_76484_1_, pos4)
+                        	|| block2 == Blocks.SNOW_LAYER.getDefaultState())
                         {
-                        	p_76484_1_.setBlock(p_76484_3_, p_76484_4_ + k2, p_76484_5_, this.logBlock, this.logMeta, this.generateFlag);
+                        	p_76484_1_.setBlockState(new BlockPos(p_76484_3_, p_76484_4_ + k2, p_76484_5_), this.logBlock, this.generateFlag);
                         }
                     }
                     
@@ -188,17 +201,19 @@ public class TreeRTGPinusMonticola extends TreeRTG
     {
     	int[] pos = new int[]{0,0, 1,0, 0,1, -1,0, 0,-1};
     	int sh;
-    	IBlockState b;
+    	Block b;
     	for(int t = 0; t < (pos.length / 2); t++)
     	{    	
     		sh = rand.nextInt(4) + y - 2;
     		while(sh > y - 1)
     		{
-    			if(world.getBlock(x + pos[t * 2], sh, z + pos[t * 2 + 1]) == Blocks.grass)
+    			if(world.getBlockState(new BlockPos(x + pos[t * 2], sh, z + pos[t * 2 + 1])) == Blocks.GRASS.getDefaultState())
     			{
     				break;
     			}
-    			world.setBlock(x + pos[t * 2], sh, z + pos[t * 2 + 1], this.logBlock, this.logMeta + 12, this.generateFlag);
+    			
+    			//TODO: this.logMeta + 12 (meta)
+    			world.setBlockState(new BlockPos(x + pos[t * 2], sh, z + pos[t * 2 + 1]), this.logBlock, this.generateFlag);
     			sh--;
     		}
     	}
@@ -228,7 +243,7 @@ public class TreeRTGPinusMonticola extends TreeRTG
     	
     	for(int m = 1; m <= logLength; m++)
     	{
-        	world.setBlock(x + (dX * m), y, z + (dZ * m), this.logBlock, this.logMeta, this.generateFlag);
+        	world.setBlockState(new BlockPos(x + (dX * m), y, z + (dZ * m)), this.logBlock, this.generateFlag);
     	}
     }
 	
@@ -237,10 +252,10 @@ public class TreeRTGPinusMonticola extends TreeRTG
     {
 		if (!this.noLeaves) {
 		
-	    	Block b = world.getBlock(x, y, z);
-	    	if(b.getMaterial() == Material.air)
+	    	IBlockState b = world.getBlockState(new BlockPos(x, y, z));
+	    	if(b.getMaterial() == Material.AIR)
 	    	{
-	    		world.setBlock(x, y, z, this.leavesBlock, this.leavesMeta, this.generateFlag);
+	    		world.setBlockState(new BlockPos(x, y, z), this.leavesBlock, this.generateFlag);
 	    	}
 		}
     }

@@ -2,23 +2,26 @@ package rtg.world.gen.feature.tree.vanilla;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockVine;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMegaJungle;
 
 public class WorldGenMegaJungleRTG extends WorldGenMegaJungle
 {
-
+	//TODO: Unused.
 	public int minTrunkHeight;
 	public int maxTrunkHeight;
 	public int minCrownHeight;
 	public int maxCrownHeight;
 	
-    public WorldGenMegaJungleRTG(boolean doBlockNotify, int minTrunkHeight, int maxTrunkHeight, int minCrownHeight, int maxCrownHeight, int logMeta, int leavesMeta)
+    public WorldGenMegaJungleRTG(boolean doBlockNotify, int minTrunkHeight, int maxTrunkHeight, int minCrownHeight, int maxCrownHeight, IBlockState logBlock, IBlockState leavesBlock)
     {
-        this(doBlockNotify, minTrunkHeight, minCrownHeight, logMeta, leavesMeta);
+        this(doBlockNotify, minTrunkHeight, minCrownHeight, logBlock, leavesBlock);
         
     	this.minTrunkHeight = minTrunkHeight;
     	this.maxTrunkHeight = maxTrunkHeight;
@@ -26,9 +29,9 @@ public class WorldGenMegaJungleRTG extends WorldGenMegaJungle
     	this.maxCrownHeight = maxCrownHeight;
     }
     
-    public WorldGenMegaJungleRTG(boolean doBlockNotify, int trunkHeight, int crownHeight, int logMeta, int leavesMeta)
+    public WorldGenMegaJungleRTG(boolean doBlockNotify, int trunkHeight, int crownHeight, IBlockState logBlock, IBlockState leavesBlock)
     {
-        super(doBlockNotify, trunkHeight, crownHeight, logMeta, leavesMeta);
+        super(doBlockNotify, trunkHeight, crownHeight, logBlock, leavesBlock);
         
         this.minTrunkHeight = 0;
         this.maxTrunkHeight = 0;
@@ -36,135 +39,94 @@ public class WorldGenMegaJungleRTG extends WorldGenMegaJungle
         this.maxCrownHeight = 0;
     }
 
-    @Override
-    public boolean generate(World world, Random rand, int worldX, int worldY, int worldZ)
+    public boolean generate(World worldIn, Random rand, BlockPos position)
     {
-    	int trunkHeight = 0;
-    	if (this.minTrunkHeight > 0 && this.maxTrunkHeight > 0) {
-    		trunkHeight = this.minTrunkHeight + rand.nextInt(this.maxTrunkHeight - this.minTrunkHeight + 1);
-    	}
-    	
-    	int crownHeight = 0;
-    	if (this.minCrownHeight > 0 && this.maxCrownHeight > 0) {
-    		crownHeight = this.minCrownHeight + rand.nextInt(this.maxCrownHeight - this.minCrownHeight + 1);
-    	}
-    	
-        int treeHeight = trunkHeight + crownHeight;
+        int i = this.getHeight(rand);
 
-        if (!this.func_150537_a(world, rand, worldX, worldY, worldZ, treeHeight))
+        if (!this.ensureGrowable(worldIn, rand, position, i))
         {
             return false;
         }
         else
         {
+            this.createCrown(worldIn, position.up(i), 2);
 
-            this.func_150543_c(world, worldX, worldZ, worldY + treeHeight, 2, rand);
-
-            for (int i1 = worldY + treeHeight - 2 - rand.nextInt(4); i1 > worldY + treeHeight / 2; i1 -= 2 + rand.nextInt(4))
+            for (int j = position.getY() + i - 2 - rand.nextInt(4); j > position.getY() + i / 2; j -= 2 + rand.nextInt(4))
             {
-                float f = rand.nextFloat() * (float)Math.PI * 2.0F;
-                int j1 = worldX + (int)(0.5F + MathHelper.cos(f) * 4.0F);
-                int k1 = worldZ + (int)(0.5F + MathHelper.sin(f) * 4.0F);
-                int l1;
+                float f = rand.nextFloat() * ((float)Math.PI * 2F);
+                int k = position.getX() + (int)(0.5F + MathHelper.cos(f) * 4.0F);
+                int l = position.getZ() + (int)(0.5F + MathHelper.sin(f) * 4.0F);
 
-                for (l1 = 0; l1 < 5; ++l1)
+                for (int i1 = 0; i1 < 5; ++i1)
                 {
-                    j1 = worldX + (int)(1.5F + MathHelper.cos(f) * (float)l1);
-                    k1 = worldZ + (int)(1.5F + MathHelper.sin(f) * (float)l1);
-                    this.setBlockAndNotifyAdequately(world, j1, i1 - 3 + l1 / 2, k1, Blocks.log, this.woodMetadata);
+                    k = position.getX() + (int)(1.5F + MathHelper.cos(f) * (float)i1);
+                    l = position.getZ() + (int)(1.5F + MathHelper.sin(f) * (float)i1);
+                    this.setBlockAndNotifyAdequately(worldIn, new BlockPos(k, j - 3 + i1 / 2, l), this.woodMetadata);
                 }
 
-                l1 = 1 + rand.nextInt(2);
-                int i2 = i1;
+                int j2 = 1 + rand.nextInt(2);
+                int j1 = j;
 
-                for (int j2 = i1 - l1; j2 <= i2; ++j2)
+                for (int k1 = j - j2; k1 <= j1; ++k1)
                 {
-                    int k2 = j2 - i2;
-                    this.func_150534_b(world, j1, j2, k1, 1 - k2, rand);
+                    int l1 = k1 - j1;
+                    this.growLeavesLayer(worldIn, new BlockPos(k, k1, l), 1 - l1);
                 }
             }
 
-            for (int l2 = 0; l2 < treeHeight; ++l2)
+            for (int i2 = 0; i2 < i; ++i2)
             {
-                Block block = world.getBlock(worldX, worldY + l2, worldZ);
+                BlockPos blockpos = position.up(i2);
 
-                if (block.isAir(world, worldX, worldY + l2, worldZ) || block.isLeaves(world, worldX, worldY + l2, worldZ))
+                if (this.isAirLeaves(worldIn,blockpos))
                 {
-                    this.setBlockAndNotifyAdequately(world, worldX, worldY + l2, worldZ, Blocks.log, this.woodMetadata);
+                    this.setBlockAndNotifyAdequately(worldIn, blockpos, this.woodMetadata);
 
-                    if (l2 > 0)
+                    if (i2 > 0)
                     {
-                        if (rand.nextInt(3) > 0 && world.isAirBlock(worldX - 1, worldY + l2, worldZ))
-                        {
-                            this.setBlockAndNotifyAdequately(world, worldX - 1, worldY + l2, worldZ, Blocks.vine, 8);
-                        }
-
-                        if (rand.nextInt(3) > 0 && world.isAirBlock(worldX, worldY + l2, worldZ - 1))
-                        {
-                            this.setBlockAndNotifyAdequately(world, worldX, worldY + l2, worldZ - 1, Blocks.vine, 1);
-                        }
+                        this.placeVine(worldIn, rand, blockpos.west(), BlockVine.EAST);
+                        this.placeVine(worldIn, rand, blockpos.north(), BlockVine.SOUTH);
                     }
                 }
 
-                if (l2 < treeHeight - 1)
+                if (i2 < i - 1)
                 {
-                    block = world.getBlock(worldX + 1, worldY + l2, worldZ);
+                    BlockPos blockpos1 = blockpos.east();
 
-                    if (block.isAir(world, worldX + 1, worldY + l2, worldZ) || block.isLeaves(world, worldX + 1, worldY + l2, worldZ))
+                    if (this.isAirLeaves(worldIn,blockpos1))
                     {
-                        this.setBlockAndNotifyAdequately(world, worldX + 1, worldY + l2, worldZ, Blocks.log, this.woodMetadata);
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos1, this.woodMetadata);
 
-                        if (l2 > 0)
+                        if (i2 > 0)
                         {
-                            if (rand.nextInt(3) > 0 && world.isAirBlock(worldX + 2, worldY + l2, worldZ))
-                            {
-                                this.setBlockAndNotifyAdequately(world, worldX + 2, worldY + l2, worldZ, Blocks.vine, 2);
-                            }
-
-                            if (rand.nextInt(3) > 0 && world.isAirBlock(worldX + 1, worldY + l2, worldZ - 1))
-                            {
-                                this.setBlockAndNotifyAdequately(world, worldX + 1, worldY + l2, worldZ - 1, Blocks.vine, 1);
-                            }
+                            this.placeVine(worldIn, rand, blockpos1.east(), BlockVine.WEST);
+                            this.placeVine(worldIn, rand, blockpos1.north(), BlockVine.SOUTH);
                         }
                     }
 
-                    block = world.getBlock(worldX + 1, worldY + l2, worldZ + 1);
+                    BlockPos blockpos2 = blockpos.south().east();
 
-                    if (block.isAir(world, worldX + 1, worldY + l2, worldZ + 1) || block.isLeaves(world, worldX + 1, worldY + l2, worldZ + 1))
+                    if (this.isAirLeaves(worldIn,blockpos2))
                     {
-                        this.setBlockAndNotifyAdequately(world, worldX + 1, worldY + l2, worldZ + 1, Blocks.log, this.woodMetadata);
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos2, this.woodMetadata);
 
-                        if (l2 > 0)
+                        if (i2 > 0)
                         {
-                            if (rand.nextInt(3) > 0 && world.isAirBlock(worldX + 2, worldY + l2, worldZ + 1))
-                            {
-                                this.setBlockAndNotifyAdequately(world, worldX + 2, worldY + l2, worldZ + 1, Blocks.vine, 2);
-                            }
-
-                            if (rand.nextInt(3) > 0 && world.isAirBlock(worldX + 1, worldY + l2, worldZ + 2))
-                            {
-                                this.setBlockAndNotifyAdequately(world, worldX + 1, worldY + l2, worldZ + 2, Blocks.vine, 4);
-                            }
+                            this.placeVine(worldIn, rand, blockpos2.east(), BlockVine.WEST);
+                            this.placeVine(worldIn, rand, blockpos2.south(), BlockVine.NORTH);
                         }
                     }
 
-                    block = world.getBlock(worldX, worldY + l2, worldZ + 1);
+                    BlockPos blockpos3 = blockpos.south();
 
-                    if (block.isAir(world, worldX, worldY + l2, worldZ + 1) || block.isLeaves(world, worldX, worldY + l2, worldZ + 1))
+                    if (this.isAirLeaves(worldIn,blockpos3))
                     {
-                        this.setBlockAndNotifyAdequately(world, worldX, worldY + l2, worldZ + 1, Blocks.log, this.woodMetadata);
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos3, this.woodMetadata);
 
-                        if (l2 > 0)
+                        if (i2 > 0)
                         {
-                            if (rand.nextInt(3) > 0 && world.isAirBlock(worldX - 1, worldY + l2, worldZ + 1))
-                            {
-                                this.setBlockAndNotifyAdequately(world, worldX - 1, worldY + l2, worldZ + 1, Blocks.vine, 8);
-                            }
-
-                            if (rand.nextInt(3) > 0 && world.isAirBlock(worldX, worldY + l2, worldZ + 2))
-                            {
-                                this.setBlockAndNotifyAdequately(world, worldX, worldY + l2, worldZ + 2, Blocks.vine, 4);
-                            }
+                            this.placeVine(worldIn, rand, blockpos3.west(), BlockVine.EAST);
+                            this.placeVine(worldIn, rand, blockpos3.south(), BlockVine.NORTH);
                         }
                     }
                 }
@@ -174,14 +136,28 @@ public class WorldGenMegaJungleRTG extends WorldGenMegaJungle
         }
     }
 
-    private void func_150543_c(World p_150543_1_, int p_150543_2_, int p_150543_3_, int p_150543_4_, int p_150543_5_, Random p_150543_6_)
+    private void placeVine(World p_181632_1_, Random p_181632_2_, BlockPos p_181632_3_, PropertyBool p_181632_4_)
     {
-        byte b0 = 2;
-
-        for (int i1 = p_150543_4_ - b0; i1 <= p_150543_4_; ++i1)
+        if (p_181632_2_.nextInt(3) > 0 && p_181632_1_.isAirBlock(p_181632_3_))
         {
-            int j1 = i1 - p_150543_4_;
-            this.func_150535_a(p_150543_1_, p_150543_2_, i1, p_150543_3_, p_150543_5_ + 1 - j1, p_150543_6_);
+            this.setBlockAndNotifyAdequately(p_181632_1_, p_181632_3_, Blocks.VINE.getDefaultState().withProperty(p_181632_4_, Boolean.valueOf(true)));
         }
+    }
+
+    private void createCrown(World worldIn, BlockPos p_175930_2_, int p_175930_3_)
+    {
+        int i = 2;
+
+        for (int j = -i; j <= 0; ++j)
+        {
+            this.growLeavesLayerStrict(worldIn, p_175930_2_.up(j), p_175930_3_ + 1 - j);
+        }
+    }
+
+    //Helper macro
+    private boolean isAirLeaves(World world, BlockPos pos)
+    {
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock().isAir(state, world, pos) || state.getBlock().isLeaves(state, world, pos);
     }
 }

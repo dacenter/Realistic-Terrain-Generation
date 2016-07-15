@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -19,16 +20,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class TreeRTG extends WorldGenerator
 {
 
-	public Block logBlock;
-	public byte logMeta;
-	public Block leavesBlock;
-	public byte leavesMeta;
+	public IBlockState logBlock;
+	public IBlockState leavesBlock;
 	public int trunkSize;
 	public int crownSize;
 	public boolean noLeaves;
 	
-	public Block saplingBlock;
-	public byte saplingMeta;
+	public IBlockState saplingBlock;
 	
 	public int generateFlag;
 	
@@ -37,20 +35,17 @@ public class TreeRTG extends WorldGenerator
 	public int minCrownSize;
 	public int maxCrownSize;
 	
-	public ArrayList<Block> validGroundBlocks;
+	public ArrayList<IBlockState> validGroundBlocks;
 	
 	public TreeRTG()
 	{
-		this.logBlock = Blocks.log;
-		this.logMeta = (byte)0;
-		this.leavesBlock = Blocks.leaves;
-		this.leavesMeta = (byte)0;
+		this.logBlock = Blocks.LOG.getDefaultState();
+		this.leavesBlock = Blocks.LEAVES.getDefaultState();
 		this.trunkSize = 2;
 		this.crownSize = 4;
 		this.noLeaves = false;
 		
-		this.saplingBlock = Blocks.sapling;
-		this.saplingMeta = (byte)0;
+		this.saplingBlock = Blocks.SAPLING.getDefaultState();
 		
 		this.generateFlag = 2;
 		
@@ -61,11 +56,15 @@ public class TreeRTG extends WorldGenerator
 		this.maxCrownSize = 0;
 		
 		// Each tree sub-class is responsible for using (or not using) this list as part of its generation logic.
-		this.validGroundBlocks = new ArrayList<Block>(Arrays.asList(Blocks.grass, Blocks.dirt, Blocks.sand));
+		this.validGroundBlocks = new ArrayList<IBlockState>(Arrays.asList(
+			Blocks.GRASS.getDefaultState(),
+			Blocks.DIRT.getDefaultState(),
+			Blocks.SAND.getDefaultState()
+		));
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z)
+	public boolean generate(World world, Random rand, BlockPos pos)
 	{
 		return false;
 	}
@@ -92,27 +91,15 @@ public class TreeRTG extends WorldGenerator
 
     }
     
-	public TreeRTG setLogBlock(Block logBlock)
+	public TreeRTG setLogBlock(IBlockState logBlock)
 	{
 		this.logBlock = logBlock;
 		return this;
 	}
 	
-	public TreeRTG setLogMeta(byte logMeta)
-	{
-		this.logMeta = logMeta;
-		return this;
-	}
-	
-	public TreeRTG setLeavesBlock(Block leavesBlock)
+	public TreeRTG setLeavesBlock(IBlockState leavesBlock)
 	{
 		this.leavesBlock = leavesBlock;
-		return this;
-	}
-	
-	public TreeRTG setLeavesMeta(byte leavesMeta)
-	{
-		this.leavesMeta = leavesMeta;
 		return this;
 	}
 	

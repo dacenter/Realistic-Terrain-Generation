@@ -2,8 +2,9 @@ package rtg.world.gen.feature.tree.rtg;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -38,16 +39,14 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
 	{
 		super();
 		
-		this.setLogBlock(Blocks.log)
-			.setLogMeta((byte)0)
-			.setLeavesBlock(Blocks.leaves)
-			.setLeavesMeta((byte)0);
+		this.setLogBlock(Blocks.LOG.getStateFromMeta(0)).setLeavesBlock(Blocks.LEAVES.getStateFromMeta(0));
 	}
 
 	@Override
-    public boolean generate(World world, Random rand, int x, int y, int z)
+    public boolean generate(World world, Random rand, BlockPos pos)
     {
-    	Block cb;
+    	int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
+    	IBlockState cb;
     	boolean earth = false;
     	boolean water = false;
     	for(int c1 = -2; c1 <= 2; c1++)
@@ -56,12 +55,12 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
         	{
             	for(int c2 = -1; c2 <= 1; c2++)
             	{
-            		cb = world.getBlock(x + c1, y + c2, z + c3);
-            		if(cb == Blocks.grass)
+            		cb = world.getBlockState(new BlockPos(x + c1, y + c2, z + c3));
+            		if(cb == Blocks.GRASS.getDefaultState())
             		{
             			earth = true;
             		}
-            		else if(cb == Blocks.water)
+            		else if(cb == Blocks.WATER.getDefaultState())
             		{
             			water = true;
             		}
@@ -81,7 +80,7 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
     	
     	for(int i = 0; i < height; i++)
     	{
-    		world.setBlock(x, y + i, z, this.logBlock, this.logMeta, this.generateFlag);
+    		world.setBlockState(new BlockPos(x, y + i, z), this.logBlock, this.generateFlag);
     	}
     	createLeavesAroundBranch(world, rand, x, y + height, z, 3, 2);
     	createTrunk(world, rand, x, y, z);
@@ -108,7 +107,9 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
     			}
     			c++;
     			hd += 0.5f;
-    			world.setBlock(x + (int)(c * xd), y + (int)hd, z + (int)(c * yd), this.logBlock, this.logMeta + 12, this.generateFlag);
+    			
+    			//TODO: this.logMeta + 12
+    			world.setBlockState(new BlockPos(x + (int)(c * xd), y + (int)hd, z + (int)(c * yd)), this.logBlock, this.generateFlag);
     		}
     		createLeavesAroundBranch(world, rand, x + (int)(c * xd), y + (int)hd, z + (int)(c * yd), 2, 1);
     	}
@@ -129,11 +130,11 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
     				l = i*i + j*j + k*k;
     				if(l <= t)
     				{
-    					if(world.isAirBlock(x + i, y + j, z + k) && (l < t - c || rand.nextBoolean()))
+    					if(world.isAirBlock(new BlockPos(x + i, y + j, z + k)) && (l < t - c || rand.nextBoolean()))
     					{
     						if (!this.noLeaves) {
     							
-	    						world.setBlock(x + i, y + j, z + k, this.leavesBlock, this.leavesMeta, this.generateFlag);
+	    						world.setBlockState(new BlockPos(x + i, y + j, z + k), this.leavesBlock, this.generateFlag);
 	    						if(j < -(s - 2) && rand.nextInt(3) != 0)
 	    						{
 	    							createVine(world, rand, x + i, y + j, z + k);
@@ -151,11 +152,11 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
     	int r = rand.nextInt(3) + 5;
     	for(int i = -1; i > -r; i--)
     	{
-			if(!world.isAirBlock(x, y + i, z))
+			if(!world.isAirBlock(new BlockPos(x, y + i, z)))
 			{
 				break;
 			}
-			world.setBlock(x, y + i, z, this.leavesBlock, this.leavesMeta, this.generateFlag);
+			world.setBlockState(new BlockPos(x, y + i, z), this.leavesBlock, this.generateFlag);
     	}
     }
     
@@ -168,7 +169,8 @@ public class TreeRTGSalixMyrtilloides extends TreeRTG
     		sh = rand.nextInt(3) + y;
     		while(sh > y - 3)
     		{
-    			world.setBlock(x + pos[t * 2], sh, z + pos[t * 2 + 1], this.logBlock, this.logMeta + 12, this.generateFlag);
+    			//TODO: this.logMeta + 12 (meta)
+    			world.setBlockState(new BlockPos(x + pos[t * 2], sh, z + pos[t * 2 + 1]), this.logBlock, this.generateFlag);
     			sh--;
     		}
     	}

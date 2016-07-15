@@ -2,8 +2,9 @@ package rtg.world.gen.feature.tree.rtg;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -98,18 +99,17 @@ public class TreeRTGCocosNucifera extends TreeRTG
     {
     	super();
     	
-    	this.logBlock = Blocks.log;
-    	this.logMeta = (byte)3;
-    	this.leavesBlock = Blocks.leaves;
-    	this.leavesMeta = (byte)3;
+    	this.logBlock = Blocks.LOG.getStateFromMeta(3);
+    	this.leavesBlock = Blocks.LEAVES.getStateFromMeta(3);
     	this.trunkSize = 8;
     	this.crownSize = 7;
     }
 	
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) 
-	{
-    	Block b = world.getBlock(x, y - 1, z);
+	public boolean generate(World world, Random rand, BlockPos pos)
+    {
+    	int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
+    	IBlockState b = world.getBlockState(new BlockPos(x, y - 1, z));
     	boolean validGroundBlock = false;
     	
     	for (int i = 0; i < this.validGroundBlocks.size(); i++) {
@@ -149,7 +149,8 @@ public class TreeRTGCocosNucifera extends TreeRTG
 		
 		while(c < length)
 		{
-			world.setBlock((int)posX, (int)posY, (int)posZ, this.logBlock, this.logMeta + 12, this.generateFlag);
+			// TODO: this.logMeta + 12 (meta)
+			world.setBlockState(new BlockPos((int)posX, (int)posY, (int)posZ), this.logBlock, this.generateFlag);
 			
 			if(c < length - 3)
 			{
@@ -175,7 +176,7 @@ public class TreeRTGCocosNucifera extends TreeRTG
 			
 	    	for(int j = 0; j < leavesLength; j+=3)
 	    	{
-	    		world.setBlock(x + leaves[j], y + leaves[j + 1], z + leaves[j + 2], this.leavesBlock, this.leavesMeta, this.generateFlag);
+	    		world.setBlockState(new BlockPos(x + leaves[j], y + leaves[j + 1], z + leaves[j + 2]), this.leavesBlock, this.generateFlag);
 	    	}
 		}
     	
@@ -183,7 +184,8 @@ public class TreeRTGCocosNucifera extends TreeRTG
     	{
     		if(rand.nextInt(20) == 0)
     		{
-    			world.setBlock(x + cocoas[k + 1], y + cocoas[k + 2], z + cocoas[k + 3], Blocks.cocoa, cocoas[k + 0] + 8, this.generateFlag);
+    			//TODO: cocoas[k + 0] + 8 (meta)
+    			world.setBlockState(new BlockPos(x + cocoas[k + 1], y + cocoas[k + 2], z + cocoas[k + 3]), Blocks.COCOA.getDefaultState(), this.generateFlag);
     		}
     	}
     	

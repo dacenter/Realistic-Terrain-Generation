@@ -2,8 +2,9 @@ package rtg.world.gen.feature.tree.rtg;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import rtg.config.rtg.ConfigRTG;
 
@@ -91,15 +92,16 @@ public class TreeRTGCeibaRosea extends TreeRTG
 	}
 	
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) 
-	{
-    	Block b = world.getBlock(x, y - 1, z);
+	public boolean generate(World world, Random rand, BlockPos pos)
+    {
+    	int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
+    	IBlockState b = world.getBlockState(new BlockPos(x, y - 1, z));
     	
-        if (b == Blocks.sand && !ConfigRTG.allowTreesToGenerateOnSand) {
+        if (b == Blocks.SAND.getDefaultState() && !ConfigRTG.allowTreesToGenerateOnSand) {
             return false;
         }
     	
-    	if(b != Blocks.grass && b != Blocks.dirt && b != Blocks.sand)
+    	if(b != Blocks.GRASS.getDefaultState() && b != Blocks.DIRT.getDefaultState() && b != Blocks.SAND.getDefaultState())
     	{
     		return false;
     	}
@@ -115,8 +117,8 @@ public class TreeRTGCeibaRosea extends TreeRTG
     	
     	for(int i = y + this.trunkSize - 2; i < y + this.crownSize + 2; i++)
     	{
-    		world.setBlock(x, i, z, this.logBlock, this.logMeta, this.generateFlag);
-    		world.setBlock(x + 1, i, z + 1, this.logBlock, this.logMeta, this.generateFlag);
+    		world.setBlockState(new BlockPos(x, i, z), this.logBlock, this.generateFlag);
+    		world.setBlockState(new BlockPos(x + 1, i, z + 1), this.logBlock, this.generateFlag);
     	}
     	
     	float horDir, verDir;
@@ -170,7 +172,7 @@ public class TreeRTGCeibaRosea extends TreeRTG
 		
 		while(c < length)
 		{
-			world.setBlock((int)x, (int)y, (int)z, this.logBlock, this.logMeta, this.generateFlag);
+			world.setBlockState(new BlockPos((int)x, (int)y, (int)z), this.logBlock, this.generateFlag);
 			
 			x += velX;
 			y += velY;
@@ -195,14 +197,14 @@ public class TreeRTGCeibaRosea extends TreeRTG
 					{
 						if(dist < 1.3f)
 						{
-							world.setBlock((int)x + i, (int)y + j, (int)z + k, this.logBlock, this.logMeta, this.generateFlag);
+							world.setBlockState(new BlockPos((int)x + i, (int)y + j, (int)z + k), this.logBlock, this.generateFlag);
 						}
 						
 						if (!this.noLeaves) {
 							
-							if(world.isAirBlock((int)x + i, (int)y + j, (int)z + k))
+							if(world.isAirBlock(new BlockPos((int)x + i, (int)y + j, (int)z + k)))
 							{
-								world.setBlock((int)x + i, (int)y + j, (int)z + k, this.leavesBlock, this.leavesMeta, this.generateFlag);
+								world.setBlockState(new BlockPos((int)x + i, (int)y + j, (int)z + k), this.leavesBlock, this.generateFlag);
 							}
 						}
 					}

@@ -2,8 +2,9 @@ package rtg.world.gen.feature.tree.rtg;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import rtg.util.Logger;
@@ -54,17 +55,16 @@ public class TreeRTGQuercusRobur extends TreeRTG
     {
     	super();
     	
-		this.logBlock = Blocks.log;
-		this.logMeta = (byte)0;
-		this.leavesBlock = Blocks.leaves;
-		this.leavesMeta = (byte)0;
+		this.logBlock = Blocks.LOG.getStateFromMeta(0);
+		this.leavesBlock = Blocks.LEAVES.getStateFromMeta(0);
 		this.trunkSize = 4;
 		this.crownSize = 8;
     }
     
     @Override
-    public boolean generate(World world, Random rand, int x, int y, int z)
+    public boolean generate(World world, Random rand, BlockPos pos)
     {
+    	int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
         this.world = world;
         this.rand = rand;
         this.basePos[0] = x;
@@ -170,7 +170,7 @@ public class TreeRTGQuercusRobur extends TreeRTG
         System.arraycopy(var2, 0, this.leafNodes, 0, var4);
     }
 
-    void genTreeLayer(int par1, int par2, int par3, float par4, byte par5, Block par6)
+    void genTreeLayer(int par1, int par2, int par3, float par4, byte par5, IBlockState par6)
     {
         int var7 = (int)((double)par4 + 0.618D);
         byte var8 = otherCoordPairs[par5];
@@ -196,16 +196,16 @@ public class TreeRTGQuercusRobur extends TreeRTG
                 else
                 {
                     var11[var9] = var10[var9] + var13;
-                    Block var14 = this.world.getBlock(var11[0], var11[1], var11[2]);
+                    IBlockState var14 = this.world.getBlockState(new BlockPos(var11[0], var11[1], var11[2]));
 
-                    if (var14 != Blocks.air && var14 != this.leavesBlock)
+                    if (var14 != Blocks.AIR.getDefaultState() && var14 != this.leavesBlock)
                     {
                         ++var13;
                     }
                     else
                     {
                     	if (!this.noLeaves) {
-                    		this.world.setBlock(var11[0], var11[1], var11[2], par6, this.leavesMeta, this.generateFlag);
+                    		this.world.setBlockState(new BlockPos(var11[0], var11[1], var11[2]), par6, this.generateFlag);
                     	}
                     	
                         ++var13;
@@ -270,7 +270,7 @@ public class TreeRTGQuercusRobur extends TreeRTG
     /**
      * Places a line of the specified block ID into the world from the first coordinate triplet to the second.
      */
-    void placeBlockLine(int[] par1ArrayOfInteger, int[] par2ArrayOfInteger, Block par3)
+    void placeBlockLine(int[] par1ArrayOfInteger, int[] par2ArrayOfInteger, IBlockState par3)
     {
         int[] var4 = new int[] {0, 0, 0};
         byte var5 = 0;
@@ -328,7 +328,7 @@ public class TreeRTGQuercusRobur extends TreeRTG
                     }
                 }
 
-                this.world.setBlock(var14[0], var14[1], var14[2], par3, this.logMeta, this.generateFlag);
+                this.world.setBlockState(new BlockPos(var14[0], var14[1], var14[2]), par3, this.generateFlag);
             }
         }
     }
@@ -444,9 +444,9 @@ public class TreeRTGQuercusRobur extends TreeRTG
                 var13[var5] = par1ArrayOfInteger[var5] + var14;
                 var13[var6] = MathHelper.floor_double((double)par1ArrayOfInteger[var6] + (double)var14 * var9);
                 var13[var7] = MathHelper.floor_double((double)par1ArrayOfInteger[var7] + (double)var14 * var11);
-                Block var16 = this.world.getBlock(var13[0], var13[1], var13[2]);
+                IBlockState var16 = this.world.getBlockState(new BlockPos(var13[0], var13[1], var13[2]));
 
-                if (var16 != Blocks.air && var16 != this.leavesBlock)
+                if (var16 != Blocks.AIR && var16 != this.leavesBlock)
                 {
                     break;
                 }
@@ -464,21 +464,21 @@ public class TreeRTGQuercusRobur extends TreeRTG
     {
         int[] var1 = new int[] {this.basePos[0], this.basePos[1], this.basePos[2]};
         int[] var2 = new int[] {this.basePos[0], this.basePos[1] + this.heightLimit - 1, this.basePos[2]};
-        Block groundBlock = this.world.getBlock(this.basePos[0], this.basePos[1] - 1, this.basePos[2]);
+        IBlockState groundBlock = this.world.getBlockState(new BlockPos(this.basePos[0], this.basePos[1] - 1, this.basePos[2]));
 
-        if (groundBlock != Blocks.grass && groundBlock != Blocks.dirt)
+        if (groundBlock != Blocks.GRASS.getDefaultState() && groundBlock != Blocks.DIRT.getDefaultState())
         {
-        	Logger.debug("Invalid location. Ground block (%s) is not grass or dirt.", groundBlock.getLocalizedName());
+        	Logger.debug("Invalid location. Ground block (%s) is not grass or dirt.", groundBlock.getBlock().getLocalizedName());
             return false;
         }
         else
         {
-        	Block checkBlock;
+        	IBlockState checkBlock;
         	for (int h = this.basePos[1] + 1; h < (this.basePos[1] + this.heightLimit); h++) {
-        		checkBlock = this.world.getBlock(this.basePos[0], h, this.basePos[2]);
+        		checkBlock = this.world.getBlockState(new BlockPos(this.basePos[0], h, this.basePos[2]));
         		
-        		if (checkBlock != Blocks.air && checkBlock != this.leavesBlock) {
-        			Logger.debug("Invalid location (%d/%d/%d). Check block (%s) is not air or %s.", this.basePos[0], h, this.basePos[2], checkBlock.getLocalizedName(), this.leavesBlock.getLocalizedName());
+        		if (checkBlock != Blocks.AIR && checkBlock != this.leavesBlock) {
+        			Logger.debug("Invalid location (%d/%d/%d). Check block (%s) is not air or %s.", this.basePos[0], h, this.basePos[2], checkBlock.getBlock().getLocalizedName(), this.leavesBlock.getBlock().getLocalizedName());
         			return false;
         		}
         	}

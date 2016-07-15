@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -44,22 +45,21 @@ public class TreeRTGPiceaSitchensis extends TreeRTG
 	{
 		super();
 		
-		this.logBlock = Blocks.log;
-		this.logMeta = (byte)1;
-		this.leavesBlock = Blocks.leaves;
-		this.leavesMeta = (byte)1;
+		this.logBlock = Blocks.LOG.getStateFromMeta(1);
+		this.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
 		this.trunkSize = 8;
 		this.crownSize = 10;
 		this.noLeaves = false;
 		
-		this.validGroundBlocks = new ArrayList<Block>(Arrays.asList(Blocks.grass, Blocks.dirt));
+		this.validGroundBlocks = new ArrayList<IBlockState>(Arrays.asList(Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState()));
 	}
 
 	@Override
-    public boolean generate(World world, Random rand, int x, int y, int z)
+    public boolean generate(World world, Random rand, BlockPos pos)
     {
+    	int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
 
-    	Block g = world.getBlock(x, y - 1, z);
+    	IBlockState g = world.getBlockState(new BlockPos(x, y - 1, z));
     	boolean validGroundBlock = false;
     	
     	for (int i = 0; i < this.validGroundBlocks.size(); i++) {
@@ -76,7 +76,7 @@ public class TreeRTGPiceaSitchensis extends TreeRTG
     	int i;
     	for(i = 0; i < this.trunkSize; i++)
     	{
-    		world.setBlock(x, y, z, this.logBlock, this.logMeta, this.generateFlag);
+    		world.setBlockState(new BlockPos(x, y, z), this.logBlock, this.generateFlag);
     		y++;
     	}
 
@@ -109,7 +109,7 @@ public class TreeRTGPiceaSitchensis extends TreeRTG
 
         		buildBranch(world, rand, x, y, z, dX, dZ, i < this.crownSize - 10 ? 2 : 1, i < this.crownSize - 6 ? 2 : 1);
     		}
-    		world.setBlock(x, y, z, this.logBlock, this.logMeta, this.generateFlag);
+    		world.setBlockState(new BlockPos(x, y, z), this.logBlock, this.generateFlag);
 
     		if(i < this.crownSize - 2)
 	    	{
@@ -150,7 +150,7 @@ public class TreeRTGPiceaSitchensis extends TreeRTG
 
     	for(int m = 1; m <= logLength; m++)
     	{
-        	world.setBlock(x + (dX * m), y, z + (dZ * m), this.logBlock, this.logMeta, this.generateFlag);
+        	world.setBlockState(new BlockPos(x + (dX * m), y, z + (dZ * m)), this.logBlock, this.generateFlag);
     	}
     }
 	
@@ -159,10 +159,10 @@ public class TreeRTGPiceaSitchensis extends TreeRTG
     {
 		if (!this.noLeaves) {
 
-	    	Block b = world.getBlock(x, y, z);
-	    	if(b.getMaterial() == Material.air)
+	    	IBlockState b = world.getBlockState(new BlockPos(x, y, z));
+	    	if(b.getMaterial() == Material.AIR)
 	    	{
-	    		world.setBlock(x, y, z, this.leavesBlock, this.leavesMeta, this.generateFlag);
+	    		world.setBlockState(new BlockPos(x, y, z), this.leavesBlock, this.generateFlag);
 	    	}
 		}
     }
