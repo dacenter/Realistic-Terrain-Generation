@@ -4,6 +4,7 @@ import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.Ev
 
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -44,7 +45,7 @@ public class DecoReed extends DecoBase
 	{
 		if (this.allowed) {
 			
-			if (TerrainGen.decorate(world, rand, chunkX, chunkY, REED)) {
+			if (TerrainGen.decorate(world, rand, new BlockPos(chunkX, 0, chunkY), REED)) {
 	            
 				WorldGenerator worldGenerator = new WorldGenReed();
 				
@@ -56,7 +57,7 @@ public class DecoReed extends DecoBase
 	                int intZ = chunkY + rand.nextInt(16) + 8;
 
 	                if (intY <= this.maxY) {
-	                	worldGenerator.generate(world, rand, intX, intY, intZ);
+	                	worldGenerator.generate(world, rand, new BlockPos(intX, intY, intZ));
 	                }
 	            }
 	        }

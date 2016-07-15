@@ -5,6 +5,7 @@ import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.Ev
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -49,40 +50,40 @@ public class DecoGrassDoubleTallgrass extends DecoBase
 	{
 		if (this.allowed) {
 			
-			if (TerrainGen.decorate(world, rand, chunkX, chunkY, GRASS)) {
+			if (TerrainGen.decorate(world, rand, new BlockPos(chunkX, 0, chunkY), GRASS)) {
 	            
 				WorldGenerator worldGenerator = null;
             	if (this.doubleGrassChance > 0) {
             		
                 	if (rand.nextInt(this.doubleGrassChance) == 0) {
                 		
-                		worldGenerator = new WorldGenGrass(Blocks.double_plant, 2);
+                		worldGenerator = new WorldGenGrass(Blocks.DOUBLE_PLANT.getStateFromMeta(2));
                 	}
                 	else {
                 		
-                		worldGenerator = new WorldGenGrass(Blocks.tallgrass, 1);
+                		worldGenerator = new WorldGenGrass(Blocks.TALLGRASS.getStateFromMeta(1));
                 	}
             	}
             	else if (this.grassChance > 0) {
             		
                 	if (rand.nextInt(this.grassChance) == 0) {
                 		
-                		worldGenerator = new WorldGenGrass(Blocks.tallgrass, 1);
+                		worldGenerator = new WorldGenGrass(Blocks.TALLGRASS.getStateFromMeta(1));
                 	}
                 	else {
                 		
-                		worldGenerator = new WorldGenGrass(Blocks.double_plant, 2);
+                		worldGenerator = new WorldGenGrass(Blocks.DOUBLE_PLANT.getStateFromMeta(2));
                 	}
             	}
             	else {
             		
                 	if (rand.nextBoolean()) {
                 		
-                		worldGenerator = new WorldGenGrass(Blocks.tallgrass, 1);
+                		worldGenerator = new WorldGenGrass(Blocks.TALLGRASS.getStateFromMeta(1));
                 	}
                 	else {
                 		
-                		worldGenerator = new WorldGenGrass(Blocks.double_plant, 2);
+                		worldGenerator = new WorldGenGrass(Blocks.DOUBLE_PLANT.getStateFromMeta(2));
                 	}
             	}
 				
@@ -95,7 +96,7 @@ public class DecoGrassDoubleTallgrass extends DecoBase
 
 	                if (intY <= this.maxY) {
 	                	
-	                	worldGenerator.generate(world, rand, intX, intY, intZ);
+	                	worldGenerator.generate(world, rand, new BlockPos(intX, intY, intZ));
 	                }
 	            }
 	        }

@@ -23,10 +23,8 @@ public class DecoCollectionSmallPineTreesForest extends DecoCollectionBase
 	{
 
 		TreeRTG sitchensisTree = new TreeRTGPiceaSitchensis();
-    	sitchensisTree.logBlock = Blocks.log;
-    	sitchensisTree.logMeta = (byte)0;
-    	sitchensisTree.leavesBlock = Blocks.leaves;
-    	sitchensisTree.leavesMeta = (byte)0;
+    	sitchensisTree.logBlock = Blocks.LOG.getDefaultState();
+    	sitchensisTree.leavesBlock = Blocks.LEAVES.getDefaultState();
     	sitchensisTree.minTrunkSize = 4;
     	sitchensisTree.maxTrunkSize = 10;
     	sitchensisTree.minCrownSize = 6;
@@ -46,17 +44,10 @@ public class DecoCollectionSmallPineTreesForest extends DecoCollectionBase
 		vanillaTrees.treeCondition = TreeCondition.RANDOM_CHANCE;
 		vanillaTrees.treeConditionChance = 4;
 		vanillaTrees.maxY = 110;
-        
-        DecoTree vanillaForest = new DecoTree(new WorldGenForestRTG());
-		vanillaForest.strengthFactorForLoops = 3f;
-        vanillaForest.treeType = TreeType.WORLDGEN;
-		vanillaForest.treeCondition = TreeCondition.RANDOM_CHANCE;
-		vanillaForest.treeConditionChance = 4;
-		vanillaForest.maxY = 110;
 		
 		DecoHelperRandomSplit decoHelperRandomSplit = new DecoHelperRandomSplit();
-		decoHelperRandomSplit.decos = new DecoBase[]{oakPine, vanillaTrees, vanillaForest};
-		decoHelperRandomSplit.chances = new int[]{8, 4, 1};
+		decoHelperRandomSplit.decos = new DecoBase[]{oakPine, vanillaTrees};
+		decoHelperRandomSplit.chances = new int[]{8, 4};
 		this.addDeco(decoHelperRandomSplit);
 	}
 }

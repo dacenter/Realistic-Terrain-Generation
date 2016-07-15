@@ -4,6 +4,7 @@ import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.Ev
 
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -48,7 +49,7 @@ public class DecoJungleCacti extends DecoBase
 	{
 		if (this.allowed) {
 
-            if (TerrainGen.decorate(world, rand, chunkX, chunkY, CACTUS)) {
+			if (TerrainGen.decorate(world, rand, new BlockPos(chunkX, 0, chunkY), CACTUS)) {
                 
             	WorldGenerator worldGenerator = new WorldGenJungleCacti(this.sandOnly, rand.nextInt(this.extraHeight), this.sandMeta);
             	
@@ -60,7 +61,7 @@ public class DecoJungleCacti extends DecoBase
                     
                     if (intY < this.maxY)
                     {
-                    	worldGenerator.generate(world, rand, intX, intY, intZ);
+                    	worldGenerator.generate(world, rand, new BlockPos(intX, intY, intZ));
                     }
                 }
             }

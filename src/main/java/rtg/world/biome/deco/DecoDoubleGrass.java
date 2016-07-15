@@ -5,6 +5,7 @@ import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.Ev
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -45,9 +46,9 @@ public class DecoDoubleGrass extends DecoBase
 	{
 		if (this.allowed) {
 			
-			if (TerrainGen.decorate(world, rand, chunkX, chunkY, GRASS)) {
+			if (TerrainGen.decorate(world, rand, new BlockPos(chunkX, 0, chunkY), GRASS)) {
 	            
-				WorldGenerator worldGenerator = new WorldGenGrass(Blocks.double_plant, 2);
+				WorldGenerator worldGenerator = new WorldGenGrass(Blocks.DOUBLE_PLANT.getStateFromMeta(2));
 				
 				this.loops = (this.strengthFactor > 0f) ? (int)(this.strengthFactor * strength) : this.loops;
 	            for (int i = 0; i < this.loops; i++)
@@ -57,7 +58,7 @@ public class DecoDoubleGrass extends DecoBase
 	                int intZ = chunkY + rand.nextInt(16) + 8;
 
 	                if (intY <= this.maxY) {
-	                	worldGenerator.generate(world, rand, intX, intY, intZ);
+	                	worldGenerator.generate(world, rand, new BlockPos(intX, intY, intZ));
 	                }
 	            }
 	        }

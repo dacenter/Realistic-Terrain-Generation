@@ -27,10 +27,8 @@ public class DecoCollectionDesertRiver extends DecoCollectionBase
 		super();
 
 		TreeRTG acaciaTree = new TreeRTGAcaciaBucheri();
-		acaciaTree.logBlock = Blocks.log2;
-		acaciaTree.logMeta = (byte)0;
-		acaciaTree.leavesBlock = Blocks.leaves2;
-		acaciaTree.leavesMeta = (byte)0;
+		acaciaTree.logBlock = Blocks.LOG2.getDefaultState();
+		acaciaTree.leavesBlock = Blocks.LEAVES2.getDefaultState();
 		acaciaTree.minTrunkSize = 12;
 		acaciaTree.maxTrunkSize = 16;
 		this.addTree(acaciaTree);
@@ -47,10 +45,8 @@ public class DecoCollectionDesertRiver extends DecoCollectionBase
         DecoShrub acaciaShrub = new DecoShrub();
         acaciaShrub.checkRiver = true;
         acaciaShrub.minRiver = 0.86f;
-        acaciaShrub.logBlock = Blocks.log2;
-        acaciaShrub.logMeta = (byte)0;
-        acaciaShrub.leavesBlock = Blocks.leaves2;
-        acaciaShrub.leavesMeta = (byte)0;
+        acaciaShrub.logBlock = Blocks.LOG2.getDefaultState();
+        acaciaShrub.leavesBlock = Blocks.LEAVES2.getDefaultState();
         acaciaShrub.maxY = 65;
         acaciaShrub.loops = 1;
         acaciaShrub.chance = 1;

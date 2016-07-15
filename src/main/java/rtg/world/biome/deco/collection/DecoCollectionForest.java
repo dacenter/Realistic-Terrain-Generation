@@ -33,10 +33,8 @@ public class DecoCollectionForest extends DecoCollectionBase
         // Trees first.
 		
 		TreeRTG ponderosaOakTree = new TreeRTGPinusPonderosa();
-		ponderosaOakTree.logBlock = Blocks.log;
-		ponderosaOakTree.logMeta = (byte)0;
-		ponderosaOakTree.leavesBlock = Blocks.leaves;
-		ponderosaOakTree.leavesMeta = (byte)0;
+		ponderosaOakTree.logBlock = Blocks.LOG.getDefaultState();
+		ponderosaOakTree.leavesBlock = Blocks.LEAVES.getDefaultState();
 		ponderosaOakTree.minTrunkSize = 11;
 		ponderosaOakTree.maxTrunkSize = 21;
 		ponderosaOakTree.minCrownSize = 15;
@@ -55,10 +53,8 @@ public class DecoCollectionForest extends DecoCollectionBase
 		oakPines.maxY = 85;
 		
 		TreeRTG ponderosaSpruceTree = new TreeRTGPinusPonderosa();
-		ponderosaSpruceTree.logBlock = Blocks.log;
-		ponderosaSpruceTree.logMeta = (byte)1;
-		ponderosaSpruceTree.leavesBlock = Blocks.leaves;
-		ponderosaSpruceTree.leavesMeta = (byte)1;
+		ponderosaSpruceTree.logBlock = Blocks.LOG.getStateFromMeta(1);
+		ponderosaSpruceTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
 		ponderosaSpruceTree.minTrunkSize = 11;
 		ponderosaSpruceTree.maxTrunkSize = 21;
 		ponderosaSpruceTree.minCrownSize = 15;
@@ -82,10 +78,8 @@ public class DecoCollectionForest extends DecoCollectionBase
 		// More trees.
 		
 		TreeRTG sitchensisTree = new TreeRTGPiceaSitchensis();
-    	sitchensisTree.logBlock = Blocks.log;
-    	sitchensisTree.logMeta = (byte)0;
-    	sitchensisTree.leavesBlock = Blocks.leaves;
-    	sitchensisTree.leavesMeta = (byte)0;
+    	sitchensisTree.logBlock = Blocks.LOG.getDefaultState();
+    	sitchensisTree.leavesBlock = Blocks.LEAVES.getDefaultState();
     	sitchensisTree.minTrunkSize = 4;
     	sitchensisTree.maxTrunkSize = 10;
     	sitchensisTree.minCrownSize = 6;
@@ -106,18 +100,10 @@ public class DecoCollectionForest extends DecoCollectionBase
 		vanillaTrees.treeCondition = TreeCondition.RANDOM_CHANCE;
 		vanillaTrees.treeConditionChance = 4;
 		vanillaTrees.maxY = 120;
-
-        WorldGenerator vanillaForestDefinition = new WorldGenForestRTG();
-        DecoTree vanillaForest = new DecoTree(vanillaForestDefinition);
-		vanillaForest.strengthFactorForLoops = 3f;
-        vanillaForest.treeType = TreeType.WORLDGEN;
-		vanillaForest.treeCondition = TreeCondition.RANDOM_CHANCE;
-		vanillaForest.treeConditionChance = 4;
-		vanillaForest.maxY = 120;
 		
 		DecoHelperRandomSplit decoHelperRandomSplit = new DecoHelperRandomSplit();
-		decoHelperRandomSplit.decos = new DecoBase[]{oakPine, vanillaTrees, vanillaForest};
-		decoHelperRandomSplit.chances = new int[]{8, 4, 1};
+		decoHelperRandomSplit.decos = new DecoBase[]{oakPine, vanillaTrees};
+		decoHelperRandomSplit.chances = new int[]{8, 4};
 		this.addDeco(decoHelperRandomSplit);
 		
 		// Add some fallen trees of the oak and spruce variety (50/50 distribution).
@@ -125,10 +111,8 @@ public class DecoCollectionForest extends DecoCollectionBase
         decoFallenOak.logCondition = LogCondition.RANDOM_CHANCE;
         decoFallenOak.logConditionChance = 16;
         decoFallenOak.maxY = 80;
-        decoFallenOak.logBlock = Blocks.log;
-        decoFallenOak.logMeta = (byte)0;
-        decoFallenOak.leavesBlock = Blocks.leaves;
-        decoFallenOak.leavesMeta = (byte)-1;
+        decoFallenOak.logBlock = Blocks.LOG.getDefaultState();
+        decoFallenOak.leavesBlock = Blocks.LEAVES.getDefaultState();
         decoFallenOak.minSize = 3;
         decoFallenOak.maxSize = 6;
 		
@@ -136,10 +120,8 @@ public class DecoCollectionForest extends DecoCollectionBase
         decoFallenSpruce.logCondition = LogCondition.RANDOM_CHANCE;
         decoFallenSpruce.logConditionChance = 24;
         decoFallenSpruce.maxY = 80;
-        decoFallenSpruce.logBlock = Blocks.log;
-        decoFallenSpruce.logMeta = (byte)1;
-        decoFallenSpruce.leavesBlock = Blocks.leaves;
-        decoFallenSpruce.leavesMeta = (byte)-1;
+        decoFallenSpruce.logBlock = Blocks.LOG.getStateFromMeta(1);
+        decoFallenSpruce.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
         decoFallenSpruce.minSize = 3;
         decoFallenSpruce.maxSize = 6;
         
@@ -154,10 +136,8 @@ public class DecoCollectionForest extends DecoCollectionBase
 		this.addDeco(decoShrubOak);
 		
         DecoShrub decoShrubSpruce = new DecoShrub();
-        decoShrubSpruce.logBlock = Blocks.log;
-        decoShrubSpruce.logMeta = 1;
-        decoShrubSpruce.leavesBlock = Blocks.leaves;
-        decoShrubSpruce.leavesMeta = 1;
+        decoShrubSpruce.logBlock = Blocks.LOG.getStateFromMeta(1);
+        decoShrubSpruce.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
         decoShrubSpruce.maxY = 140;
         decoShrubSpruce.strengthFactor = 4f;
         decoShrubSpruce.chance = 9;

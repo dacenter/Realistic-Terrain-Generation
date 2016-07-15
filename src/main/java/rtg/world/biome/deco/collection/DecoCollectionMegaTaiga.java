@@ -25,10 +25,8 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase
 		super();
 		
 		TreeRTG sitchensisTree = new TreeRTGPiceaSitchensis();
-		sitchensisTree.logBlock = Blocks.log;
-		sitchensisTree.logMeta = (byte)1;
-		sitchensisTree.leavesBlock = Blocks.leaves;
-		sitchensisTree.leavesMeta = (byte)1;
+		sitchensisTree.logBlock = Blocks.LOG.getStateFromMeta(1);
+		sitchensisTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
 		sitchensisTree.minTrunkSize = 4;
 		sitchensisTree.maxTrunkSize = 9;
 		sitchensisTree.minCrownSize = 5;
@@ -44,10 +42,8 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase
 		smallPines.maxY = 100;
 		
 		TreeRTG pungensTree = new TreeRTGPiceaPungens();
-		pungensTree.logBlock = Blocks.log;
-		pungensTree.logMeta = (byte)1;
-		pungensTree.leavesBlock = Blocks.leaves;
-		pungensTree.leavesMeta = (byte)1;
+		pungensTree.logBlock = Blocks.LOG.getStateFromMeta(1);
+		pungensTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
 		pungensTree.minTrunkSize = 2;
 		pungensTree.maxTrunkSize = 7;
 		pungensTree.minCrownSize = 6;
@@ -63,10 +59,8 @@ public class DecoCollectionMegaTaiga extends DecoCollectionBase
 		spruceTrees.maxY = 100;
 		
 		TreeRTG ponderosaTree = new TreeRTGPinusPonderosa();
-		ponderosaTree.logBlock = Blocks.log;
-		ponderosaTree.logMeta = (byte)0;
-		ponderosaTree.leavesBlock = Blocks.leaves;
-		ponderosaTree.leavesMeta = (byte)0;
+		ponderosaTree.logBlock = Blocks.LOG.getDefaultState();
+		ponderosaTree.leavesBlock = Blocks.LEAVES.getDefaultState();
 		ponderosaTree.minTrunkSize = 11;
 		ponderosaTree.maxTrunkSize = 21;
 		ponderosaTree.minCrownSize = 15;

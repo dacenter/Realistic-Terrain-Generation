@@ -2,8 +2,9 @@ package rtg.world.biome.deco;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import rtg.util.CellNoise;
@@ -23,10 +24,8 @@ public class DecoShrub extends DecoBase
 	
 	public int size;
 	public boolean useDefaultRandom;
-	public Block[] randomLogBlocks;
-	public byte[] randomLogMetas;
-	public Block[] randomLeavesBlocks;
-	public byte[] randomLeavesMetas;
+	public IBlockState[] randomLogBlocks;
+	public IBlockState[] randomLeavesBlocks;
 	public float strengthFactor; // Higher = more/bigger shrubs.
 	public int minY; // Height restriction.
 	public int maxY; // Height restriction.
@@ -35,10 +34,8 @@ public class DecoShrub extends DecoBase
 	public int loops;
 	public int minSize;
 	public int maxSize;
-	public Block logBlock;
-	public byte logMeta;
-	public Block leavesBlock;
-	public byte leavesMeta;
+	public IBlockState logBlock;
+	public IBlockState leavesBlock;
 	
 	public DecoShrub()
 	{
@@ -50,10 +47,8 @@ public class DecoShrub extends DecoBase
 		 */
 		this.size = -1;
 		this.useDefaultRandom = false;
-		this.randomLogBlocks = new Block[]{Blocks.log, Blocks.log};
-		this.randomLogMetas = new byte[]{(byte)0, (byte)1};
-		this.randomLeavesBlocks = new Block[]{Blocks.leaves, Blocks.leaves};
-		this.randomLeavesMetas = new byte[]{(byte)0, (byte)1};
+		this.randomLogBlocks = new IBlockState[]{Blocks.LOG.getDefaultState(), Blocks.LOG.getStateFromMeta(1)};
+		this.randomLeavesBlocks = new IBlockState[]{Blocks.LEAVES.getDefaultState(), Blocks.LEAVES.getStateFromMeta(1)};
 		this.strengthFactor = 3f; // Not sure why it was done like this, but... the higher the value, the more there will be.
 		this.minY = 1; // No height limit by default.
 		this.maxY = 255; // No height limit by default.
@@ -62,10 +57,8 @@ public class DecoShrub extends DecoBase
 		this.loops = 1;
 		this.minSize = 3;
 		this.maxSize = 4;
-		this.logBlock = Blocks.log;
-		this.logMeta = (byte)0;
-		this.leavesBlock = Blocks.leaves;
-		this.leavesMeta = (byte)0;
+		this.logBlock = Blocks.LOG.getDefaultState();
+		this.leavesBlock = Blocks.LEAVES.getDefaultState();
 
 		this.addDecoTypes(DecoType.SHRUB);
 	}
@@ -90,20 +83,16 @@ public class DecoShrub extends DecoBase
 			// Do we want random shrubs?
             if (this.useDefaultRandom &&
             	this.randomLogBlocks.length > 0 &&
-            	this.randomLogBlocks.length == this.randomLogMetas.length &&
-            	this.randomLogBlocks.length == this.randomLeavesBlocks.length &&
-            	this.randomLogBlocks.length == this.randomLeavesMetas.length)
+            	this.randomLogBlocks.length == this.randomLeavesBlocks.length)
             {
             	int rnd = rand.nextInt(this.randomLogBlocks.length);
             	
         		this.logBlock = this.randomLogBlocks[rnd];
-        		this.logMeta = this.randomLogMetas[rnd];
         		this.leavesBlock = this.randomLeavesBlocks[rnd];
-        		this.leavesMeta = this.randomLeavesMetas[rnd];
             }
 
             WorldUtil worldUtil = new WorldUtil(world);
-            WorldGenerator worldGenerator = new WorldGenShrubRTG(this.size, this.logBlock, this.logMeta, this.leavesBlock, this.leavesMeta);
+            WorldGenerator worldGenerator = new WorldGenShrubRTG(this.size, this.logBlock, this.leavesBlock);
             
 			int loopCount = this.loops;
 			loopCount = (this.strengthFactor > 0f) ? (int)(this.strengthFactor * strength) : loopCount;
@@ -111,33 +100,35 @@ public class DecoShrub extends DecoBase
             {
                 int intX = chunkX + rand.nextInt(16);// + 8;
                 int intZ = chunkY + rand.nextInt(16);// + 8;
-                int intY = world.getHeightValue(intX, intZ);
+                int intY = world.getHeight(new BlockPos(intX, 0, intZ)).getY();
 
                 if (this.notEqualsZerochance > 1) {
                 	
 	                if (intY >= this.minY && intY <= this.maxY && rand.nextInt(this.notEqualsZerochance) != 0) {
-	                	generateWorldGenerator(worldGenerator, worldUtil, world, rand, intX, intY, intZ, hasPlacedVillageBlocks);
+	                	generateWorldGenerator(worldGenerator, worldUtil, world, rand, new BlockPos(intX, intY, intZ), hasPlacedVillageBlocks);
 	                }
                 }
                 else {
                 	
 	                if (intY >= this.minY && intY <= this.maxY && rand.nextInt(this.chance) == 0) {
-	                	generateWorldGenerator(worldGenerator, worldUtil, world, rand, intX, intY, intZ, hasPlacedVillageBlocks);
+	                	generateWorldGenerator(worldGenerator, worldUtil, world, rand, new BlockPos(intX, intY, intZ), hasPlacedVillageBlocks);
 	                }
                 }
             }
 		}
 	}
 	
-	private boolean generateWorldGenerator(WorldGenerator worldGenerator, WorldUtil worldUtil, World world, Random rand, int x, int y, int z, boolean hasPlacedVillageBlocks)
+	private boolean generateWorldGenerator(WorldGenerator worldGenerator, WorldUtil worldUtil, World world, Random rand, BlockPos pos, boolean hasPlacedVillageBlocks)
 	{
+		int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
+		
         // If we're in a village, check to make sure the shrub has extra room to grow to avoid corrupting the village.
         if (hasPlacedVillageBlocks) {
-            if (!worldUtil.isSurroundedByBlock(Blocks.air, 2, SurroundCheckType.CARDINAL, rand, x, y, z)) {
+            if (!worldUtil.isSurroundedByBlock(Blocks.AIR.getDefaultState(), 2, SurroundCheckType.CARDINAL, rand, x, y, z)) {
             	return false;
             }
         }
         
-		return worldGenerator.generate(world, rand, x, y, z);
+		return worldGenerator.generate(world, rand, pos);
 	}
 }

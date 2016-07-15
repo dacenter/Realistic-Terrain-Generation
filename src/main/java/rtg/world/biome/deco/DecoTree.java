@@ -4,8 +4,9 @@ import static net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.Ev
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -39,10 +40,8 @@ public class DecoTree extends DecoBase
 	public float treeConditionFloat; // Multi-purpose float.
 	public int minY; // Lower height restriction.
 	public int maxY; // Upper height restriction.
-	public Block logBlock;
-	public byte logMeta;
-	public Block leavesBlock;
-	public byte leavesMeta;
+	public IBlockState logBlock;
+	public IBlockState leavesBlock;
 	public int minSize; // Min tree height (only used with certain tree presets)
 	public int maxSize; // Max tree height (only used with certain tree presets)
 	public int minTrunkSize; // Min tree height (only used with certain tree presets)
@@ -73,10 +72,8 @@ public class DecoTree extends DecoBase
 		this.treeConditionChance = 1;
 		this.minY = 62; // No underwater trees by default.
 		this.maxY = 230; // Sensible upper height limit by default.
-		this.logBlock = Blocks.log;
-		this.logMeta = (byte)0;
-		this.leavesBlock = Blocks.leaves;
-		this.leavesMeta = (byte)-1;
+		this.logBlock = Blocks.LOG.getDefaultState();
+		this.leavesBlock = Blocks.LEAVES.getDefaultState();
 		this.minSize = 2;
 		this.maxSize = 4;
 		this.minTrunkSize = 2;
@@ -103,9 +100,7 @@ public class DecoTree extends DecoBase
 		this.minY = source.minY;
 		this.maxY = source.maxY;
 		this.logBlock = source.logBlock;
-		this.logMeta = source.logMeta;
 		this.leavesBlock = source.leavesBlock;
-		this.leavesMeta = source.leavesMeta;
 		this.minSize = source.minSize;
 		this.maxSize = source.maxSize;
 		this.minTrunkSize = source.minTrunkSize;
@@ -120,9 +115,7 @@ public class DecoTree extends DecoBase
 		this();
 		this.tree = tree;
 		this.logBlock = tree.logBlock;
-		this.logMeta = tree.logMeta;
 		this.leavesBlock = tree.leavesBlock;
-		this.leavesMeta = tree.leavesMeta;
 		this.minTrunkSize = tree.minTrunkSize;
 		this.maxTrunkSize = tree.maxTrunkSize;
 		this.minCrownSize = tree.minCrownSize;
@@ -135,20 +128,13 @@ public class DecoTree extends DecoBase
 		this();
 		this.worldGen = worldGen;
 	}
-
-    public boolean properlyDefined() {
-        if (this.treeType == TreeType.RTG_TREE) {
-            if (this.tree == null) return false;
-        }
-        return super.properlyDefined();
-    }
     
 	@Override
 	public void generate(RealisticBiomeBase biome, World world, Random rand, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float strength, float river, boolean hasPlacedVillageBlocks)
 	{
 		if (this.allowed) {
 			
-			if (TerrainGen.decorate(world, rand, chunkX, chunkY, TREE)) {
+			if (TerrainGen.decorate(world, rand, new BlockPos(chunkX, 0, chunkY), TREE)) {
 				
 				WorldUtil worldUtil = new WorldUtil(world);
 				float noise = simplex.noise2(chunkX / this.distribution.noiseDivisor, chunkY / this.distribution.noiseDivisor) * this.distribution.noiseFactor + this.distribution.noiseAddend;
@@ -161,13 +147,13 @@ public class DecoTree extends DecoBase
 	            {
 	                int intX = chunkX + rand.nextInt(16);// + 8;
 	                int intZ = chunkY + rand.nextInt(16);// + 8;
-	                int intY = world.getHeightValue(intX, intZ);
+	                int intY = world.getHeight(new BlockPos(intX, 0, intZ)).getY();
 	                
 	                if (intY <= this.maxY && intY >= this.minY && isValidTreeCondition(noise, rand, strength)) {
 	                
 		                // If we're in a village, check to make sure the tree has extra room to grow to avoid corrupting the village.
 		                if (hasPlacedVillageBlocks) {
-			                if (!worldUtil.isSurroundedByBlock(Blocks.air, 2, SurroundCheckType.CARDINAL, rand, intX, intY, intZ)) {
+			                if (!worldUtil.isSurroundedByBlock(Blocks.AIR.getDefaultState(), 2, SurroundCheckType.CARDINAL, rand, intX, intY, intZ)) {
 			                	return;
 			                }
 		                }
@@ -178,22 +164,18 @@ public class DecoTree extends DecoBase
 			            	case RTG_TREE:
 
 		            			this.tree.setLogBlock(this.logBlock);
-	            				this.tree.setLogMeta(this.logMeta);
 	            				this.tree.setLeavesBlock(this.leavesBlock);
-	            				this.tree.setLeavesMeta(this.leavesMeta);
 	            				this.tree.setTrunkSize(RandomUtil.getRandomInt(rand, this.minTrunkSize, this.maxTrunkSize));
 	            				this.tree.setCrownSize(RandomUtil.getRandomInt(rand, this.minCrownSize, this.maxCrownSize));
 	            				this.tree.setNoLeaves(this.noLeaves);
-		                        this.tree.setScale(1.0D, 1.0D, 1.0D);
-		                        this.tree.generate(world, rand, intX, intY, intZ);
+		                        this.tree.generate(world, rand, new BlockPos(intX, intY, intZ));
 			            		
 			            		break;
 			            		
 	                        case WORLDGEN:
 
                                 WorldGenerator worldgenerator = this.worldGen;
-                                worldgenerator.setScale(1.0D, 1.0D, 1.0D);
-                                worldgenerator.generate(world, rand, intX, intY, intZ);
+                                worldgenerator.generate(world, rand, new BlockPos(intX, intY, intZ));
 	
 	                            break;
 	

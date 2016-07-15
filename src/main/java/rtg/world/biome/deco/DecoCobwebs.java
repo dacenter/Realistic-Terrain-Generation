@@ -2,8 +2,9 @@ package rtg.world.biome.deco;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import rtg.util.CellNoise;
@@ -24,8 +25,7 @@ public class DecoCobwebs extends DecoBase
 	public int minY; // Lower height restriction.
 	public int maxY; // Upper height restriction.
 	public int chance; // Higher = more rare.
-	public Block adjacentBlock;
-	public byte adjacentBlockMeta;
+	public IBlockState adjacentBlock;
 	public int minAdjacents;
 	
 	public DecoCobwebs()
@@ -40,8 +40,7 @@ public class DecoCobwebs extends DecoBase
 		this.minY = 1; // No lower height limit by default.
 		this.maxY = 255; // No upper height limit by default.
 		this.chance = 10;
-		this.adjacentBlock = Blocks.air;
-		this.adjacentBlockMeta = (byte)0;
+		this.adjacentBlock = Blocks.AIR.getDefaultState();
 		this.minAdjacents = 1;
 		
 		this.addDecoTypes(DecoType.COBWEB);
@@ -52,7 +51,7 @@ public class DecoCobwebs extends DecoBase
 	{
 		if (this.allowed) {
 			
-			WorldGenerator worldGenerator = new WorldGenBlock(Blocks.web, (byte)0, Blocks.air, (byte)0, this.adjacentBlock, this.adjacentBlockMeta, this.minAdjacents);
+			WorldGenerator worldGenerator = new WorldGenBlock(Blocks.WEB.getDefaultState(), Blocks.AIR.getDefaultState(), this.adjacentBlock, this.minAdjacents);
 			
             for (int l1 = 0; l1 < this.strengthFactor * strength; ++l1)
             {
@@ -61,7 +60,7 @@ public class DecoCobwebs extends DecoBase
                 int k1 = RandomUtil.getRandomInt(rand, this.minY, this.maxY);
                 
                 if (rand.nextInt(this.chance) == 0) {
-                	worldGenerator.generate(world, rand, i1, k1, j1);
+                	worldGenerator.generate(world, rand, new BlockPos(i1, k1, j1));
                 }
             }
 		}
