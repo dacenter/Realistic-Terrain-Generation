@@ -2,37 +2,33 @@ package rtg.world.gen.feature;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenBlock extends WorldGenerator
 {
-	protected Block placeBlock;
-	protected byte placeBlockMeta;
-	protected Block replaceBlock;
-	protected byte replaceBlockMeta;
-	protected Block adjacentBlock;
-	protected byte adjacentBlockMeta;
+	protected IBlockState placeBlock;
+	protected IBlockState replaceBlock;
+	protected IBlockState adjacentBlock;
 	protected int minAdjacents;
 
-    public WorldGenBlock(Block placeBlock, byte placeBlockMeta, Block replaceBlock, byte replaceBlockMeta, Block adjacentBlock, byte adjacentBlockMeta, int minAdjacents)
+    public WorldGenBlock(IBlockState placeBlock, IBlockState replaceBlock, IBlockState adjacentBlock, int minAdjacents)
     {
         super(false);
 
     	this.placeBlock = placeBlock;
-    	this.placeBlockMeta = placeBlockMeta;
     	this.replaceBlock = replaceBlock;
-    	this.replaceBlockMeta = replaceBlockMeta;
     	this.adjacentBlock = adjacentBlock;
-    	this.adjacentBlockMeta = adjacentBlockMeta;
     	this.minAdjacents = minAdjacents;
     }
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z)
+	public boolean generate(World world, Random rand, BlockPos pos)
 	{
-		Block targetBlock = world.getBlock(x, y, z);
+		int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
+		IBlockState targetBlock = world.getBlockState(new BlockPos(x, y, z));
 		
 		if (targetBlock != replaceBlock) {
 			//Logger.debug("Target block (%s) does not equal Replace block (%s)", targetBlock.getLocalizedName(), replaceBlock.getLocalizedName());
@@ -44,7 +40,7 @@ public class WorldGenBlock extends WorldGenerator
 			return false;
 		}
 		
-        world.setBlock(x, y, z, placeBlock, placeBlockMeta, 2);
+        world.setBlockState(new BlockPos(x, y, z), placeBlock, 2);
         
         //Logger.debug("COBWEB at %d, %d, %d !!!", x, y, z);
         
@@ -55,27 +51,27 @@ public class WorldGenBlock extends WorldGenerator
 	{
 		int adjacentCount = 0;
 		
-		if (world.getBlock(x + 1, y, z) == this.adjacentBlock) {
+		if (world.getBlockState(new BlockPos(x + 1, y, z)) == this.adjacentBlock) {
 			adjacentCount++;
 		}
 
-		if (world.getBlock(x - 1, y, z) == this.adjacentBlock) {
+		if (world.getBlockState(new BlockPos(x - 1, y, z)) == this.adjacentBlock) {
 			adjacentCount++;
 		}
 		
-		if (world.getBlock(x, y + 1, z) == this.adjacentBlock) {
+		if (world.getBlockState(new BlockPos(x, y + 1, z)) == this.adjacentBlock) {
 			adjacentCount++;
 		}
 		
-		if (world.getBlock(x, y - 1, z) == this.adjacentBlock) {
+		if (world.getBlockState(new BlockPos(x, y - 1, z)) == this.adjacentBlock) {
 			adjacentCount++;
 		}
 		
-		if (world.getBlock(x, y, z + 1) == this.adjacentBlock) {
+		if (world.getBlockState(new BlockPos(x, y, z + 1)) == this.adjacentBlock) {
 			adjacentCount++;
 		}
 		
-		if (world.getBlock(x, y, z - 1) == this.adjacentBlock) {
+		if (world.getBlockState(new BlockPos(x, y, z - 1)) == this.adjacentBlock) {
 			adjacentCount++;
 		}
 

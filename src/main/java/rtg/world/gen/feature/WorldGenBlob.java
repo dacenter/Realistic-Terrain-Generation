@@ -2,9 +2,10 @@ package rtg.world.gen.feature;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import rtg.config.rtg.ConfigRTG;
@@ -13,25 +14,22 @@ import rtg.util.RandomUtil;
 
 public class WorldGenBlob extends WorldGenerator
 {
-    private Block blobBlock;
-    private byte blobMeta;
+    private IBlockState blobBlock;
     private int blobSize;
     private boolean booShouldGenerate;
-    private static final String __OBFID = "CL_00000402";
     protected boolean water;
     protected BoulderUtil boulderUtil;
 
-    public WorldGenBlob(Block b, int s, Random rand)
+    public WorldGenBlob(IBlockState b, int s, Random rand)
     {
         super(false);
         this.blobBlock = b;
-        this.blobMeta = 0;
         this.blobSize = s;
         booShouldGenerate = true;
         this.water = true;
         this.boulderUtil = new BoulderUtil();
         
-        if (blobBlock == Blocks.mossy_cobblestone || blobBlock == Blocks.cobblestone) {
+        if (blobBlock == Blocks.MOSSY_COBBLESTONE.getDefaultState() || blobBlock == Blocks.COBBLESTONE.getDefaultState()) {
             if (!ConfigRTG.enableCobblestoneBoulders) {
                 booShouldGenerate = false;
             }
@@ -43,16 +41,9 @@ public class WorldGenBlob extends WorldGenerator
         }
     }
     
-    public WorldGenBlob(Block b, byte m, int s, Random rand)
+    public WorldGenBlob(IBlockState b, int s, Random rand, boolean water)
     {
         this(b, s, rand);
-        this.blobMeta = m;
-    }
-    
-    public WorldGenBlob(Block b, byte m, int s, Random rand, boolean water)
-    {
-        this(b, m, s, rand);
-        this.blobMeta = m;
         this.water = water;
     }
 
@@ -71,17 +62,19 @@ public class WorldGenBlob extends WorldGenerator
             }
         }
 
-        generate(world, rand, x, y, z);
+        generate(world, rand, new BlockPos(x, y, z));
     }
     
-    public boolean generate(World world, Random rand, int x, int y, int z)
-    {
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos)
+	{
         if (!booShouldGenerate) {
             return false;
         }
+        
+        int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
 
-        Block boulderBlock = this.boulderUtil.getBoulderBlock(this.blobBlock, x, y, z);
-        byte boulderMeta = this.boulderUtil.getBoulderMeta(this.blobBlock, this.blobMeta, x, y, z);
+        IBlockState boulderBlock = this.boulderUtil.getBoulderBlock(this.blobBlock, x, y, z);
         
         while (true)
         {
@@ -89,25 +82,25 @@ public class WorldGenBlob extends WorldGenerator
             {
                 label63:
                 {
-                    if (!world.isAirBlock(x, y - 1, z))
+                    if (!world.isAirBlock(new BlockPos(x, y - 1, z)))
                     {
-                        Block block = world.getBlock(x, y - 1, z);
+                        IBlockState block = world.getBlockState(new BlockPos(x, y - 1, z));
 
                         // Water check.
                         if (!this.water) {
 
-                    		if (block.getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x, y - 1, z - 1).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x, y - 1, z + 1).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x - 1, y - 1, z).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x - 1, y - 1, z - 1).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x - 1, y - 1, z + 1).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x + 1, y - 1, z).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x + 1, y - 1, z - 1).getMaterial() == Material.water) { return false; }
-                    		if (world.getBlock(x + 1, y - 1, z + 1).getMaterial() == Material.water) { return false; }
+                    		if (block.getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x, y - 1, z - 1)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x, y - 1, z + 1)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x - 1, y - 1, z)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x - 1, y - 1, z - 1)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x - 1, y - 1, z + 1)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x + 1, y - 1, z)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x + 1, y - 1, z - 1)).getMaterial() == Material.WATER) { return false; }
+                    		if (world.getBlockState(new BlockPos(x + 1, y - 1, z + 1)).getMaterial() == Material.WATER) { return false; }
                         }
                         
-                        if (block == Blocks.grass || block == Blocks.dirt || block == Blocks.stone || block == Blocks.gravel || block == Blocks.sand)
+                        if (block == Blocks.GRASS.getDefaultState() || block == Blocks.DIRT.getDefaultState() || block == Blocks.STONE.getDefaultState() || block == Blocks.GRAVEL.getDefaultState() || block == Blocks.SAND.getDefaultState())
                         {
                             break label63;
                         }
@@ -144,7 +137,7 @@ public class WorldGenBlob extends WorldGenerator
 
                             if (f1 * f1 + f2 * f2 + f3 * f3 <= f * f)
                             {
-                                world.setBlock(l1, j2, i2, boulderBlock, boulderMeta, 2);
+                                world.setBlockState(new BlockPos(l1, j2, i2), boulderBlock, 2);
                             }
                         }
                     }

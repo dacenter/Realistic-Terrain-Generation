@@ -1,13 +1,14 @@
-
 package rtg.world.gen.feature;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 /**
@@ -15,30 +16,23 @@ import net.minecraft.world.gen.feature.WorldGenerator;
  * @author Zeno410
  */
 public class WorldGenPond extends WorldGenerator {
-    private Block fill;
+    private IBlockState fill;
 
     /**
      *
      * @param fill
      */
-    public WorldGenPond(Block fill) {
+    public WorldGenPond(IBlockState fill) {
         this.fill = fill;
     }
 
-    /**
-     * 
-     * @param world
-     * @param random
-     * @param x
-     * @param y
-     * @param z
-     * @return
-     */
-    public boolean generate(World world, Random random, int x, int y, int z)
-    {
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos)
+	{
+		int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
         x -= 8;
 
-        for (z -= 8; y > 5 && world.isAirBlock(x, y, z); --y)
+        for (z -= 8; y > 5 && world.isAirBlock(new BlockPos(x, y, z)); --y)
         {
             ;
         }
@@ -51,17 +45,17 @@ public class WorldGenPond extends WorldGenerator {
         {
             y -= 4;
             boolean[] aboolean = new boolean[2048];
-            int l = random.nextInt(4) + 4;
+            int l = rand.nextInt(4) + 4;
             int i1;
 
             for (i1 = 0; i1 < l; ++i1)
             {
-                double d0 = random.nextDouble() * 6.0D + 3.0D;
-                double d1 = random.nextDouble() * 4.0D + 2.0D;
-                double d2 = random.nextDouble() * 6.0D + 3.0D;
-                double d3 = random.nextDouble() * (16.0D - d0 - 2.0D) + 1.0D + d0 / 2.0D;
-                double d4 = random.nextDouble() * (8.0D - d1 - 4.0D) + 2.0D + d1 / 2.0D;
-                double d5 = random.nextDouble() * (16.0D - d2 - 2.0D) + 1.0D + d2 / 2.0D;
+                double d0 = rand.nextDouble() * 6.0D + 3.0D;
+                double d1 = rand.nextDouble() * 4.0D + 2.0D;
+                double d2 = rand.nextDouble() * 6.0D + 3.0D;
+                double d3 = rand.nextDouble() * (16.0D - d0 - 2.0D) + 1.0D + d0 / 2.0D;
+                double d4 = rand.nextDouble() * (8.0D - d1 - 4.0D) + 2.0D + d1 / 2.0D;
+                double d5 = rand.nextDouble() * (16.0D - d2 - 2.0D) + 1.0D + d2 / 2.0D;
 
                 for (int k1 = 1; k1 < 15; ++k1)
                 {
@@ -148,7 +142,7 @@ public class WorldGenPond extends WorldGenerator {
                 for (j2 = 1; j2 < 15; ++j2)
                 {
                     if (willBeShore[(i1 * 16 + j2)]) {
-                        int topHeight = world.getTopSolidOrLiquidBlock(x + i1, z + j2);
+                        int topHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + i1, 0, z + j2)).getY();
                         if (topHeight <1||topHeight>255) return false;//empty or too high column
                         heightCounts[topHeight] += 1;
                         shoreBlockCount++;
@@ -184,7 +178,7 @@ public class WorldGenPond extends WorldGenerator {
                 for (j2 = 0; j2 < 16; ++j2)
                 {
                     if (willBePond[(i1 * 16 + j2)]) {
-                        int top = world.getTopSolidOrLiquidBlock(x + i1, z + j2);
+                        int top = world.getTopSolidOrLiquidBlock(new BlockPos(x + i1, 0, z + j2)).getY();
                         if (top > lakeLevel+4) return false;
                     }
                 }
@@ -196,19 +190,19 @@ public class WorldGenPond extends WorldGenerator {
                 for (j2 = 1; j2 < 15; ++j2)
                 {
                     if (willBeShore[(i1 * 16 + j2)]) {
-                        int shoreHeight = world.getTopSolidOrLiquidBlock(x + i1, z + j2);
+                        int shoreHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + i1, 0, z + j2)).getY();
                         if (shoreHeight < lakeLevel) {
-                            BiomeGenBase biomegenbase = world.getBiomeGenForCoords(x + i1, z + j2);
+                            Biome biomegenbase = world.getBiome(new BlockPos(x + i1, 0, z + j2));
                             for (int height = shoreHeight; height < lakeLevel; height ++) {
 
 
-                                if (biomegenbase.topBlock == Blocks.mycelium)
+                                if (biomegenbase.topBlock == Blocks.MYCELIUM.getDefaultState())
                                 {
-                                    world.setBlock(x + i1, height, z + j2, Blocks.mycelium, 0, 2);
+                                    world.setBlockState(new BlockPos(x + i1, height, z + j2), Blocks.MYCELIUM.getDefaultState(), 2);
                                 }
                                 else
                                 {
-                                    world.setBlock(x + i1, height, z + j2, Blocks.grass, 0, 2);
+                                    world.setBlockState(new BlockPos(x + i1, height, z + j2), Blocks.GRASS.getDefaultState(), 2);
                                 }
                             }
                         }
@@ -227,14 +221,14 @@ public class WorldGenPond extends WorldGenerator {
 
                         if (flag)
                         {
-                            Material material = world.getBlock(x + i1, y + j1, z + j2).getMaterial();
+                            Material material = world.getBlockState(new BlockPos(x + i1, y + j1, z + j2)).getMaterial();
 
                             if (j1 >= 4 && material.isLiquid())
                             {
                                 return false;
                             }
 
-                            if (j1 < 4 && !material.isSolid() && world.getBlock(x + i1, y + j1, z + j2) != this.fill)
+                            if (j1 < 4 && !material.isSolid() && world.getBlockState(new BlockPos(x + i1, y + j1, z + j2)) != this.fill)
                             {
                                 return false;
                             }
@@ -252,12 +246,12 @@ public class WorldGenPond extends WorldGenerator {
                         if (j1<4) {
                             if (aboolean[(i1 * 16 + j2) * 8 + j1])
                             {
-                                world.setBlock(x + i1, y + j1, z + j2, fill, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, y + j1, z + j2), fill, 2);
                             }
                         } else {
                             // air
                             if (willBePond[i1 * 16 + j2]) {
-                                world.setBlock(x + i1, y + j1, z + j2, Blocks.air, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, y + j1, z + j2), Blocks.AIR.getDefaultState(), 2);
                             }
                         }
 
@@ -271,24 +265,24 @@ public class WorldGenPond extends WorldGenerator {
                 {
                     for (j1 = 4; j1 < 8; ++j1)
                     {
-                        if (aboolean[(i1 * 16 + j2) * 8 + j1] && world.getBlock(x + i1, y + j1 - 1, z + j2) == Blocks.dirt && world.getSavedLightValue(EnumSkyBlock.Sky, x + i1, y + j1, z + j2) > 0)
+                        if (aboolean[(i1 * 16 + j2) * 8 + j1] && world.getBlockState(new BlockPos(x + i1, y + j1 - 1, z + j2)) == Blocks.DIRT.getDefaultState() && world.getLightFor(EnumSkyBlock.SKY, new BlockPos(x + i1, y + j1, z + j2)) > 0)
                         {
-                            BiomeGenBase biomegenbase = world.getBiomeGenForCoords(x + i1, z + j2);
+                            Biome biomegenbase = world.getBiome(new BlockPos(x + i1, 0, z + j2));
 
-                            if (biomegenbase.topBlock == Blocks.mycelium)
+                            if (biomegenbase.topBlock == Blocks.MYCELIUM.getDefaultState())
                             {
-                                world.setBlock(x + i1, y + j1 - 1, z + j2, Blocks.mycelium, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, y + j1 - 1, z + j2), Blocks.MYCELIUM.getDefaultState(), 2);
                             }
                             else
                             {
-                                world.setBlock(x + i1, y + j1 - 1, z + j2, biomegenbase.topBlock, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, y + j1 - 1, z + j2), biomegenbase.topBlock, 2);
                             }
                         }
                     }
                 }
             }
 
-            if (this.fill.getMaterial() == Material.lava)
+            if (this.fill.getMaterial() == Material.LAVA)
             {
                 for (i1 = 0; i1 < 16; ++i1)
                 {
@@ -298,16 +292,16 @@ public class WorldGenPond extends WorldGenerator {
                         {
                             flag = !aboolean[(i1 * 16 + j2) * 8 + j1] && (i1 < 15 && aboolean[((i1 + 1) * 16 + j2) * 8 + j1] || i1 > 0 && aboolean[((i1 - 1) * 16 + j2) * 8 + j1] || j2 < 15 && aboolean[(i1 * 16 + j2 + 1) * 8 + j1] || j2 > 0 && aboolean[(i1 * 16 + (j2 - 1)) * 8 + j1] || j1 < 7 && aboolean[(i1 * 16 + j2) * 8 + j1 + 1] || j1 > 0 && aboolean[(i1 * 16 + j2) * 8 + (j1 - 1)]);
 
-                            if (flag && (j1 < 4 || random.nextInt(2) != 0) && world.getBlock(x + i1, y + j1, z + j2).getMaterial().isSolid())
+                            if (flag && (j1 < 4 || rand.nextInt(2) != 0) && world.getBlockState(new BlockPos(x + i1, y + j1, z + j2)).getMaterial().isSolid())
                             {
-                                world.setBlock(x + i1, y + j1, z + j2, Blocks.stone, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, y + j1, z + j2), Blocks.STONE.getDefaultState(), 2);
                             }
                         }
                     }
                 }
             }
 
-            if (this.fill.getMaterial() == Material.water)
+            if (this.fill.getMaterial() == Material.WATER)
             {
                 for (i1 = 0; i1 < 16; ++i1)
                 {
@@ -315,9 +309,9 @@ public class WorldGenPond extends WorldGenerator {
                     {
                         byte b0 = 4;
 
-                        if (world.isBlockFreezable(x + i1, y + b0, z + j2))
+                        if (world.canBlockFreezeWater(new BlockPos(x + i1, y + b0, z + j2)))
                         {
-                            world.setBlock(x + i1, y + b0, z + j2, Blocks.ice, 0, 2);
+                            world.setBlockState(new BlockPos(x + i1, y + b0, z + j2), Blocks.ICE.getDefaultState(), 2);
                         }
                     }
                 }
@@ -329,20 +323,20 @@ public class WorldGenPond extends WorldGenerator {
                 for (j2 = 1; j2 < 15; ++j2)
                 {
                     if (willBeShore[(i1 * 16 + j2)]) {
-                        int shoreHeight = world.getTopSolidOrLiquidBlock(x + i1, z + j2);
+                        int shoreHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + i1, 0, z + j2)).getY();
                         if (shoreHeight > lakeLevel) {
                             shoreHeight--;
-                            BiomeGenBase biomegenbase = world.getBiomeGenForCoords(x + i1, z + j2);
-                            world.setBlock(x + i1, shoreHeight, z + j2, Blocks.air, 0, 2);
+                            Biome biomegenbase = world.getBiome(new BlockPos(x + i1, 0, z + j2));
+                            world.setBlockState(new BlockPos(x + i1, shoreHeight, z + j2), Blocks.AIR.getDefaultState(), 2);
                             shoreHeight--;
 
-                            if (biomegenbase.topBlock == Blocks.mycelium)
+                            if (biomegenbase.topBlock == Blocks.MYCELIUM.getDefaultState())
                             {
-                                world.setBlock(x + i1, shoreHeight, z + j2, Blocks.mycelium, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, shoreHeight, z + j2), Blocks.MYCELIUM.getDefaultState(), 2);
                             }
                             else
                             {
-                                world.setBlock(x + i1, shoreHeight, z + j2, biomegenbase.topBlock, 0, 2);
+                                world.setBlockState(new BlockPos(x + i1, shoreHeight, z + j2), biomegenbase.topBlock, 2);
                             }
                         }
                     }

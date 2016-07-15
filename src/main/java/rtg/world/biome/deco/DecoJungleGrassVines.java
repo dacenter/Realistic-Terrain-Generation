@@ -12,7 +12,7 @@ import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
 import rtg.world.biome.realistic.RealisticBiomeBase;
 import rtg.world.gen.feature.WorldGenGrass;
-import rtg.world.gen.feature.WorldGenVines;
+import rtg.world.gen.feature.WorldGenVinesRTG;
 
 /**
  * 
@@ -36,7 +36,7 @@ public class DecoJungleGrassVines extends DecoBase
 		this.worldgeneratorDoubleTallgrass = new WorldGenGrass(Blocks.double_plant, 2);
 		this.worldgeneratorFern = new WorldGenGrass(Blocks.tallgrass, 2);
 		this.worldgeneratorLargeFern = new WorldGenGrass(Blocks.double_plant, 3);
-		this.worldgeneratorVines = new WorldGenVines();
+		this.worldgeneratorVines = new WorldGenVinesRTG();
 		
 		this.addDecoTypes(DecoType.GRASS, DecoType.VINE);
 	}

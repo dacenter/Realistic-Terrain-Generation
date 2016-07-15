@@ -3,25 +3,21 @@ package rtg.world.gen.feature;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameData;
 import rtg.config.rtg.ConfigRTG;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
 import rtg.util.TerrainMath;
 
-public class WorldGenVolcano 
+public class WorldGenVolcano
 {
-    protected static Block volcanoBlock = GameData.getBlockRegistry().getObject(ConfigRTG.volcanoBlockId);
-    protected static byte volcanoBlockMeta = (byte) ConfigRTG.volcanoBlockMeta;
-	protected static Block volcanoPatchBlock = GameData.getBlockRegistry().getObject(ConfigRTG.volcanoMix1BlockId);
-	protected static byte volcanoPatchBlockMeta = (byte) ConfigRTG.volcanoMix1BlockMeta;
-	protected static Block volcanoPatchBlock2 = GameData.getBlockRegistry().getObject(ConfigRTG.volcanoMix2BlockId);
-	protected static byte volcanoPatchBlockMeta2 = (byte) ConfigRTG.volcanoMix2BlockMeta;
-	protected static Block volcanoPatchBlock3 = GameData.getBlockRegistry().getObject(ConfigRTG.volcanoMix3BlockId);
-	protected static byte volcanoPatchBlockMeta3 = (byte) ConfigRTG.volcanoMix3BlockMeta;
-    protected static Block lavaBlock = ConfigRTG.enableVolcanoEruptions ? Blocks.flowing_lava : Blocks.lava;
+    protected static IBlockState volcanoBlock = Block.getBlockFromName(ConfigRTG.volcanoBlockId).getStateFromMeta(ConfigRTG.volcanoBlockMeta);
+	protected static IBlockState volcanoPatchBlock = Block.getBlockFromName(ConfigRTG.volcanoMix1BlockId).getStateFromMeta(ConfigRTG.volcanoMix1BlockMeta);
+	protected static IBlockState volcanoPatchBlock2 = Block.getBlockFromName(ConfigRTG.volcanoMix2BlockId).getStateFromMeta(ConfigRTG.volcanoMix2BlockMeta);
+	protected static IBlockState volcanoPatchBlock3 = Block.getBlockFromName(ConfigRTG.volcanoMix3BlockId).getStateFromMeta(ConfigRTG.volcanoMix3BlockMeta);
+    protected static IBlockState lavaBlock = ConfigRTG.enableVolcanoEruptions ? Blocks.FLOWING_LAVA.getDefaultState() : Blocks.LAVA.getDefaultState();
 
 	// How much stretched the vent/mouth is
 	private static final float ventEccentricity = 8f;
@@ -30,13 +26,11 @@ public class WorldGenVolcano
 	private static final int lavaHeight = 138 + 3 + (ConfigRTG.enableVolcanoEruptions ? 5 : 0);	// + 3 to account for lava cone tip
 	private static final int baseVolcanoHeight = 142 + 8;
 
-
-	public static void build(Block[] blocks, byte[] metadata, World world, Random mapRand, int baseX, int baseY, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float[] noise)
+	public static void build(IBlockState[] blocks, World world, Random mapRand, int baseX, int baseY, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float[] noise)
 	{
 		int i, j;
 		float distanceEll, height, terrainHeight, obsidian;
 		IBlockState b;
-		byte meta;
 
 		for (int x = 0; x < 16; x++)
 		{
@@ -69,16 +63,15 @@ public class WorldGenVolcano
 						// Above lava
 						if(y > lavaHeight)
 						{
-							if(blocks[cta(x, y, z)] != Blocks.air)
+							if(blocks[cta(x, y, z)] != Blocks.AIR.getDefaultState())
 							{
-								blocks[cta(x, y, z)] = Blocks.air;
+								blocks[cta(x, y, z)] = Blocks.AIR.getDefaultState();
 							}
 						}
 						// Below lava and above obsidian
 						else if(y > obsidian && y < (lavaHeight - 9) + height)
 						{
 						    blocks[cta(x, y, z)] = volcanoBlock;
-						    metadata[cta(x, y, z)] = volcanoBlockMeta;
 						}
 						// In lava
 						else if(y < lavaHeight + 1)
@@ -89,10 +82,9 @@ public class WorldGenVolcano
 						// Below obsidian
 						else if(y < obsidian + 1)
 						{
-							if(blocks[cta(x, y, z)] == Blocks.air)
+							if(blocks[cta(x, y, z)] == Blocks.AIR.getDefaultState())
 							{
-							    blocks[cta(x, y, z)] = Blocks.stone;
-							    metadata[cta(x, y, z)] = (byte)0;
+							    blocks[cta(x, y, z)] = Blocks.STONE.getDefaultState();
 							}
 							else
 							{
@@ -119,9 +111,8 @@ public class WorldGenVolcano
 						if(y <= terrainHeight)
 						{
 							b = blocks[cta(x, y, z)];
-							meta = metadata[cta(x, y, z)];
 
-							if(b == Blocks.air||b == Blocks.water)
+							if(b == Blocks.AIR.getDefaultState() || b == Blocks.WATER.getDefaultState())
 							{
                                 /*************************************
                                  * WARNING: Spaghetti surfacing code *
@@ -138,7 +129,6 @@ public class WorldGenVolcano
                                             patchNoise += simplex.octave(3).noise2(i / 5f, j / 5f) * .6;
                                             if (patchNoise > .85) {
                                                 blocks[cta(x, y, z)] = volcanoPatchBlock;   // Cobble
-                                                metadata[cta(x, y, z)] = volcanoPatchBlockMeta;
                                                 continue;
                                             }
                                         }
@@ -149,7 +139,6 @@ public class WorldGenVolcano
                                             patchNoise += simplex.octave(5).noise2(i / 5f, j / 5f) * .5;
                                             if (patchNoise > .92) {
                                                 blocks[cta(x, y, z)] = volcanoPatchBlock2;  // Gravel
-                                                metadata[cta(x, y, z)] = volcanoPatchBlockMeta2;
                                                 continue;
                                             }
                                         }
@@ -159,7 +148,6 @@ public class WorldGenVolcano
                                             patchNoise += simplex.octave(7).noise2(i / 5f, j / 5f) * .7;
                                             if (patchNoise > .93) {
                                                 blocks[cta(x, y, z)] = volcanoPatchBlock3;  // Coal block
-                                                metadata[cta(x, y, z)] = volcanoPatchBlockMeta3;
                                                 continue;
                                             }
                                         }
@@ -171,12 +159,10 @@ public class WorldGenVolcano
                                     	if (mapRand.nextInt(20) == 0) {
                                     		
                                             b = volcanoPatchBlock3;
-                                            meta = volcanoPatchBlockMeta3;
                                     	}
                                     	else {
                                     		
                                             b = volcanoBlock;
-                                            meta = volcanoBlockMeta;
                                     	}
                                     }
                                     else if(distanceEll < 75 + simplex.noise2(x/26f, y/26f) * 5)
@@ -188,30 +174,25 @@ public class WorldGenVolcano
                                         	if (mapRand.nextInt(20) == 0) {
                                         		
                                                 b = volcanoPatchBlock2;
-                                                meta = volcanoPatchBlockMeta2;
                                         	}
                                         	else {
                                         		
-                                                b = Blocks.stone; // Stone so that surfacing will run (so this usually becomes grass)
-                                                meta = (byte)0;
+                                                b = Blocks.STONE.getDefaultState(); // Stone so that surfacing will run (so this usually becomes grass)
                                         	}
                                         }
                                         else
                                         {
 											b = volcanoBlock;
-											meta = volcanoBlockMeta;
                                         }
                                     }
                                     else
                                     {
-                                        b = Blocks.stone; // Stone so that surfacing will run (so this usually becomes grass)
-                                        meta = (byte)0;
+                                    	b = Blocks.STONE.getDefaultState(); // Stone so that surfacing will run (so this usually becomes grass)
                                     }
 								}
 								else
 								{
-									b = Blocks.stone;
-									meta = (byte)0;
+									b = Blocks.STONE.getDefaultState();
 								}
 							}
 							else
@@ -220,7 +201,6 @@ public class WorldGenVolcano
 							}
 
 							blocks[cta(x, y, z)] = b;
-							metadata[cta(x, y, z)] = meta;
 						}
 					}
 				}
@@ -228,8 +208,8 @@ public class WorldGenVolcano
 		}
 	}
 
-    private static boolean isOnSurface(int x, int y, int z, Block[] blocks) {
-        return (blocks[cta(x, y+1, z)] == Blocks.air);
+    private static boolean isOnSurface(int x, int y, int z, IBlockState[] blocks) {
+        return (blocks[cta(x, y+1, z)] == Blocks.AIR.getDefaultState());
     }
 
     public static int cta(int x, int y, int z)

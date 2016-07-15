@@ -13,7 +13,7 @@ import rtg.config.rtg.ConfigRTG;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
 import rtg.world.biome.realistic.RealisticBiomeBase;
-import rtg.world.gen.feature.WorldGenVines;
+import rtg.world.gen.feature.WorldGenVinesRTG;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class DecoJungleLilypadVines extends DecoBase
 	        if (TerrainGen.decorate(world, rand, blockX, blockY, LILYPAD)) {
 	            
 	        	WorldGenerator worldgeneratorLilypads = new WorldGenWaterlily();
-	        	WorldGenerator worldgeneratorVines = new WorldGenVines();
+	        	WorldGenerator worldgeneratorVines = new WorldGenVinesRTG();
 	        	Block vb;
 	        	
 	            for (int b33 = 0; b33 < 5; b33++)
@@ -65,7 +65,7 @@ public class DecoJungleLilypadVines extends DecoBase
 
 	                for (int h44 = 100; h44 > 0; h44--) {
 	                	
-	                	vb = world.getBlock(j6, h44, k10);
+	                	vb = world.getBlockState(new BlockPos(j6, h44, k10));
 	                	
 						if (vb == volcanoBlockId || vb == volcanoMix1BlockId || vb == volcanoMix2BlockId || vb == volcanoMix3BlockId) {
 							return;

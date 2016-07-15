@@ -1,4 +1,3 @@
-
 package rtg.world.gen.feature;
 
 /**
@@ -8,26 +7,26 @@ package rtg.world.gen.feature;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenPlantBlock extends WorldGenerator
 {
-	private Block soilBlock;
-	private byte soilMeta;
-    private Block plantBlock;
+	private IBlockState soilBlock;
+    private IBlockState plantBlock;
 
-
-
-	public WorldGenPlantBlock(Block plantBlock)
+	public WorldGenPlantBlock(IBlockState plantBlock)
 	{
         this.plantBlock = plantBlock;
 	}
 
-    public boolean generate(World world, Random rand, int x, int y, int z)
-    {
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos)
+	{
+		int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
     	IBlockState b;
         //for (int l = 0; l < 10; ++l)
         {
@@ -35,15 +34,22 @@ public class WorldGenPlantBlock extends WorldGenerator
             int j1 = y + rand.nextInt(4) - rand.nextInt(4);
             int k1 = z;// + rand.nextInt(8) - rand.nextInt(8);
 
-            if (world.isAirBlock(i1, j1, k1)||world.getBlock(x, y, z).isLeaves(world, x, y, z))
+            if (world.isAirBlock(new BlockPos(i1, j1, k1)) || world.getBlockState(new BlockPos(x, y, z)).getBlock().isLeaves(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z)))
             {
-            	b = world.getBlock(i1, j1 - 1, k1);
-            	if(b == Blocks.grass || b == Blocks.dirt)
+            	b = world.getBlockState(new BlockPos(i1, j1 - 1, k1));
+            	if(b == Blocks.GRASS.getDefaultState() || b == Blocks.DIRT.getDefaultState())
             	{
-                    if (plantBlock.canBlockStay(world, i1, j1 , k1))
-                    {
-                        world.setBlock(i1, j1, k1,plantBlock, 0, 2);
-                    }
+            		/**
+            		 * TODO: Figure out why canBlockStay() isn't working.
+            		 * if (plantBlock.getBlock().canBlockStay(world, new BlockPos(i1, j1 , k1), plantBlock))
+            		 * {
+            		 */
+
+                        world.setBlockState(new BlockPos(i1, j1, k1), plantBlock, 2);
+                        
+            		/**
+            		 * }
+            		 */
                 }
             }
         }

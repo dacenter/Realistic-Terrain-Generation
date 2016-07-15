@@ -562,7 +562,7 @@ public class RealisticBiomeBase
             j1 = rand.nextInt(28) + 4;
             int k1 = chunkZ + rand.nextInt(16);
 
-            if (world.getBlock(i1, j1, k1).isReplaceableOreGen(world, i1, j1, k1, emeraldStoneBlock))
+            if (world.getBlockState(new BlockPos(i1, j1, k1).isReplaceableOreGen(world, i1, j1, k1, emeraldStoneBlock)))
             {
                 world.setBlock(i1, j1, k1, emeraldEmeraldBlock, emeraldEmeraldMeta, 2);
             }
@@ -583,7 +583,7 @@ public class RealisticBiomeBase
             {
                 for (int y = 0; y < maxY; ++y)
                 {   
-                    if (world.getBlock(x, y, z).isReplaceableOreGen(world, x, y, z, emeraldEmeraldBlock)) {
+                    if (world.getBlockState(new BlockPos(x, y, z).isReplaceableOreGen(world, x, y, z, emeraldEmeraldBlock))) {
                         
                         world.setBlock(x, y, z, emeraldStoneBlock, emeraldStoneMeta, 2);
                     }

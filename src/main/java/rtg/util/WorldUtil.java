@@ -2,7 +2,9 @@ package rtg.util;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class WorldUtil
@@ -18,7 +20,7 @@ public class WorldUtil
 	 * Checks a given coordinate to see if it is surrounded by a given block, usually air.
 	 * This method only checks along the same Y coord.
 	 */
-	public boolean isSurroundedByBlock(Block checkBlock, int checkDistance, SurroundCheckType checkType, Random rand, int x, int y, int z)
+	public boolean isSurroundedByBlock(IBlockState checkBlock, int checkDistance, SurroundCheckType checkType, Random rand, int x, int y, int z)
 	{
 		switch (checkType)
 		{
@@ -29,7 +31,7 @@ public class WorldUtil
 						
 						if (x == ix && z == iz) continue;
 						
-						if (this.world.getBlock(x + ix, y, z + iz) != checkBlock) return false;
+						if (this.world.getBlockState(new BlockPos(x + ix, y, z + iz)) != checkBlock) return false;
 					}
 				}
 
@@ -39,10 +41,10 @@ public class WorldUtil
 				
 				for (int i = checkDistance; i > 0; i--) {
 					
-					if (this.world.getBlock(x, y, z + i) != checkBlock) return false;
-					if (this.world.getBlock(x, y, z - i) != checkBlock) return false;
-					if (this.world.getBlock(x + i, y, z) != checkBlock) return false;
-					if (this.world.getBlock(x - i, y, z) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x, y, z + i)) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x, y, z - i)) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x + i, y, z)) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x - i, y, z)) != checkBlock) return false;
 				}
 				
 				break;
@@ -51,10 +53,10 @@ public class WorldUtil
 				
 				for (int i = checkDistance; i > 0; i--) {
 					
-					if (this.world.getBlock(x + i, y, z + i) != checkBlock) return false;
-					if (this.world.getBlock(x + i, y, z - i) != checkBlock) return false;
-					if (this.world.getBlock(x - i, y, z + i) != checkBlock) return false;
-					if (this.world.getBlock(x - i, y, z - i) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x + i, y, z + i)) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x + i, y, z - i)) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x - i, y, z + i)) != checkBlock) return false;
+					if (this.world.getBlockState(new BlockPos(x - i, y, z - i)) != checkBlock) return false;
 				}
 				
 				break;
@@ -65,6 +67,33 @@ public class WorldUtil
 		
 		return true;
 	}
+	
+	/**
+	 * Checks to see if a given block is above a given coordinate.
+	 */
+    public boolean isBlockAbove(IBlockState checkBlock, int checkDistance, World world, int x, int y, int z, boolean materialCheck)
+    {
+    	Material checkBlockMaterial = checkBlock.getBlock().getMaterial(checkBlock);
+    	IBlockState blockAbove;
+    	Material m;
+    	
+    	for (int i = 1; i <= checkDistance; i++) {
+    		
+	    	blockAbove = world.getBlockState(new BlockPos(x, y + checkDistance, z));
+	    	
+	    	if (materialCheck) {
+	    		m = blockAbove.getBlock().getMaterial(blockAbove);
+	    		if (m != checkBlockMaterial) {
+	    			return false;
+	    		}
+	    	}
+	    	else if (blockAbove != checkBlock) {
+	    		return false;
+	    	}
+    	}
+    	
+    	return true;
+    }
 	
 	public enum SurroundCheckType
 	{

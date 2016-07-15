@@ -3,6 +3,7 @@ package rtg.world.gen.feature;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -38,8 +39,10 @@ public class WorldGenFlowersRTG extends WorldGenerator
     	flowers = f;
     }
     
-    public boolean generate(World world, Random rand, int x, int y, int z)
-    {
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos)
+	{
+		int x = pos.getX(); int y = pos.getY(); int z = pos.getZ();
     	int randomFlower = flowers[rand.nextInt(flowers.length)];
     	
     	if(randomFlower > 9)
@@ -50,9 +53,9 @@ public class WorldGenFlowersRTG extends WorldGenerator
                 int j1 = y + rand.nextInt(4) - rand.nextInt(4);
                 int k1 = z;// + rand.nextInt(8) - rand.nextInt(8);
 
-                if (world.isAirBlock(i1, j1, k1) && (!world.provider.hasNoSky || j1 < 254) && Blocks.double_plant.canPlaceBlockAt(world, i1, j1, k1))
+                if (world.isAirBlock(new BlockPos(i1, j1, k1)) && (!world.provider.getHasNoSky() || j1 < 254) && Blocks.DOUBLE_PLANT.canPlaceBlockAt(world, new BlockPos(i1, j1, k1)))
                 {
-                    Blocks.double_plant.func_149889_c(world, i1, j1, k1, randomFlower - 10, 0);
+                	world.setBlockState(new BlockPos(i1, j1, k1), Blocks.DOUBLE_PLANT.getStateFromMeta(randomFlower - 10), 0);
                 }
             }
     	}
@@ -64,9 +67,10 @@ public class WorldGenFlowersRTG extends WorldGenerator
 	            int j1 = y + rand.nextInt(4) - rand.nextInt(4);
 	            int k1 = z;// + rand.nextInt(8) - rand.nextInt(8);
 	
-	            if (world.isAirBlock(i1, j1, k1) && (!world.provider.hasNoSky || j1 < 255) && Blocks.yellow_flower.canBlockStay(world, i1, j1, k1))
+	            if (world.isAirBlock(new BlockPos(i1, j1, k1)) && (!world.provider.getHasNoSky() || j1 < 255)
+	            		&& Blocks.YELLOW_FLOWER.canBlockStay(world, new BlockPos(i1, j1, k1), Blocks.YELLOW_FLOWER.getDefaultState()))
 	            {
-	            	world.setBlock(i1, j1, k1, Blocks.yellow_flower, 0, 0);
+	            	world.setBlockState(new BlockPos(i1, j1, k1), Blocks.YELLOW_FLOWER.getDefaultState(), 0);
 	            }
 	        }
     	}
@@ -78,9 +82,10 @@ public class WorldGenFlowersRTG extends WorldGenerator
 	            int j1 = y + rand.nextInt(4) - rand.nextInt(4);
 	            int k1 = z;// + rand.nextInt(8) - rand.nextInt(8);
 	
-	            if (world.isAirBlock(i1, j1, k1) && (!world.provider.hasNoSky || j1 < 255) && Blocks.red_flower.canBlockStay(world, i1, j1, k1))
+	            if (world.isAirBlock(new BlockPos(i1, j1, k1)) && (!world.provider.getHasNoSky() || j1 < 255)
+	            		&& Blocks.RED_FLOWER.canPlaceBlockAt(world, new BlockPos(i1, j1, k1)))
 	            {
-	            	world.setBlock(i1, j1, k1, Blocks.red_flower, randomFlower, 0);
+	            	world.setBlockState(new BlockPos(i1, j1, k1), Blocks.RED_FLOWER.getStateFromMeta(randomFlower), 0);
 	            }
 	        }
     	}

@@ -200,7 +200,7 @@ public class EventManagerRTG
             int y = event.y;
             int z = event.z;
 
-            Block saplingBlock = world.getBlock(x, y, z);
+            Block saplingBlock = world.getBlockState(new BlockPos(x, y, z));
             byte saplingMeta = (byte) saplingBlock.getDamageValue(world, x, y, z);
 
             WorldChunkManagerRTG cmr = (WorldChunkManagerRTG) world.getWorldChunkManager();
@@ -265,7 +265,7 @@ public class EventManagerRTG
                         event.setResult(Result.DENY);
 
                         // Sometimes we have to remove the sapling manually because some trees grow around it, leaving the original sapling.
-                        if (world.getBlock(x, y, z) == saplingBlock) {
+                        if (world.getBlockState(new BlockPos(x, y, z) == saplingBlock)) {
                             world.setBlock(x, y, z, Blocks.air, (byte)0, 2);
                         }
                     }
