@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
@@ -18,18 +19,15 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaDesertM;
 
 public class RealisticBiomeVanillaDesertM extends RealisticBiomeVanillaBase
 {
-    public static BiomeGenBase standardBiome = Biomes.desert;
-    public static BiomeGenBase mutationBiome = Biomes.getBiome(standardBiome.biomeID + MUTATION_ADDEND);
-    
-    public static Block topBlock = mutationBiome.topBlock;
-    public static Block fillerBlock = mutationBiome.fillerBlock;
+    public static Biome biome = Biomes.MUTATED_DESERT;
+    public static Biome river = Biomes.RIVER;
 
     public RealisticBiomeVanillaDesertM(BiomeConfig config)
     {
     
         super(config, 
             mutationBiome,
-            BiomeGenBase.river,
+            Biome.river,
             new TerrainVanillaDesertM(10f, 20f, 68f, 200f),
             new SurfaceVanillaDesertM(config, Blocks.sand, (byte)0, Blocks.sandstone, (byte)0, 0));
         

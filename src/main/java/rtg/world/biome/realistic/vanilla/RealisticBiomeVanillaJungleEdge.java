@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaJungleEdge;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
@@ -21,8 +22,8 @@ public class RealisticBiomeVanillaJungleEdge extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.jungleEdge,
-            BiomeGenBase.river,
+            Biome.jungleEdge,
+            Biome.river,
             new TerrainVanillaJungleEdge(),
             new SurfaceVanillaJungleEdge(config, topBlock, fillerBlock)
         );

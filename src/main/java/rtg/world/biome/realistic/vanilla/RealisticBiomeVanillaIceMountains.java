@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
 import rtg.world.gen.surface.vanilla.SurfaceVanillaIceMountains;
@@ -18,8 +19,8 @@ public class RealisticBiomeVanillaIceMountains extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.iceMountains,
-            BiomeGenBase.frozenRiver,
+            Biome.iceMountains,
+            Biome.frozenRiver,
             new TerrainVanillaIceMountains(230f, 60f, 68f),
             new SurfaceVanillaIceMountains(config, topBlock, fillerBlock, Blocks.snow, Blocks.snow, Blocks.packed_ice, Blocks.ice, 60f, -0.14f, 14f, 0.25f)
         );

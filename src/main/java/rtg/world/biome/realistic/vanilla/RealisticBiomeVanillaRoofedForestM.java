@@ -3,8 +3,10 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaRoofedForestM;
+import rtg.util.BiomeUtils;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
 import rtg.world.biome.deco.DecoBoulder;
 import rtg.world.biome.deco.DecoDeadBush;
@@ -24,18 +26,15 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaRoofedForestM;
 
 public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeVanillaBase
 {
-    public static BiomeGenBase standardBiome = Biomes.roofedForest;
-    public static BiomeGenBase mutationBiome = Biomes.getBiome(standardBiome.biomeID + MUTATION_ADDEND);
-    
-    public static Block topBlock = mutationBiome.topBlock;
-    public static Block fillerBlock = mutationBiome.fillerBlock;
-    
+    public static Biome biome = Biomes.MUTATED_ROOFED_FOREST;
+    public static Biome river = Biomes.RIVER;
+
     public RealisticBiomeVanillaRoofedForestM(BiomeConfig config)
     {
     
         super(config, 
             mutationBiome,
-            BiomeGenBase.river,
+            Biome.river,
             new TerrainVanillaRoofedForestM(),
             new SurfaceVanillaRoofedForestM(config, topBlock, fillerBlock)
         );

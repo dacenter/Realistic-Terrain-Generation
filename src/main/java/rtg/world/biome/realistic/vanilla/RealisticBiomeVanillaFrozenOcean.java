@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
 import rtg.world.gen.surface.vanilla.SurfaceVanillaFrozenOcean;
@@ -18,8 +19,8 @@ public class RealisticBiomeVanillaFrozenOcean extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.frozenOcean,
-            BiomeGenBase.river,
+            Biome.frozenOcean,
+            Biome.river,
             new TerrainVanillaFrozenOcean(),
             new SurfaceVanillaFrozenOcean(config, Blocks.sand, Blocks.sand, Blocks.gravel, 20f, 0.2f));
         

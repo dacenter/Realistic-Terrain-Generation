@@ -22,7 +22,7 @@ import rtg.world.biome.realistic.RealisticBiomePatcher;
 
 public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeProvider
 {
-    /** A GenLayer containing the indices into BiomeGenBase.biomeList[] */
+    /** A GenLayer containing the indices into Biome.biomeList[] */
     private GenLayer genBiomes;
     private GenLayer biomeIndexLayer;
     private List biomesToSpawnIn;
@@ -134,8 +134,8 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
     }
 
     @Override
-    public BiomeGenBase getBiomeGenAt(int par1, int par2) {
-        BiomeGenBase result;
+    public Biome getBiomeGenAt(int par1, int par2) {
+        Biome result;
 
         result = this.biomeCache.getBiomeGenAt(par1, par2);
 
@@ -152,7 +152,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
 
         if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5)
         {
-            par1ArrayOfBiomeGenBase = new BiomeGenBase[par4 * par5];
+            par1ArrayOfBiomeGenBase = new Biome[par4 * par5];
         }
 
         int[] aint = this.genBiomes.getInts(par2, par3, par4, par5);
@@ -306,7 +306,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
 
         if (par1ArrayOfBiomeGenBase == null || par1ArrayOfBiomeGenBase.length < par4 * par5)
         {
-            par1ArrayOfBiomeGenBase = new BiomeGenBase[par4 * par5];
+            par1ArrayOfBiomeGenBase = new Biome[par4 * par5];
         }
 
         if (par6 && par4 == 16 && par5 == 16 && (par2 & 15) == 0 && (par3 & 15) == 0)
@@ -389,7 +389,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
         {
             int l2 = l + k2 % l1 << 2;
             int i3 = i1 + k2 / l1 << 2;
-            BiomeGenBase biomegenbase = Biomes.getBiome(aint[k2]);
+            Biome biomegenbase = Biomes.getBiome(aint[k2]);
 
             if (p_150795_4_.contains(biomegenbase) && (chunkposition == null || p_150795_5_.nextInt(j2 + 1) == 0))
             {

@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaExtremeHills;
 import rtg.world.biome.deco.DecoBoulder;
@@ -30,8 +31,8 @@ public class RealisticBiomeVanillaExtremeHills extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.extremeHills,
-            BiomeGenBase.river,
+            Biome.extremeHills,
+            Biome.river,
             new TerrainVanillaExtremeHills(10f, 120f, 10f, 200f),
             new SurfaceVanillaExtremeHills(config, topBlock, fillerBlock, Blocks.grass, Blocks.dirt, 60f, -0.14f, 14f, 0.25f)
         );

@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaExtremeHillsPlus;
 import rtg.world.biome.deco.DecoBoulder;
@@ -30,8 +31,8 @@ public class RealisticBiomeVanillaExtremeHillsPlus extends RealisticBiomeVanilla
     {
     
         super(config, 
-            BiomeGenBase.extremeHillsPlus,
-            BiomeGenBase.river,
+            Biome.extremeHillsPlus,
+            Biome.river,
             new TerrainVanillaExtremeHillsPlus(150f, 80f, 90f),
             new SurfaceVanillaExtremeHillsPlus(config, Blocks.grass, Blocks.dirt, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.gravel, 0.08f));
         this.generatesEmeralds = true;

@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
@@ -32,8 +33,8 @@ public class RealisticBiomeVanillaMesaPlateau extends RealisticBiomeVanillaBase
     {
 
         super(config,
-                BiomeGenBase.mesaPlateau,
-                BiomeGenBase.river,
+                Biome.mesaPlateau,
+                Biome.river,
                 new TerrainVanillaMesaPlateau(true, 35f, 160f, 60f, 40f, 69f),
                 new SurfaceVanillaMesaPlateau(config, Blocks.sand, (byte)1, Blocks.sand, (byte)1, 0)
         );

@@ -223,7 +223,7 @@ public class MapGenCavesRTG extends MapGenCaves
         caveFrequency = ConfigRTG.caveFrequency;
 
         // If the user has set biome-specific settings, let's use those instead.
-        BiomeGenBase biome = world.getBiomeGenForCoords(this.rand.nextInt(16) + chunkX * 16, this.rand.nextInt(16) + chunkZ * 16);
+        Biome biome = world.getBiomeGenForCoords(this.rand.nextInt(16) + chunkX * 16, this.rand.nextInt(16) + chunkZ * 16);
         
         if (biome != null) {
         
@@ -290,7 +290,7 @@ public class MapGenCavesRTG extends MapGenCaves
 
     //Exception biomes to make sure we generate like vanilla
     
-    private boolean isExceptionBiome(BiomeGenBase biome)
+    private boolean isExceptionBiome(Biome biome)
     {
     	if (biome != null) {
 	        if (biome.biomeID == Biomes.mushroomIsland.biomeID) {
@@ -312,7 +312,7 @@ public class MapGenCavesRTG extends MapGenCaves
     
     private boolean isTopBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ)
     {
-        BiomeGenBase biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
+        Biome biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
         return (isExceptionBiome(biome) ? data[index] == Blocks.grass : data[index] == Biomes.topBlock);
     }
 
@@ -335,7 +335,7 @@ public class MapGenCavesRTG extends MapGenCaves
     @Override
     protected void digBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop)
     {
-        BiomeGenBase biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
+        Biome biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
         Block top    = (isExceptionBiome(biome) ? Blocks.grass : biome.topBlock);
         Block filler = (isExceptionBiome(biome) ? Blocks.dirt  : biome.fillerBlock);
         Block block  = data[index];

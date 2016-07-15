@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaForest;
 import rtg.world.biome.deco.collection.DecoCollectionForest;
@@ -19,8 +20,8 @@ public class RealisticBiomeVanillaForest extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.forest,
-            BiomeGenBase.river,
+            Biome.forest,
+            Biome.river,
             new TerrainVanillaForest(),
             new SurfaceVanillaForest(config, Blocks.grass, Blocks.dirt, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.dirt, (byte)2, 0.10f)
         );

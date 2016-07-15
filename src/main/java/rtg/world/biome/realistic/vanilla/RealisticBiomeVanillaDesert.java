@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
@@ -25,8 +26,8 @@ public class RealisticBiomeVanillaDesert extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.desert,
-            BiomeGenBase.river,
+            Biome.desert,
+            Biome.river,
             new TerrainVanillaDesert(),
             new SurfaceVanillaDesert(config, topBlock, fillerBlock));
         

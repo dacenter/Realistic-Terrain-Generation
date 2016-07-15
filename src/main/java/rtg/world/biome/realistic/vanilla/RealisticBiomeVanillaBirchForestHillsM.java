@@ -3,8 +3,10 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaBirchForestHillsM;
+import rtg.util.BiomeUtils;
 import rtg.world.biome.deco.DecoBase;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
 import rtg.world.biome.deco.DecoFallenTree;
@@ -24,19 +26,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaBirchForestHillsM;
 
 public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeVanillaBase
 {	
-    public static BiomeGenBase standardBiome = Biomes.birchForestHills;
-    public static BiomeGenBase mutationBiome = Biomes.getBiome(standardBiome.biomeID + MUTATION_ADDEND);
-    
-    public static Block topBlock = mutationBiome.topBlock;
-    public static Block fillerBlock = mutationBiome.fillerBlock;
-	
+    public static Biome biome = Biomes.MUTATED_BIRCH_FOREST_HILLS;
+    public static Biome river = Biomes.RIVER;
+
 	public RealisticBiomeVanillaBirchForestHillsM(BiomeConfig config)
 	{
-		super(config, 
-		    mutationBiome,
-			BiomeGenBase.river,
+		super(config, mutationBiome, river,
 			new TerrainVanillaBirchForestHillsM(),
-			new SurfaceVanillaBirchForestHillsM(config, topBlock, fillerBlock)
+			new SurfaceVanillaBirchForestHillsM(config, mutationBiome.topBlock, mutationBiome.fillerBlock)
 		);
         this.noLakes=true;
         

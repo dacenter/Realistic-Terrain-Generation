@@ -3,8 +3,10 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaRedwoodTaigaHills;
+import rtg.util.BiomeUtils;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
 import rtg.world.biome.deco.DecoBoulder;
 import rtg.world.biome.deco.DecoFallenTree;
@@ -19,18 +21,15 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaRedwoodTaigaHills;
 
 public class RealisticBiomeVanillaRedwoodTaigaHills extends RealisticBiomeVanillaBase
 {
-    public static BiomeGenBase standardBiome = Biomes.megaTaigaHills;
-    public static BiomeGenBase mutationBiome = Biomes.getBiome(standardBiome.biomeID + MUTATION_ADDEND);
-    
-    public static Block topBlock = mutationBiome.topBlock;
-    public static Block fillerBlock = mutationBiome.fillerBlock;
-    
+    public static Biome biome = Biomes.MUTATED_REDWOOD_TAIGA_HILLS;
+    public static Biome river = Biomes.RIVER;
+
     public RealisticBiomeVanillaRedwoodTaigaHills(BiomeConfig config)
     {
     
         super(config, 
             mutationBiome,
-            BiomeGenBase.river,
+            Biome.river,
             new TerrainVanillaRedwoodTaigaHills(),
             new SurfaceVanillaRedwoodTaigaHills(config, Blocks.grass, Blocks.dirt, true, Blocks.sand, 0.2f)
         );

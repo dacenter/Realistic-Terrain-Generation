@@ -3,7 +3,9 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
+import rtg.util.BiomeUtils;
 import rtg.world.biome.deco.DecoBoulder;
 import rtg.world.biome.deco.DecoCactus;
 import rtg.world.biome.deco.DecoDoubleGrass;
@@ -20,18 +22,15 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaSavannaPlateauM;
 
 public class RealisticBiomeVanillaSavannaPlateauM extends RealisticBiomeVanillaBase
 {
-    public static BiomeGenBase standardBiome = Biomes.savannaPlateau;
-    public static BiomeGenBase mutationBiome = Biomes.getBiome(standardBiome.biomeID + MUTATION_ADDEND);
-    
-    public static Block topBlock = mutationBiome.topBlock;
-    public static Block fillerBlock = mutationBiome.fillerBlock;
-    
+    public static Biome biome = Biomes.MUTATED_SAVANNA_ROCK;
+    public static Biome river = Biomes.RIVER;
+
     public RealisticBiomeVanillaSavannaPlateauM(BiomeConfig config)
     {
     
         super(config, 
             mutationBiome,
-            BiomeGenBase.river,
+            Biome.river,
             new TerrainVanillaSavannaPlateauM(true, 35f, 160f, 60f, 40f, 69f),
             new SurfaceVanillaSavannaPlateauM(config, topBlock, (byte)0, fillerBlock, (byte)0, 0)
         );

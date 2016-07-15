@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaJungleEdgeM;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
@@ -13,18 +14,15 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaJungleEdgeM;
 
 public class RealisticBiomeVanillaJungleEdgeM extends RealisticBiomeVanillaBase
 {
-    public static BiomeGenBase standardBiome = Biomes.jungleEdge;
-    public static BiomeGenBase mutationBiome = Biomes.getBiome(standardBiome.biomeID + MUTATION_ADDEND);
-    
-    public static Block topBlock = mutationBiome.topBlock;
-    public static Block fillerBlock = mutationBiome.fillerBlock;
-    
+    public static Biome biome = Biomes.MUTATED_JUNGLE_EDGE;
+    public static Biome river = Biomes.RIVER;
+
     public RealisticBiomeVanillaJungleEdgeM(BiomeConfig config)
     {
     
         super(config, 
             mutationBiome,
-            BiomeGenBase.river,
+            Biome.river,
             new TerrainVanillaJungleEdgeM(),
             new SurfaceVanillaJungleEdgeM(config, topBlock, fillerBlock)
         );

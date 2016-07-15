@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaBirchForestHills;
 import rtg.world.biome.deco.DecoBase;
@@ -24,14 +25,12 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaBirchForestHills;
 
 public class RealisticBiomeVanillaBirchForestHills extends RealisticBiomeVanillaBase
 {	
-	public static Block topBlock = Biomes.birchForestHills.topBlock;
-    public static Block fillerBlock = Biomes.birchForestHills.fillerBlock;
+	public static Biome biome = Biomes.BIRCH_FOREST_HILLS;
+	public static Biome river = Biomes.RIVER;
 	
 	public RealisticBiomeVanillaBirchForestHills(BiomeConfig config)
 	{
-		super(config, 
-			BiomeGenBase.birchForestHills,
-			BiomeGenBase.river,
+		super(config, biome, river,
 			new TerrainVanillaBirchForestHills(),
 			new SurfaceVanillaBirchForestHills(config, Blocks.grass, Blocks.dirt, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.dirt, (byte)2, 0.10f)
 		);

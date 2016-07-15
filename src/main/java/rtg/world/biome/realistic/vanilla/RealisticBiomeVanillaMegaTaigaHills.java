@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaMegaTaigaHills;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
@@ -27,8 +28,8 @@ public class RealisticBiomeVanillaMegaTaigaHills extends RealisticBiomeVanillaBa
     {
     
         super(config, 
-            BiomeGenBase.megaTaigaHills,
-            BiomeGenBase.river,
+            Biome.megaTaigaHills,
+            Biome.river,
             new TerrainVanillaMegaTaigaHills(),
             new SurfaceVanillaMegaTaigaHills(config, Blocks.grass, Blocks.dirt, true, Blocks.sand, 0.2f)
         );

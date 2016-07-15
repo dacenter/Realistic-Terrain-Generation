@@ -1,8 +1,8 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaBeach;
 import rtg.world.biome.deco.DecoTree;
@@ -13,18 +13,17 @@ import rtg.world.gen.feature.tree.rtg.TreeRTGCocosNucifera;
 import rtg.world.gen.surface.vanilla.SurfaceVanillaBeach;
 import rtg.world.gen.terrain.vanilla.TerrainVanillaBeach;
 
-public class RealisticBiomeVanillaBeach extends RealisticBiomeVanillaBase {
+public class RealisticBiomeVanillaBeach extends RealisticBiomeVanillaBase
+{
     
-    public static Block topBlock = Biomes.beach.topBlock;
-    public static Block fillerBlock = Biomes.beach.fillerBlock;
+	public static Biome biome = Biomes.BEACH;
+	public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaBeach(BiomeConfig config)
     {
-        super(config, 
-            BiomeGenBase.beach,
-            BiomeGenBase.river,
+        super(config, biome, river,
             new TerrainVanillaBeach(),
-            new SurfaceVanillaBeach(config, topBlock, fillerBlock, topBlock, fillerBlock, (byte) 0, 1)
+            new SurfaceVanillaBeach(config, biome.topBlock, biome.fillerBlock, biome.topBlock, biome.fillerBlock, (byte) 0, 1)
         );
         
 		/**
@@ -41,7 +40,7 @@ public class RealisticBiomeVanillaBeach extends RealisticBiomeVanillaBase {
 		nuciferaTree.minCrownSize = 6;
 		nuciferaTree.maxCrownSize = 8;
 		nuciferaTree.validGroundBlocks.clear();
-		nuciferaTree.validGroundBlocks.add(Blocks.sand);
+		nuciferaTree.validGroundBlocks.add(Blocks.SAND.getDefaultState());
 		this.addTree(nuciferaTree);
         
 		DecoTree palmTrees = new DecoTree(nuciferaTree);

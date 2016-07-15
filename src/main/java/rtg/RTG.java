@@ -23,7 +23,7 @@ import rtg.world.gen.structure.MapGenScatteredFeatureRTG;
 import rtg.world.gen.structure.MapGenVillageRTG;
 
 
-//@Mod(modid = "RTG", name = "Realistic Terrain Generaton", version = "0.8.0d", dependencies = "required-after:Forge@[10.13.4.1448,)", acceptableRemoteVersions = "*")
+//@Mod(modid = "RTG", name = "Realistic Terrain Generaton", version = "2.0.0", dependencies = "required-after:Forge@[10.13.4.1448,)", acceptableRemoteVersions = "*")
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = "required-after:Forge@[" + ModInfo.FORGE_DEP + ",)" + ModInfo.MOD_DEPS, acceptableRemoteVersions = "*")
 public class RTG {
 
@@ -70,43 +70,9 @@ public class RTG {
     {
 
         RealisticBiomeVanillaBase.addBiomes();
-        
-        RealisticBiomeBOPBase.addBiomes();
-        RealisticBiomeEBBase.addBiomes();
-        RealisticBiomeEBXLBase.addBiomes();
-        RealisticBiomeHLBase.addBiomes();
-        RealisticBiomeTCBase.addBiomes();
-        RealisticBiomeBCBase.addBiomes();
-        RealisticBiomeAMBase.addBiomes();
-        RealisticBiomeATGBase.addBiomes();
-        RealisticBiomeCCBase.addBiomes();
-        RealisticBiomeGCBase.addBiomes();
-        RealisticBiomeVAMPBase.addBiomes();
-        RealisticBiomeACBase.addBiomes();
-        RealisticBiomeRWBase.addBiomes();
-        RealisticBiomeLOMBase.addBiomes();
-        RealisticBiomeTOFUBase.addBiomes();
-        RealisticBiomeFNBase.addBiomes();
-        RealisticBiomeICBase.addBiomes();
-        RealisticBiomeIDTBase.addBiomes();
 
         RealisticBiomePresenceTester.doBiomeCheck();
     }
-    
-/*
-    @EventHandler
-    public void serverAboutToStart(FMLServerAboutToStartEvent event) {}
-    
-    @EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {}
-    
-    @EventHandler
-    public void serverStarted(FMLServerStartedEvent event) {}
-
-    @EventHandler
-    public void serverStopping(FMLServerStoppingEvent event) {}
-*/
-
 
     public void runOnServerClose(Runnable action) {
         serverCloseActions.add(action);
@@ -129,11 +95,12 @@ public class RTG {
         }
         oneShotServerCloseActions.clear();
 
-        if (eventMgr.isRegistered()) {
+        // TODO: Port the latest event manager stuff.
+        /*if (eventMgr.isRegistered()) {
             Logger.info("Unregistering RTG's Terrain Event Handlers...");
             RTG.eventMgr.unRegisterEventHandlers();
             if (!eventMgr.isRegistered()) Logger.info("RTG's Terrain Event Handlers have been unregistered successfully.");
-        }
+        }*/
 
     }
 }

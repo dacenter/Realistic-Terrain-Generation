@@ -17,7 +17,7 @@ public class RealisticBiomePresenceTester {
         {
             if (b[i] != null)
             {
-                BiomeGenBase biome = b[i];
+                Biome biome = b[i];
                 int biomeId = b[i].biomeID;
                 String biomeName = b[i].biomeName;
                 String biomeClass = b[i].getBiomeClass().getName();

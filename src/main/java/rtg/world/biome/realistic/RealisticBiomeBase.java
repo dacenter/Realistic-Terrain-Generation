@@ -15,7 +15,9 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
@@ -46,10 +48,10 @@ import rtg.world.gen.terrain.TerrainBase;
 
 public class RealisticBiomeBase
 {
-    private static final RealisticBiomeBase[] arrRealisticBiomeIds = new RealisticBiomeBase[BiomeGenBase.getBiomeGenArray().length];
+    private static final RealisticBiomeBase[] arrRealisticBiomeIds = new RealisticBiomeBase[Biome.getBiomeGenArray().length];
     
-    public final BiomeGenBase baseBiome;
-    public final BiomeGenBase riverBiome;
+    public final Biome baseBiome;
+    public final Biome riverBiome;
     public BiomeConfig config;
     
     public TerrainBase terrain;
@@ -93,12 +95,12 @@ public class RealisticBiomeBase
     public boolean disallowStoneBeaches = false; // this is for rugged biomes that should have sand beaches
     public boolean disallowAllBeaches = false;
 
-    public RealisticBiomeBase(BiomeConfig config, BiomeGenBase biome) {
+    public RealisticBiomeBase(BiomeConfig config, Biome biome) {
     
-        this(config, biome, BiomeGenBase.river);
+        this(config, biome, Biome.river);
     }
     
-    public RealisticBiomeBase(BiomeConfig config, BiomeGenBase biome, BiomeGenBase river) {
+    public RealisticBiomeBase(BiomeConfig config, Biome biome, Biome river) {
 
         this.config = config;
 
@@ -158,7 +160,7 @@ public class RealisticBiomeBase
         return arrRealisticBiomeIds[id];
     }
     
-    public RealisticBiomeBase(BiomeConfig config, BiomeGenBase b, BiomeGenBase riverbiome, TerrainBase t, SurfaceBase[] s) {
+    public RealisticBiomeBase(BiomeConfig config, Biome b, Biome riverbiome, TerrainBase t, SurfaceBase[] s) {
     
         this(config, b, riverbiome);
         
@@ -168,7 +170,7 @@ public class RealisticBiomeBase
         surfacesLength = s.length;
     }
     
-    public RealisticBiomeBase(BiomeConfig config, BiomeGenBase b, BiomeGenBase riverbiome, TerrainBase t, SurfaceBase s) {
+    public RealisticBiomeBase(BiomeConfig config, Biome b, Biome riverbiome, TerrainBase t, SurfaceBase s) {
         
         this(config, b, riverbiome, t, new SurfaceBase[] {s});
         
@@ -289,7 +291,7 @@ public class RealisticBiomeBase
     /**
      * This method is used by DecoBaseBiomeDecorations to allow the base biome to decorate itself.
      */
-    public void rDecorateSeedBiome(World world, Random rand, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float strength, float river, BiomeGenBase seedBiome) {
+    public void rDecorateSeedBiome(World world, Random rand, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float strength, float river, Biome seedBiome) {
         
         if (strength > 0.3f) {
             seedBiome.decorate(world, rand, chunkX, chunkY);
@@ -303,7 +305,7 @@ public class RealisticBiomeBase
      * This method is used by DecoBaseBiomeDecorations to generate ores when the base biome 
      * doesn't decorate itself.
      */
-    public void rOreGenSeedBiome(World world, Random rand, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float strength, float river, BiomeGenBase seedBiome) {
+    public void rOreGenSeedBiome(World world, Random rand, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float strength, float river, Biome seedBiome) {
 
         MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(world, rand, chunkX, chunkY));
         

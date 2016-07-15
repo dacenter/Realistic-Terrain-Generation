@@ -2,6 +2,7 @@ package rtg.world.biome.realistic.vanilla;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaSavanna;
 import rtg.world.biome.deco.collection.DecoCollectionDesertRiver;
@@ -19,8 +20,8 @@ public class RealisticBiomeVanillaSavanna extends RealisticBiomeVanillaBase
     {
     
         super(config, 
-            BiomeGenBase.savanna,
-            BiomeGenBase.river,
+            Biome.savanna,
+            Biome.river,
             new TerrainVanillaSavanna(),
             new SurfaceVanillaSavanna(config, topBlock, fillerBlock, topBlock, 13f, 0.27f)
         );

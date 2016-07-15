@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
@@ -24,8 +25,8 @@ public class RealisticBiomeVanillaDesertHills extends RealisticBiomeVanillaBase
 	public RealisticBiomeVanillaDesertHills(BiomeConfig config)
 	{
 		super(config, 
-			BiomeGenBase.desertHills,
-			BiomeGenBase.river,
+			Biome.desertHills,
+			Biome.river,
 			new TerrainVanillaDesertHills(10f, 80f, 68f, 200f),
 			new SurfaceVanillaDesertHills(config, Blocks.sand, Blocks.sandstone, false, null, 0f, 1.5f, 60f, 65f, 1.5f)
 		);

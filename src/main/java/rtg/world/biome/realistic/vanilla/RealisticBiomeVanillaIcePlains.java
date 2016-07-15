@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaIcePlains;
 import rtg.world.biome.deco.DecoBaseBiomeDecorations;
@@ -20,8 +21,8 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeVanillaBase
 	public RealisticBiomeVanillaIcePlains(BiomeConfig config)
 	{
 		super(config, 
-			BiomeGenBase.icePlains,
-			BiomeGenBase.frozenRiver,
+			Biome.icePlains,
+			Biome.frozenRiver,
 			new TerrainVanillaIcePlains(),
 			new SurfaceVanillaIcePlains(config, topBlock, fillerBlock, topBlock, topBlock)
 		);

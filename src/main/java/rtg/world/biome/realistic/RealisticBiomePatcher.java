@@ -7,7 +7,7 @@ public class RealisticBiomePatcher
     
     private int patchBiomeId;
     private RealisticBiomeBase realisticBiome;
-    private BiomeGenBase baseBiome;
+    private Biome baseBiome;
     
     public RealisticBiomePatcher()
     {
@@ -44,7 +44,7 @@ public class RealisticBiomePatcher
         }
     }
     
-    public BiomeGenBase getPatchedBaseBiome(String exceptionMessage)
+    public Biome getPatchedBaseBiome(String exceptionMessage)
     {
         if (this.patchBiomeId < 0) {
             throw new RuntimeException(exceptionMessage);

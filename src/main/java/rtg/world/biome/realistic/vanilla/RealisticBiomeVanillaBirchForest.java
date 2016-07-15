@@ -1,6 +1,8 @@
 package rtg.world.biome.realistic.vanilla;
 
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.Biome;
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaBirchForest;
 import rtg.world.biome.deco.DecoBase;
@@ -22,15 +24,16 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaBirchForest;
 
 public class RealisticBiomeVanillaBirchForest extends RealisticBiomeVanillaBase
 {
-
+    
+	public static Biome biome = Biomes.BIRCH_FOREST;
+	public static Biome river = Biomes.RIVER;
+    
     public RealisticBiomeVanillaBirchForest(BiomeConfig config)
     {
     
-        super(config, 
-            BiomeGenBase.birchForest,
-            BiomeGenBase.river,
+    	super(config, biome, river,
             new TerrainVanillaBirchForest(),
-            new SurfaceVanillaBirchForest(config, BiomeGenBase.birchForest.topBlock, BiomeGenBase.birchForest.fillerBlock, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.dirt, (byte)2, 0.15f)
+            new SurfaceVanillaBirchForest(config, Biome.birchForest.topBlock, Biome.birchForest.fillerBlock, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.dirt, (byte)2, 0.15f)
         );
         
 		/**
