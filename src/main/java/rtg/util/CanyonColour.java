@@ -35,7 +35,7 @@ public enum CanyonColour {
 			int j;
 			for (int i = 0; i < 256; i++) {
 				byte b = colour.bytes[i % colour.bytes.length];
-				c[i] = (b == -1) ? Blocks.hardened_clay : Blocks.stained_hardened_clay;
+				c[i] = (b == -1) ? Blocks.HARDENED_CLAY : Blocks.STAINED_HARDENED_CLAY;
 				cm[i] = (b == -1) ? (byte)0 : b;
 			}
 			colourBlocks.put(colour, c);

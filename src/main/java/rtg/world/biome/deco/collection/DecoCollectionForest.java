@@ -16,7 +16,6 @@ import rtg.world.biome.deco.helper.DecoHelperRandomSplit;
 import rtg.world.gen.feature.tree.rtg.TreeRTG;
 import rtg.world.gen.feature.tree.rtg.TreeRTGPiceaSitchensis;
 import rtg.world.gen.feature.tree.rtg.TreeRTGPinusPonderosa;
-import rtg.world.gen.feature.tree.vanilla.WorldGenForestRTG;
 import rtg.world.gen.feature.tree.vanilla.WorldGenTreesRTG;
 
 

@@ -1,5 +1,8 @@
 package rtg.util;
 
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
+
 
 /**
  *
@@ -12,11 +15,11 @@ public class BiomeSet {
 
     public class Water {
         public Water() {
-            biomes[BiomeGenBase.deepOcean.biomeID] = true;
-            biomes[BiomeGenBase.frozenOcean.biomeID] = true;
-            biomes[BiomeGenBase.frozenRiver.biomeID] = true;
-            biomes[BiomeGenBase.ocean.biomeID] = true;
-            biomes[BiomeGenBase.river.biomeID] = true;
+            biomes[Biome.getIdForBiome(Biomes.DEEP_OCEAN)] = true;
+            biomes[Biome.getIdForBiome(Biomes.FROZEN_OCEAN)] = true;
+            biomes[Biome.getIdForBiome(Biomes.FROZEN_RIVER)] = true;
+            biomes[Biome.getIdForBiome(Biomes.OCEAN)] = true;
+            biomes[Biome.getIdForBiome(Biomes.RIVER)] = true;
         }
     }
 
