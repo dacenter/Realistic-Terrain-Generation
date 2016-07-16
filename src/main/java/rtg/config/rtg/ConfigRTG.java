@@ -7,7 +7,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 
 import org.apache.commons.lang3.ArrayUtils;
-
 import rtg.util.Logger;
 import rtg.util.ModPresenceTester;
 

@@ -2,6 +2,7 @@ package rtg.world.biome.deco.collection;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
 import rtg.world.biome.deco.DecoBase;
 import rtg.world.biome.deco.DecoFallenTree;
 import rtg.world.biome.deco.DecoFallenTree.LogCondition;

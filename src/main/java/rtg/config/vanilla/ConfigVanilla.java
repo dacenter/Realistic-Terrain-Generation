@@ -3,6 +3,7 @@ package rtg.config.vanilla;
 import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
+
 import rtg.api.biome.vanilla.config.BiomeConfigVanilla;
 import rtg.config.BiomeConfigManager;
 import rtg.util.Logger;

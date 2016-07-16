@@ -1,6 +1,7 @@
 package rtg.world.biome.deco.collection;
 
 import net.minecraft.init.Blocks;
+
 import rtg.world.biome.deco.DecoBoulder;
 import rtg.world.biome.deco.DecoFallenTree;
 import rtg.world.biome.deco.DecoFallenTree.LogCondition;

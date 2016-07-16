@@ -1,6 +1,9 @@
 
 package rtg.util;
 
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
+
 import rtg.world.biome.realistic.RealisticBiomeBase;
 
 /**

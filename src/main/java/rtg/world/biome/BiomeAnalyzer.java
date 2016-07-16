@@ -1,6 +1,9 @@
 
 package rtg.world.biome;
 
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
+
 import rtg.config.rtg.ConfigRTG;
 import rtg.util.CircularSearchCreator;
 import rtg.world.biome.realistic.RealisticBiomeBase;

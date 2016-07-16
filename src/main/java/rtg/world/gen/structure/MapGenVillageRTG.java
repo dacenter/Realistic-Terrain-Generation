@@ -13,8 +13,12 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraft.world.gen.structure.StructureVillagePieces.Road;
+
+import rtg.api.biome.BiomeConfig;
 import rtg.config.rtg.ConfigRTG;
 import rtg.world.WorldTypeRTG;
+import rtg.world.biome.RTGBiomeProvider;
+import rtg.world.biome.realistic.RealisticBiomeBase;
 
 public class MapGenVillageRTG extends MapGenVillage {
     private int terrainType = ConfigRTG.villageSize;
@@ -53,7 +57,7 @@ public class MapGenVillageRTG extends MapGenVillage {
     @Override
     protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
         boolean booRTGWorld = (worldObj.getWorldInfo().getTerrainType() instanceof WorldTypeRTG);
-        boolean booRTGChunkManager = (worldObj.getBiomeProvider() instanceof BiomeProviderRTG);
+        boolean booRTGChunkManager = (worldObj.getBiomeProvider() instanceof RTGBiomeProvider);
         boolean canSpawnVillage = false;
 
         int k = chunkX;
@@ -78,12 +82,12 @@ public class MapGenVillageRTG extends MapGenVillage {
         if (k == i1 && l == j1) {
             if (booRTGWorld && booRTGChunkManager) {
 
-                BiomeProviderRTG cmr = (BiomeProviderRTG) worldObj.getBiomeProvider();
+                RTGBiomeProvider cmr = (RTGBiomeProvider) worldObj.getBiomeProvider();
                 int worldX = k * 16 + 8;
                 int worldZ = l * 16 + 8;
-                RTGBiome realisticBiome = cmr.getRealisticAt(worldX, worldZ);
+                RealisticBiomeBase realisticBiome = cmr.getBiomeDataAt(worldX, worldZ);
 
-                if (realisticBiome.getConfig().ALLOW_VILLAGES.get()) {
+                if (realisticBiome.config.getPropertyById(BiomeConfig.allowVillagesId).valueBoolean) {
                     canSpawnVillage = true;
                 }
             } else {

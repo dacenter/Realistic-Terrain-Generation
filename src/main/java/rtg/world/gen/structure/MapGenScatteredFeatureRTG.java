@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Random;
 
 import net.minecraft.entity.monster.EntityWitch;
@@ -20,7 +19,9 @@ import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
-import rtg.api.biome.BiomeConfig;
+
+import net.minecraftforge.common.BiomeDictionary;
+
 import rtg.config.rtg.ConfigRTG;
 import rtg.util.Logger;
 import rtg.world.WorldTypeRTG;
@@ -119,8 +120,26 @@ public class MapGenScatteredFeatureRTG extends MapGenScatteredFeature {
             Biome biomegenbase = this.worldObj.getBiome(new BlockPos(k * 16 + 8, 0, l * 16 + 8));
 
             if (biomegenbase != null) {
-                RTGBiome rBiome = RTGBiome.forBiome(Biome.getIdForBiome(biomegenbase));
-                if (!Objects.equals(rBiome.getConfig().SCATTERED_FEATURE.get(), BiomeConfig.FeatureType.NONE.name())) ;
+                
+                //Desert temple.
+                if (canSpawnDesertTemple(biomegenbase)) {
+                    return true;
+                }
+                
+                //Jungle temple.
+                if (canSpawnJungleTemple(biomegenbase)) {
+                    return true;
+                }
+                
+                //Witch hut.
+                if (canSpawnWitchHut(biomegenbase)) {
+                    return true;
+                }
+                
+                //Igloo.
+                if (canSpawnIgloo(biomegenbase)) {
+                    return true;
+                }
             }
         }
 
@@ -159,42 +178,81 @@ public class MapGenScatteredFeatureRTG extends MapGenScatteredFeature {
 
             super(worldIn, random, chunkX, chunkZ);
 
-            LinkedList arrComponents = new LinkedList();
+            LinkedList desertTempleComponents = new LinkedList();
+            LinkedList jungleTempleComponents = new LinkedList();
+            LinkedList witchHutComponents = new LinkedList();
+            LinkedList iglooComponents = new LinkedList();
 
             Biome biomegenbase = worldIn.getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
-
-            if (biomegenbase != null) {
-                RTGBiome rBiome = RTGBiome.forBiome(Biome.getIdForBiome(biomegenbase));
-                switch (BiomeConfig.FeatureType.valueOf(rBiome.getConfig().SCATTERED_FEATURE.get())) {
-                    case DESERT_TEMPLE:
-                        ComponentScatteredFeaturePieces.DesertPyramid desertpyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
-                        arrComponents.add(desertpyramid);
-                        break;
-                    case JUNGLE_TEMPLE:
-                        ComponentScatteredFeaturePieces.JunglePyramid junglepyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
-                        arrComponents.add(junglepyramid);
-                        break;
-                    case WITCH_HUT:
-                        ComponentScatteredFeaturePieces.SwampHut swamphut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
-                        arrComponents.add(swamphut);
-                        break;
-                    case IGLOO:
-                        ComponentScatteredFeaturePieces.Igloo igloo = new ComponentScatteredFeaturePieces.Igloo(random, chunkX * 16, chunkZ * 16);
-                        arrComponents.add(igloo);
-                        break;
-                    default:
-                        break;
-                }
-            }
+            
             this.components.clear();
-
-            if (arrComponents.size() > 0) {
-                this.components.add((StructureComponent) arrComponents.get(random.nextInt(arrComponents.size())));
+            
+            if (canSpawnDesertTemple(biomegenbase)) {
+                
+                ComponentScatteredFeaturePieces.DesertPyramid desertpyramid = new ComponentScatteredFeaturePieces.DesertPyramid(random, chunkX * 16, chunkZ * 16);
+                desertTempleComponents.add(desertpyramid);
+                this.components.addAll(desertTempleComponents);
             }
-
-            Logger.debug("Scattered feature candidate at %d, %d", chunkX * 16, chunkZ * 16);
-
+            else if (canSpawnJungleTemple(biomegenbase)) {
+                
+                ComponentScatteredFeaturePieces.JunglePyramid junglepyramid = new ComponentScatteredFeaturePieces.JunglePyramid(random, chunkX * 16, chunkZ * 16);
+                jungleTempleComponents.add(junglepyramid);
+                this.components.addAll(jungleTempleComponents);
+            }
+            else if (canSpawnWitchHut(biomegenbase)) {
+                
+                ComponentScatteredFeaturePieces.SwampHut swamphut = new ComponentScatteredFeaturePieces.SwampHut(random, chunkX * 16, chunkZ * 16);
+                witchHutComponents.add(swamphut);
+                this.components.addAll(witchHutComponents);
+            }
+            
             this.updateBoundingBox();
+            
+            Logger.debug("Scattered feature candidate at %d, %d", chunkX * 16, chunkZ * 16);
         }
+    }
+    
+    private static boolean canSpawnDesertTemple(Biome b)
+    {
+        boolean canSpawn = false;
+        
+        if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HOT) && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.DRY) && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.SANDY)) {
+            canSpawn = true;
+        }
+        
+        return canSpawn;
+    }
+    
+    private static boolean canSpawnJungleTemple(Biome b)
+    {
+        boolean canSpawn = false;
+        
+        if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.HOT) && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.WET) && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.JUNGLE)) {
+            canSpawn = true;
+        }
+        
+        return canSpawn;
+    }
+    
+    private static boolean canSpawnWitchHut(Biome b)
+    {
+        boolean canSpawn = false;
+        
+        if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.WET) && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.SWAMP)) {
+            canSpawn = true;
+        }
+        
+        return canSpawn;
+    }
+    
+    private static boolean canSpawnIgloo(Biome b)
+    {
+        boolean canSpawn = false;
+        
+        if (BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.COLD) && BiomeDictionary.isBiomeOfType(b, BiomeDictionary.Type.SNOWY)) {
+            canSpawn = true;
+        }
+        
+        return canSpawn;
     }
 }

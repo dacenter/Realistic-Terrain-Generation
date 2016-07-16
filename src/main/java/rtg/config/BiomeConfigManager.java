@@ -3,6 +3,7 @@ package rtg.config;
 import java.util.ArrayList;
 
 import net.minecraftforge.common.config.Configuration;
+
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.BiomeConfigProperty;
 import rtg.api.biome.vanilla.config.BiomeConfigVanilla;

@@ -1,6 +1,7 @@
 package rtg.world.biome.deco.collection;
 
 import net.minecraft.init.Blocks;
+
 import rtg.world.biome.deco.DecoCactus;
 import rtg.world.biome.deco.DecoGrassDoubleTallgrass;
 import rtg.world.biome.deco.DecoReed;

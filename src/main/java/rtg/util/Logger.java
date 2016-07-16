@@ -2,10 +2,10 @@ package rtg.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
+
 import net.minecraftforge.fml.common.FMLLog;
 
 import org.apache.logging.log4j.Level;
-
 import rtg.config.rtg.ConfigRTG;
 
 public class Logger {

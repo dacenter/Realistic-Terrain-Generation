@@ -1,6 +1,8 @@
 
 package rtg.world.gen;
 
+import net.minecraft.world.biome.Biome;
+
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
 import rtg.util.PlaneLocation;

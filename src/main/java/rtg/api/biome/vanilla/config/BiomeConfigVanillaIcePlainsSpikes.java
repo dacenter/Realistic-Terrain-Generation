@@ -1,6 +1,7 @@
 package rtg.api.biome.vanilla.config;
 
 import net.minecraftforge.common.config.Configuration;
+
 import rtg.api.biome.BiomeConfigProperty;
 import rtg.api.biome.BiomeConfigProperty.Type;
 

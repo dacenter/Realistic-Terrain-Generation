@@ -1,11 +1,10 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
+
 import rtg.api.biome.BiomeConfig;
 import rtg.api.biome.vanilla.config.BiomeConfigVanillaTaigaM;
-import rtg.util.BiomeUtils;
 import rtg.world.biome.deco.collection.DecoCollectionTaiga;
 import rtg.world.gen.surface.vanilla.SurfaceVanillaTaigaM;
 import rtg.world.gen.terrain.vanilla.TerrainVanillaTaigaM;
