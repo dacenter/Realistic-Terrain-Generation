@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -13,18 +12,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaTaigaHills;
 
 public class RealisticBiomeVanillaTaigaHills extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.taigaHills.topBlock;
-    public static Block fillerBlock = Biomes.taigaHills.fillerBlock;
+    public static Biome biome = Biomes.TAIGA_HILLS;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaTaigaHills(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.taigaHills,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaTaigaHills(),
-            new SurfaceVanillaTaigaHills(config, Blocks.grass, Blocks.dirt, true, Blocks.gravel, 0.2f)
+            new SurfaceVanillaTaigaHills(config, biome.topBlock, biome.fillerBlock, true, Blocks.GRAVEL.getDefaultState(), 0.2f)
         );
         this.noLakes=true;
         

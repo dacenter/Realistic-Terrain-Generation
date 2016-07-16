@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -21,18 +20,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaMegaTaiga;
 
 public class RealisticBiomeVanillaMegaTaiga extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.megaTaiga.topBlock;
-    public static Block fillerBlock = Biomes.megaTaiga.fillerBlock;
+    public static Biome biome = Biomes.REDWOOD_TAIGA;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaMegaTaiga(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.megaTaiga,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaMegaTaiga(),
-            new SurfaceVanillaMegaTaiga(config, topBlock, fillerBlock)
+            new SurfaceVanillaMegaTaiga(config, biome.topBlock, biome.fillerBlock)
         );
 
 		/**
@@ -42,7 +37,7 @@ public class RealisticBiomeVanillaMegaTaiga extends RealisticBiomeVanillaBase
 		 */
         
 		DecoBoulder decoBoulder = new DecoBoulder();
-		decoBoulder.boulderBlock = Blocks.mossy_cobblestone;
+		decoBoulder.boulderBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 		decoBoulder.chance = 16;
 		decoBoulder.maxY = 95;
 		decoBoulder.strengthFactor = 3f;
@@ -57,10 +52,8 @@ public class RealisticBiomeVanillaMegaTaiga extends RealisticBiomeVanillaBase
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionNoise = 0f;
 		decoFallenTree.logConditionChance = 6;
-		decoFallenTree.logBlock = Blocks.log;
-		decoFallenTree.logMeta = (byte)1;
-		decoFallenTree.leavesBlock = Blocks.leaves;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(1);
+		decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
 		decoFallenTree.minSize = 3;
 		decoFallenTree.maxSize = 6;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaMegaTaiga.decorationLogsId));        

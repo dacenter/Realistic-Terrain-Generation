@@ -26,12 +26,9 @@ public class RealisticBiomeVanillaBirchForestM extends RealisticBiomeVanillaBase
 
     public RealisticBiomeVanillaBirchForestM(BiomeConfig config)
     {
-        
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaBirchForestM(),
-            new SurfaceVanillaBirchForestM(config, topBlock, fillerBlock, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.dirt, (byte)2, 0.15f)
+            new SurfaceVanillaBirchForestM(config, biome.topBlock, biome.fillerBlock, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.DIRT.getStateFromMeta(2), 0.15f)
         );
         this.noLakes=true;
         
@@ -42,10 +39,8 @@ public class RealisticBiomeVanillaBirchForestM extends RealisticBiomeVanillaBase
 		 */
         
         TreeRTG tallBirch = new TreeRTGBetulaPapyrifera();
-		tallBirch.logBlock = Blocks.log;
-		tallBirch.logMeta = (byte)2;
-		tallBirch.leavesBlock = Blocks.leaves;
-		tallBirch.leavesMeta = (byte)2;
+        tallBirch.logBlock = Blocks.LOG.getStateFromMeta(2);
+        tallBirch.leavesBlock = Blocks.LEAVES.getStateFromMeta(2);
 		tallBirch.minTrunkSize = 16;
 		tallBirch.maxTrunkSize = 23;
 		tallBirch.minCrownSize = 4;
@@ -76,10 +71,8 @@ public class RealisticBiomeVanillaBirchForestM extends RealisticBiomeVanillaBase
 		DecoFallenTree decoFallenTree = new DecoFallenTree();
 		decoFallenTree.logCondition = LogCondition.RANDOM_CHANCE;
 		decoFallenTree.logConditionChance = 20;
-		decoFallenTree.logBlock = Blocks.log;
-		decoFallenTree.logMeta = (byte)2;
-		decoFallenTree.leavesBlock = Blocks.leaves;
-		decoFallenTree.leavesMeta = (byte)-1;
+        decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(2);
+        decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(2);
 		decoFallenTree.minSize = 3;
 		decoFallenTree.maxSize = 6;        
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaBirchForestM.decorationLogsId));

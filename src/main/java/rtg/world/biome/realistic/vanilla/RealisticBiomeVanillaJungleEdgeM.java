@@ -19,12 +19,9 @@ public class RealisticBiomeVanillaJungleEdgeM extends RealisticBiomeVanillaBase
 
     public RealisticBiomeVanillaJungleEdgeM(BiomeConfig config)
     {
-    
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaJungleEdgeM(),
-            new SurfaceVanillaJungleEdgeM(config, topBlock, fillerBlock)
+            new SurfaceVanillaJungleEdgeM(config, biome.topBlock, biome.fillerBlock)
         );
         
 		/**
@@ -44,10 +41,8 @@ public class RealisticBiomeVanillaJungleEdgeM extends RealisticBiomeVanillaBase
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionNoise = 0f;
 		decoFallenTree.logConditionChance = 6;
-		decoFallenTree.logBlock = Blocks.log;
-		decoFallenTree.logMeta = (byte)3;
-		decoFallenTree.leavesBlock = Blocks.leaves;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(3);
+		decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(3);
 		decoFallenTree.minSize = 3;
 		decoFallenTree.maxSize = 6;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaJungleEdgeM.decorationLogsId));

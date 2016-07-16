@@ -17,12 +17,9 @@ public class RealisticBiomeVanillaSavannaM extends RealisticBiomeVanillaBase
 
     public RealisticBiomeVanillaSavannaM(BiomeConfig config)
     {
-    
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaSavannaM(),
-            new SurfaceVanillaSavannaM(config, topBlock, fillerBlock)
+            new SurfaceVanillaSavannaM(config, biome.topBlock, biome.fillerBlock)
         );
         this.noLakes=true;
         

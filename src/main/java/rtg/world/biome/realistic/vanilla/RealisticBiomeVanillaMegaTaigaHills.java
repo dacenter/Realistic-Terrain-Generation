@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -21,18 +20,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaMegaTaigaHills;
 
 public class RealisticBiomeVanillaMegaTaigaHills extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.megaTaigaHills.topBlock;
-    public static Block fillerBlock = Biomes.megaTaigaHills.fillerBlock;
+    public static Biome biome = Biomes.REDWOOD_TAIGA_HILLS;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaMegaTaigaHills(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.megaTaigaHills,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaMegaTaigaHills(),
-            new SurfaceVanillaMegaTaigaHills(config, Blocks.grass, Blocks.dirt, true, Blocks.sand, 0.2f)
+            new SurfaceVanillaMegaTaigaHills(config, biome.topBlock, biome.fillerBlock, true, Blocks.SAND.getDefaultState(), 0.2f)
         );
 
         this.noLakes=true;
@@ -44,7 +39,7 @@ public class RealisticBiomeVanillaMegaTaigaHills extends RealisticBiomeVanillaBa
 		 */
         
 		DecoBoulder decoBoulder = new DecoBoulder();
-		decoBoulder.boulderBlock = Blocks.mossy_cobblestone;
+		decoBoulder.boulderBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 		decoBoulder.chance = 16;
 		decoBoulder.maxY = 95;
 		decoBoulder.strengthFactor = 3f;
@@ -59,10 +54,8 @@ public class RealisticBiomeVanillaMegaTaigaHills extends RealisticBiomeVanillaBa
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionNoise = 0f;
 		decoFallenTree.logConditionChance = 6;
-		decoFallenTree.logBlock = Blocks.log;
-		decoFallenTree.logMeta = (byte)1;
-		decoFallenTree.leavesBlock = Blocks.leaves;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(1);
+		decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
 		decoFallenTree.minSize = 3;
 		decoFallenTree.maxSize = 6;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaMegaTaigaHills.decorationLogsId));        

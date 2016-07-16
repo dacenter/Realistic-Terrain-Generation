@@ -30,9 +30,9 @@ public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeVanill
 
 	public RealisticBiomeVanillaBirchForestHillsM(BiomeConfig config)
 	{
-		super(config, mutationBiome, river,
+	    super(config, biome, river,
 			new TerrainVanillaBirchForestHillsM(),
-			new SurfaceVanillaBirchForestHillsM(config, mutationBiome.topBlock, mutationBiome.fillerBlock)
+			new SurfaceVanillaBirchForestHillsM(config, biome.topBlock, biome.fillerBlock)
 		);
         this.noLakes=true;
         
@@ -43,10 +43,8 @@ public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeVanill
 		 */
 
         TreeRTG birchSmall = new TreeRTGBetulaPapyrifera();
-		birchSmall.logBlock = Blocks.log;
-		birchSmall.logMeta = (byte)2;
-		birchSmall.leavesBlock = Blocks.leaves;
-		birchSmall.leavesMeta = (byte)2;
+        birchSmall.logBlock = Blocks.LOG.getStateFromMeta(2);
+        birchSmall.leavesBlock = Blocks.LEAVES.getStateFromMeta(2);
 		birchSmall.minTrunkSize = 4;
 		birchSmall.maxTrunkSize = 10;
 		birchSmall.minCrownSize = 8;
@@ -64,10 +62,8 @@ public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeVanill
 		this.addDeco(smallBirch);
         
         TreeRTG birchTree = new TreeRTGBetulaPapyrifera();
-		birchTree.logBlock = Blocks.log;
-		birchTree.logMeta = (byte)2;
-		birchTree.leavesBlock = Blocks.leaves;
-		birchTree.leavesMeta = (byte)2;
+        birchTree.logBlock = Blocks.LOG.getStateFromMeta(2);
+        birchTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(2);
 		birchTree.minTrunkSize = 4;
 		birchTree.maxTrunkSize = 10;
 		birchTree.minCrownSize = 8;
@@ -86,24 +82,16 @@ public class RealisticBiomeVanillaBirchForestHillsM extends RealisticBiomeVanill
 		rtgTrees.treeCondition = TreeCondition.ALWAYS_GENERATE;
 		rtgTrees.maxY = 100;
 		
-		DecoTree vanillaTrees = new DecoTree(new WorldGenForest(false, false));
-		vanillaTrees.treeType = TreeType.WORLDGEN;
-		vanillaTrees.strengthFactorForLoops = 3f;
-		vanillaTrees.treeCondition = TreeCondition.ALWAYS_GENERATE;
-		vanillaTrees.maxY = 100;
-		
 		DecoHelperRandomSplit decoHelperRandomSplit = new DecoHelperRandomSplit();
-		decoHelperRandomSplit.decos = new DecoBase[]{birchTrees, rtgTrees, vanillaTrees};
-		decoHelperRandomSplit.chances = new int[]{10, 4, 1};
+		decoHelperRandomSplit.decos = new DecoBase[]{birchTrees, rtgTrees};
+		decoHelperRandomSplit.chances = new int[]{10, 4};
 		this.addDeco(decoHelperRandomSplit);
         
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.logCondition = LogCondition.RANDOM_CHANCE;
         decoFallenTree.logConditionChance = 8;
-        decoFallenTree.logBlock = Blocks.log;
-        decoFallenTree.logMeta = (byte)2;
-        decoFallenTree.leavesBlock = Blocks.leaves;
-        decoFallenTree.leavesMeta = (byte)-1;
+        decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(2);
+        decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(2);
         decoFallenTree.minSize = 3;
         decoFallenTree.maxSize = 6;        
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaBirchForestHillsM.decorationLogsId));

@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -16,16 +15,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaIcePlains;
 
 public class RealisticBiomeVanillaIcePlains extends RealisticBiomeVanillaBase
 {	
-	public static Block topBlock = Biomes.icePlains.topBlock;
-	public static Block fillerBlock = Biomes.icePlains.fillerBlock;
-	
+    public static Biome biome = Biomes.ICE_PLAINS;
+    public static Biome river = Biomes.FROZEN_RIVER;
+    
 	public RealisticBiomeVanillaIcePlains(BiomeConfig config)
 	{
-		super(config, 
-			Biome.icePlains,
-			Biome.frozenRiver,
+	    super(config, biome, river,
 			new TerrainVanillaIcePlains(),
-			new SurfaceVanillaIcePlains(config, topBlock, fillerBlock, topBlock, topBlock)
+			new SurfaceVanillaIcePlains(config, biome.topBlock, biome.fillerBlock, biome.topBlock, biome.topBlock)
 		);
 		
 		/**
@@ -40,7 +37,7 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeVanillaBase
 		DecoBoulder decoBoulder = new DecoBoulder();
 		decoBoulder.checkRiver = true;
 		decoBoulder.minRiver = 0.87f;
-		decoBoulder.boulderBlock = Blocks.cobblestone;
+		decoBoulder.boulderBlock = Blocks.COBBLESTONE.getDefaultState();
 		decoBoulder.chance = 16;
 		decoBoulder.maxY = 95;
 		decoBoulder.strengthFactor = 5f;
@@ -49,10 +46,8 @@ public class RealisticBiomeVanillaIcePlains extends RealisticBiomeVanillaBase
         DecoFallenTree decoFallenTree = new DecoFallenTree();
         decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
         decoFallenTree.logConditionChance = 24;
-        decoFallenTree.logBlock = Blocks.log;
-        decoFallenTree.logMeta = (byte)1;
-        decoFallenTree.leavesBlock = Blocks.leaves;
-        decoFallenTree.leavesMeta = (byte)-1;
+        decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(1);
+        decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(1);
         decoFallenTree.minSize = 1;
         decoFallenTree.maxSize = 5;        
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaIcePlains.decorationLogsId));

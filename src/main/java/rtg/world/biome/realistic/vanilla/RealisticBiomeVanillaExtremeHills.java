@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -24,18 +23,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaExtremeHills;
 
 public class RealisticBiomeVanillaExtremeHills extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.extremeHills.topBlock;
-    public static Block fillerBlock = Biomes.extremeHills.fillerBlock;
+    public static Biome biome = Biomes.EXTREME_HILLS;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaExtremeHills(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.extremeHills,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaExtremeHills(10f, 120f, 10f, 200f),
-            new SurfaceVanillaExtremeHills(config, topBlock, fillerBlock, Blocks.grass, Blocks.dirt, 60f, -0.14f, 14f, 0.25f)
+            new SurfaceVanillaExtremeHills(config, biome.topBlock, biome.fillerBlock, Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 60f, -0.14f, 14f, 0.25f)
         );
         this.generatesEmeralds = true;
         this.noLakes=true;
@@ -48,10 +43,8 @@ public class RealisticBiomeVanillaExtremeHills extends RealisticBiomeVanillaBase
 		 */
         
 		TreeRTG nigraTree = new TreeRTGPinusNigra();
-		nigraTree.logBlock = Blocks.log;
-		nigraTree.logMeta = (byte)0;
-		nigraTree.leavesBlock = Blocks.leaves;
-		nigraTree.leavesMeta = (byte)0;
+		nigraTree.logBlock = Blocks.LOG.getDefaultState();
+		nigraTree.leavesBlock = Blocks.LEAVES.getDefaultState();
 		nigraTree.minTrunkSize = 18;
 		nigraTree.maxTrunkSize = 27;
 		nigraTree.minCrownSize = 7;
@@ -77,10 +70,8 @@ public class RealisticBiomeVanillaExtremeHills extends RealisticBiomeVanillaBase
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionNoise = 0f;
 		decoFallenTree.logConditionChance = 16;
-		decoFallenTree.logBlock = Blocks.log;
-		decoFallenTree.logMeta = (byte)0;
-		decoFallenTree.leavesBlock = Blocks.leaves;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG.getDefaultState();
+		decoFallenTree.leavesBlock = Blocks.LEAVES.getDefaultState();
 		decoFallenTree.minSize = 4;
 		decoFallenTree.maxSize = 7;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaExtremeHills.decorationLogsId));
@@ -92,7 +83,7 @@ public class RealisticBiomeVanillaExtremeHills extends RealisticBiomeVanillaBase
         this.addDeco(decoShrub);
         
 		DecoBoulder decoBoulder = new DecoBoulder();
-		decoBoulder.boulderBlock = Blocks.mossy_cobblestone;
+		decoBoulder.boulderBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 		decoBoulder.chance = 12;
 		decoBoulder.maxY = 90;
 		decoBoulder.strengthFactor = 2f;

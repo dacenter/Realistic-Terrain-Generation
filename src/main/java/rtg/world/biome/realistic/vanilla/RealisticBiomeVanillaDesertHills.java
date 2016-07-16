@@ -2,11 +2,11 @@ package rtg.world.biome.realistic.vanilla;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
@@ -20,16 +20,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaDesertHills;
 
 public class RealisticBiomeVanillaDesertHills extends RealisticBiomeVanillaBase
 {	
-	public static Block topBlock = Biomes.desertHills.topBlock;
-	public static Block fillerBlock = Biomes.desertHills.fillerBlock;
-
+    public static Biome biome = Biomes.DESERT_HILLS;
+    public static Biome river = Biomes.RIVER;
+    
 	public RealisticBiomeVanillaDesertHills(BiomeConfig config)
 	{
-		super(config, 
-			Biome.desertHills,
-			Biome.river,
+	    super(config, biome, river,
 			new TerrainVanillaDesertHills(10f, 80f, 68f, 200f),
-			new SurfaceVanillaDesertHills(config, Blocks.sand, Blocks.sandstone, false, null, 0f, 1.5f, 60f, 65f, 1.5f)
+			new SurfaceVanillaDesertHills(config, Blocks.SAND.getDefaultState(), Blocks.SANDSTONE.getDefaultState(), false, null, 0f, 1.5f, 60f, 65f, 1.5f)
 		);
 		
         this.waterSurfaceLakeChance = 0;
@@ -39,11 +37,11 @@ public class RealisticBiomeVanillaDesertHills extends RealisticBiomeVanillaBase
 		this.addDecoCollection(new DecoCollectionDesert());
 	}
     
-    public void rReplace(Block[] blocks, byte[] metadata, int i, int j, int x, int y, int depth, World world, Random rand, OpenSimplexNoise simplex, CellNoise cell, float[] noise, float river, Biome[] base)
+    public void rReplace(ChunkPrimer primer, int i, int j, int x, int y, int depth, World world, Random rand, OpenSimplexNoise simplex, CellNoise cell, float[] noise, float river, Biome[] base)
     {
-        this.getSurface().paintTerrain(blocks, metadata, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
+        this.getSurface().paintTerrain(primer, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
         
         SurfaceBase riverSurface = new SurfaceRiverOasis(this.config);
-        riverSurface.paintTerrain(blocks, metadata, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
+        riverSurface.paintTerrain(primer, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
     }
 }

@@ -21,30 +21,26 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaIcePlainsSpikes;
 public class RealisticBiomeVanillaIcePlainsSpikes extends RealisticBiomeVanillaBase
 {	
     public static Biome biome = Biomes.MUTATED_ICE_FLATS;
-    public static Biome river = Biomes.RIVER;
+    public static Biome river = Biomes.FROZEN_RIVER;
 
 	public RealisticBiomeVanillaIcePlainsSpikes(BiomeConfig config)
 	{
-		super(config, 
-		    mutationBiome,
-			Biome.frozenRiver,
+	    super(config, biome, river,
 			new TerrainVanillaIcePlainsSpikes(),
-			new SurfaceVanillaIcePlainsSpikes(config, topBlock, fillerBlock, topBlock, topBlock)
+			new SurfaceVanillaIcePlainsSpikes(config, biome.topBlock, biome.fillerBlock, biome.topBlock, biome.topBlock)
 		);
         this.noLakes=true;
 		
 		TreeRTG ponderosaOakTree = new TreeRTGPinusPonderosa();
-		ponderosaOakTree.logBlock = Blocks.packed_ice;
-		ponderosaOakTree.logMeta = (byte)0;
-		ponderosaOakTree.leavesBlock = Blocks.ice;
-		ponderosaOakTree.leavesMeta = (byte)0;
+		ponderosaOakTree.logBlock = Blocks.PACKED_ICE.getDefaultState();
+		ponderosaOakTree.leavesBlock = Blocks.ICE.getDefaultState();
 		ponderosaOakTree.minTrunkSize = 11;
 		ponderosaOakTree.maxTrunkSize = 21;
 		ponderosaOakTree.minCrownSize = 15;
 		ponderosaOakTree.maxCrownSize = 29;
 		ponderosaOakTree.validGroundBlocks.clear();
-		ponderosaOakTree.validGroundBlocks.add(Blocks.snow);
-		ponderosaOakTree.validGroundBlocks.add(Blocks.snow_layer);
+		ponderosaOakTree.validGroundBlocks.add(Blocks.SNOW.getDefaultState());
+		ponderosaOakTree.validGroundBlocks.add(Blocks.SNOW_LAYER.getDefaultState());
 		
 		DecoTree oakPines = new DecoTree(ponderosaOakTree);
 		oakPines.strengthFactorForLoops = 6f;
@@ -59,17 +55,15 @@ public class RealisticBiomeVanillaIcePlainsSpikes extends RealisticBiomeVanillaB
 		this.addDeco(oakPines, this.config._boolean(BiomeConfigVanillaIcePlainsSpikes.decorationIceTreesId));
 		
 		TreeRTG sempervirensOakTree = new TreeRTGCupressusSempervirens();
-		sempervirensOakTree.logBlock = Blocks.packed_ice;
-		sempervirensOakTree.logMeta = (byte)0;
-		sempervirensOakTree.leavesBlock = Blocks.ice;
-		sempervirensOakTree.leavesMeta = (byte)0;
+		sempervirensOakTree.logBlock = Blocks.PACKED_ICE.getDefaultState();
+		sempervirensOakTree.leavesBlock = Blocks.ICE.getDefaultState();
 		sempervirensOakTree.minTrunkSize = 3;
 		sempervirensOakTree.maxTrunkSize = 4;
 		sempervirensOakTree.minCrownSize = 6;
 		sempervirensOakTree.maxCrownSize = 14;
 		sempervirensOakTree.validGroundBlocks.clear();
-		sempervirensOakTree.validGroundBlocks.add(Blocks.snow);
-		sempervirensOakTree.validGroundBlocks.add(Blocks.snow_layer);
+		sempervirensOakTree.validGroundBlocks.add(Blocks.SNOW.getDefaultState());
+		sempervirensOakTree.validGroundBlocks.add(Blocks.SNOW_LAYER.getDefaultState());
 		
 		DecoTree decoSempervirensTree = new DecoTree(sempervirensOakTree);
 		decoSempervirensTree.treeType = DecoTree.TreeType.RTG_TREE;
@@ -81,10 +75,8 @@ public class RealisticBiomeVanillaIcePlainsSpikes extends RealisticBiomeVanillaB
 		this.addDeco(decoSempervirensTree, this.config._boolean(BiomeConfigVanillaIcePlainsSpikes.decorationIceTreesId));
 		
 		TreeRTG sitchensisTree = new TreeRTGPiceaSitchensis();
-    	sitchensisTree.logBlock = Blocks.packed_ice;
-    	sitchensisTree.logMeta = (byte)0;
-    	sitchensisTree.leavesBlock = Blocks.ice;
-    	sitchensisTree.leavesMeta = (byte)0;
+    	sitchensisTree.logBlock = Blocks.PACKED_ICE.getDefaultState();
+    	sitchensisTree.leavesBlock = Blocks.ICE.getDefaultState();
     	sitchensisTree.minTrunkSize = 4;
     	sitchensisTree.maxTrunkSize = 10;
     	sitchensisTree.minCrownSize = 6;
@@ -101,10 +93,8 @@ public class RealisticBiomeVanillaIcePlainsSpikes extends RealisticBiomeVanillaB
         
         DecoShrub decoShrubOak = new DecoShrub();
         decoShrubOak.maxY = 140;
-        decoShrubOak.logBlock = Blocks.packed_ice;
-        decoShrubOak.logMeta = (byte)0;
-        decoShrubOak.leavesBlock = Blocks.ice;
-        decoShrubOak.leavesMeta = (byte)0;
+        decoShrubOak.logBlock = Blocks.PACKED_ICE.getDefaultState();
+        decoShrubOak.leavesBlock = Blocks.ICE.getDefaultState();
         decoShrubOak.strengthFactor = 4f;
         decoShrubOak.chance = 4;
 		this.addDeco(decoShrubOak, this.config._boolean(BiomeConfigVanillaIcePlainsSpikes.decorationIceShrubsId));

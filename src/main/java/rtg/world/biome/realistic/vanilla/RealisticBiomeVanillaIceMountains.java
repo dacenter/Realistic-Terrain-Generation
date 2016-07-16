@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -12,18 +11,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaIceMountains;
 
 public class RealisticBiomeVanillaIceMountains extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.iceMountains.topBlock;
-    public static Block fillerBlock = Biomes.iceMountains.fillerBlock;
+    public static Biome biome = Biomes.ICE_MOUNTAINS;
+    public static Biome river = Biomes.FROZEN_RIVER;
     
     public RealisticBiomeVanillaIceMountains(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.iceMountains,
-            Biome.frozenRiver,
+        super(config, biome, river,
             new TerrainVanillaIceMountains(230f, 60f, 68f),
-            new SurfaceVanillaIceMountains(config, topBlock, fillerBlock, Blocks.snow, Blocks.snow, Blocks.packed_ice, Blocks.ice, 60f, -0.14f, 14f, 0.25f)
+            new SurfaceVanillaIceMountains(config, biome.topBlock, biome.fillerBlock, Blocks.SNOW.getDefaultState(), Blocks.SNOW.getDefaultState(), Blocks.PACKED_ICE.getDefaultState(), Blocks.ICE.getDefaultState(), 60f, -0.14f, 14f, 0.25f)
         );
         this.noLakes=true;
 		

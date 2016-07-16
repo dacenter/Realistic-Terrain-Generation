@@ -30,12 +30,9 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeVanillaBas
 
     public RealisticBiomeVanillaRoofedForestM(BiomeConfig config)
     {
-    
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaRoofedForestM(),
-            new SurfaceVanillaRoofedForestM(config, topBlock, fillerBlock)
+            new SurfaceVanillaRoofedForestM(config, biome.topBlock, biome.fillerBlock)
         );
         this.noLakes=true;
         

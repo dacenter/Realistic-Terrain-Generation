@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -24,18 +23,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaSwampland;
 
 public class RealisticBiomeVanillaSwampland extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.swampland.topBlock;
-    public static Block fillerBlock = Biomes.swampland.fillerBlock;
+    public static Biome biome = Biomes.SWAMPLAND;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaSwampland(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.swampland,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaSwampland(),
-            new SurfaceVanillaSwampland(config, topBlock, fillerBlock)
+            new SurfaceVanillaSwampland(config, biome.topBlock, biome.fillerBlock)
         );
         
 		/**

@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -28,18 +27,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaRoofedForest;
 
 public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.roofedForest.topBlock;
-    public static Block fillerBlock = Biomes.roofedForest.fillerBlock;
+    public static Biome biome = Biomes.ROOFED_FOREST;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaRoofedForest(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.roofedForest,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaRoofedForest(),
-            new SurfaceVanillaRoofedForest(config, Blocks.grass, Blocks.dirt, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.dirt, (byte)2, 0.08f)
+            new SurfaceVanillaRoofedForest(config, biome.topBlock, biome.fillerBlock, false, null, 0f, 1.5f, 60f, 65f, 1.5f, Blocks.DIRT.getStateFromMeta(2), 0.08f)
         );
         this.waterSurfaceLakeChance = 3;
 
@@ -50,10 +45,8 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeVanillaBase
 		this.addDeco(decoMushrooms);
 		
 		TreeRTG mucronataTree = new TreeRTGRhizophoraMucronata(3, 4, 13f, 0.32f, 0.1f);
-        mucronataTree.logBlock = Blocks.log2;
-        mucronataTree.logMeta = (byte)1;
-        mucronataTree.leavesBlock = Blocks.leaves2;
-        mucronataTree.leavesMeta = (byte)1;
+        mucronataTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+        mucronataTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
         mucronataTree.minTrunkSize = 2;
         mucronataTree.maxTrunkSize = 3;
         mucronataTree.minCrownSize = 10;
@@ -70,10 +63,8 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeVanillaBase
         this.addDeco(mangroveTree);
         
         TreeRTG pentandraTree = new TreeRTGCeibaPentandra(13f, 3, 0.32f, 0.1f);
-        pentandraTree.logBlock = Blocks.log2;
-        pentandraTree.logMeta = (byte)1;
-        pentandraTree.leavesBlock = Blocks.leaves2;
-        pentandraTree.leavesMeta = (byte)1;
+        pentandraTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+        pentandraTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
         pentandraTree.minTrunkSize = 2;
         pentandraTree.maxTrunkSize = 3;
         pentandraTree.minCrownSize = 10;
@@ -90,10 +81,8 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeVanillaBase
         this.addDeco(ceibaPentandraTree);
         
         TreeRTG roseaTree = new TreeRTGCeibaRosea(16f, 5, 0.32f, 0.1f);
-        roseaTree.logBlock = Blocks.log2;
-        roseaTree.logMeta = (byte)1;
-        roseaTree.leavesBlock = Blocks.leaves2;
-        roseaTree.leavesMeta = (byte)1;
+        roseaTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+        roseaTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
         roseaTree.minTrunkSize = 2;
         roseaTree.maxTrunkSize = 3;
         roseaTree.minCrownSize = 10;
@@ -116,34 +105,28 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeVanillaBase
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionChance = 16;
 		decoFallenTree.logConditionNoise = 0f;
-		decoFallenTree.logBlock = Blocks.log2;
-		decoFallenTree.logMeta = (byte)1;
-		decoFallenTree.leavesBlock = Blocks.leaves2;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+		decoFallenTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
 		decoFallenTree.minSize = 4;
 		decoFallenTree.maxSize = 9;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaRoofedForest.decorationLogsId));
         
 		DecoShrub darkOakShrub = new DecoShrub();
-		darkOakShrub.logBlock = Blocks.log2;
-		darkOakShrub.logMeta = (byte)1;
-		darkOakShrub.leavesBlock = Blocks.leaves2;
-		darkOakShrub.leavesMeta = (byte)1;
+		darkOakShrub.logBlock = Blocks.LOG2.getStateFromMeta(1);
+		darkOakShrub.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
 		darkOakShrub.maxY = 100;
 		darkOakShrub.strengthFactor = 10f;
 		
 		DecoShrub oakShrub = new DecoShrub();
-		oakShrub.logBlock = Blocks.log;
-		oakShrub.logMeta = (byte)0;
-		oakShrub.leavesBlock = Blocks.leaves;
-		oakShrub.leavesMeta = (byte)0;
+		oakShrub.logBlock = Blocks.LOG.getDefaultState();
+		oakShrub.leavesBlock = Blocks.LEAVES.getDefaultState();
 		oakShrub.maxY = 100;
 		oakShrub.strengthFactor = 10f;		
 		
 		this.addDeco(new DecoHelperThisOrThat(4, ChanceType.NOT_EQUALS_ZERO, darkOakShrub, oakShrub));
 		
 		DecoBoulder decoBoulder = new DecoBoulder();
-		decoBoulder.boulderBlock = Blocks.mossy_cobblestone;
+		decoBoulder.boulderBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 		decoBoulder.chance = 16;
 		decoBoulder.maxY = 80;
 		decoBoulder.strengthFactor = 2f;
@@ -154,8 +137,7 @@ public class RealisticBiomeVanillaRoofedForest extends RealisticBiomeVanillaBase
 		decoCobwebs.minY = 63;
 		decoCobwebs.maxY = 76;
 		decoCobwebs.strengthFactor = 30f;
-		decoCobwebs.adjacentBlock = Blocks.log2;
-		decoCobwebs.adjacentBlockMeta = (byte)1;
+		decoCobwebs.adjacentBlock = Blocks.LOG2.getStateFromMeta(1);
 		decoCobwebs.minAdjacents = 2;
 		this.addDeco(decoCobwebs, this.config._boolean(BiomeConfigVanillaRoofedForest.decorationCobwebsId));
         

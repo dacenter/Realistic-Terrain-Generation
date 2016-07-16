@@ -16,13 +16,10 @@ public class RealisticBiomeVanillaExtremeHillsM extends RealisticBiomeVanillaBas
 
     public RealisticBiomeVanillaExtremeHillsM(BiomeConfig config)
     {
-    
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaExtremeHillsM(10f, 140f, 68f, 200f),
-            new SurfaceVanillaExtremeHillsM(config, topBlock, fillerBlock, Blocks.grass, Blocks.dirt, 60f,
-                -0.14f, 14f, 0.25f));
+            new SurfaceVanillaExtremeHillsM(config, biome.topBlock, biome.fillerBlock, Blocks.GRASS.getDefaultState(), Blocks.DIRT.getDefaultState(), 60f, -0.14f, 14f, 0.25f)
+        );
         this.generatesEmeralds = true;
         this.noWaterFeatures=true;
 		

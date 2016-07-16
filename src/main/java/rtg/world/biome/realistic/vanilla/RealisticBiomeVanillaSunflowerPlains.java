@@ -15,11 +15,9 @@ public class RealisticBiomeVanillaSunflowerPlains extends RealisticBiomeVanillaB
     
     public RealisticBiomeVanillaSunflowerPlains(BiomeConfig config)
     {
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaSunflowerPlains(),
-            new SurfaceVanillaSunflowerPlains(config, topBlock, fillerBlock)
+            new SurfaceVanillaSunflowerPlains(config, biome.topBlock, biome.fillerBlock)
         );
 		
 		DecoBaseBiomeDecorations decoBaseBiomeDecorations = new DecoBaseBiomeDecorations();

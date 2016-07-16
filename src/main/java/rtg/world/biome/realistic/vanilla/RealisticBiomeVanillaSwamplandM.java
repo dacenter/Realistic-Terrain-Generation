@@ -28,12 +28,9 @@ public class RealisticBiomeVanillaSwamplandM extends RealisticBiomeVanillaBase
 
     public RealisticBiomeVanillaSwamplandM(BiomeConfig config)
     {
-    
-        super(config, 
-            mutationBiome,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaSwamplandM(50f, 25f, 60f),
-            new SurfaceVanillaSwamplandM(config, topBlock, fillerBlock)
+            new SurfaceVanillaSwamplandM(config, biome.topBlock, biome.fillerBlock)
         );
         
 		/**

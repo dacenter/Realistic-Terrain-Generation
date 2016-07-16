@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 
@@ -13,18 +12,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaSavanna;
 
 public class RealisticBiomeVanillaSavanna extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.savanna.topBlock;
-    public static Block fillerBlock = Biomes.savanna.fillerBlock;
+    public static Biome biome = Biomes.SAVANNA;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaSavanna(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.savanna,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaSavanna(),
-            new SurfaceVanillaSavanna(config, topBlock, fillerBlock, topBlock, 13f, 0.27f)
+            new SurfaceVanillaSavanna(config, biome.topBlock, biome.fillerBlock, biome.topBlock, 13f, 0.27f)
         );
 
         this.addDecoCollection(new DecoCollectionDesertRiver());

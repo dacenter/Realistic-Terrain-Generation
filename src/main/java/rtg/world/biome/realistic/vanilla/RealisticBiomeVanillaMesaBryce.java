@@ -7,6 +7,7 @@ import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
@@ -28,18 +29,15 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeVanillaBase
 
     public RealisticBiomeVanillaMesaBryce(BiomeConfig config)
     {
-
-        super(config,
-                mutationBiome,
-                Biome.river,
-                new TerrainVanillaMesaBryce(false, 55f, 120f, 60f, 40f, 69f),
-                new SurfaceVanillaMesaBryce(config, Blocks.sand, (byte)1, Blocks.sand, (byte)1, 0)
+        super(config, biome, river,
+            new TerrainVanillaMesaBryce(false, 55f, 120f, 60f, 40f, 69f),
+            new SurfaceVanillaMesaBryce(config, Blocks.SAND.getStateFromMeta(1), Blocks.SAND.getStateFromMeta(1), 0)
         );
         
         this.addDecoCollection(new DecoCollectionDesertRiver());
         
 		DecoBoulder decoBoulder = new DecoBoulder();
-		decoBoulder.boulderBlock = Blocks.cobblestone;
+		decoBoulder.boulderBlock = Blocks.COBBLESTONE.getDefaultState();
 		decoBoulder.maxY = 83;
 		this.addDeco(decoBoulder);
 
@@ -54,7 +52,7 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeVanillaBase
         this.addDeco(decoDeadBush);
         
         DecoCactus decoCactus = new DecoCactus();
-        decoCactus.soilBlock = Blocks.sand;
+        decoCactus.soilBlock = Blocks.SAND.getStateFromMeta(1);
         decoCactus.soilMeta = (byte)1;
         decoCactus.loops = 18;
         decoCactus.maxY = 100;
@@ -62,13 +60,11 @@ public class RealisticBiomeVanillaMesaBryce extends RealisticBiomeVanillaBase
     }
     
     @Override
-    public void rReplace(Block[] blocks, byte[] metadata, int i, int j, int x, int y, int depth, World world, Random rand,
-        OpenSimplexNoise simplex, CellNoise cell, float[] noise, float river, Biome[] base)
+    public void rReplace(ChunkPrimer primer, int i, int j, int x, int y, int depth, World world, Random rand, OpenSimplexNoise simplex, CellNoise cell, float[] noise, float river, Biome[] base)
     {
-    
-        this.getSurface().paintTerrain(blocks, metadata, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
+        this.getSurface().paintTerrain(primer, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
         
         SurfaceBase riverSurface = new SurfaceRiverOasis(this.config);
-        riverSurface.paintTerrain(blocks, metadata, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
+        riverSurface.paintTerrain(primer, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
     }
 }

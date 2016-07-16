@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -19,26 +18,20 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaPlains;
 
 public class RealisticBiomeVanillaPlains extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.PLAINS.topBlock;
-    public static Block fillerBlock = Biomes.PLAINS.fillerBlock;
+    public static Biome biome = Biomes.PLAINS;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaPlains(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.plains,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaPlains(),
-            new SurfaceVanillaPlains(config, topBlock, fillerBlock)
+            new SurfaceVanillaPlains(config, biome.topBlock, biome.fillerBlock)
         );
         
         // Very sparse shrubs.
         DecoShrub decoShrubOak = new DecoShrub();
-        decoShrubOak.logBlock = Blocks.log;
-        decoShrubOak.logMeta = 0;
-        decoShrubOak.leavesBlock = Blocks.leaves;
-        decoShrubOak.leavesMeta = 0;
+        decoShrubOak.logBlock = Blocks.LOG.getDefaultState();
+        decoShrubOak.leavesBlock = Blocks.LEAVES.getDefaultState();
         decoShrubOak.maxY = 110;
         decoShrubOak.loops = 1;
         decoShrubOak.chance = 36;
@@ -61,10 +54,8 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeVanillaBase
         // Very rare fat oak/birch trees.
         	
 		TreeRTG roburTree1 = new TreeRTGQuercusRobur();
-		roburTree1.logBlock = Blocks.log;
-		roburTree1.logMeta = (byte)0;
-		roburTree1.leavesBlock = Blocks.leaves;
-		roburTree1.leavesMeta = (byte)0;
+		roburTree1.logBlock = Blocks.LOG.getDefaultState();
+		roburTree1.leavesBlock = Blocks.LEAVES.getDefaultState();
 		roburTree1.minTrunkSize = 3;
 		roburTree1.maxTrunkSize = 5;
 		roburTree1.minCrownSize = 7;
@@ -79,10 +70,8 @@ public class RealisticBiomeVanillaPlains extends RealisticBiomeVanillaBase
         oakTrees.treeConditionChance = 48;
         
 		TreeRTG roburTree2 = new TreeRTGQuercusRobur();
-		roburTree2.logBlock = Blocks.log;
-		roburTree2.logMeta = (byte)2;
-		roburTree2.leavesBlock = Blocks.leaves;
-		roburTree2.leavesMeta = (byte)2;
+		roburTree2.logBlock = Blocks.LOG.getStateFromMeta(2);
+		roburTree2.leavesBlock = Blocks.LEAVES.getStateFromMeta(2);
 		roburTree2.minTrunkSize = 3;
 		roburTree2.maxTrunkSize = 5;
 		roburTree2.minCrownSize = 7;

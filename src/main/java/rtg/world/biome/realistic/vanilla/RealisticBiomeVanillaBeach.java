@@ -16,7 +16,6 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaBeach;
 
 public class RealisticBiomeVanillaBeach extends RealisticBiomeVanillaBase
 {
-    
 	public static Biome biome = Biomes.BEACH;
 	public static Biome river = Biomes.RIVER;
     

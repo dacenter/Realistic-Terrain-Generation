@@ -3,6 +3,7 @@ package rtg.world.biome.realistic.vanilla;
 import java.util.Random;
 
 import net.minecraft.init.Biomes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -15,13 +16,12 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaRiver;
 
 public class RealisticBiomeVanillaRiver extends RealisticBiomeVanillaBase
 {
-	public static Biome vanillaBiome = Biomes.river;
-
+    public static Biome biome = Biomes.RIVER;
+    public static Biome river = Biomes.RIVER;
+    
 	public RealisticBiomeVanillaRiver(BiomeConfig config)
 	{
-		super(config, 
-			vanillaBiome,
-			Biome.river,
+	    super(config, biome, river,
 			new TerrainVanillaRiver(),
 			new SurfaceVanillaRiver(config)
 		);
@@ -40,13 +40,13 @@ public class RealisticBiomeVanillaRiver extends RealisticBiomeVanillaBase
     public void rDecorateSeedBiome(World world, Random rand, int chunkX, int chunkY, OpenSimplexNoise simplex, CellNoise cell, float strength, float river, Biome seedBiome) {
 
         if (strength > 0.3f) {
-            int previousReeds = Biomes.river.theBiomeDecorator.reedsPerChunk;
-            int previousLilies = Biomes.river.theBiomeDecorator.waterlilyPerChunk;
-            Biome.river.theBiomeDecorator.reedsPerChunk = 4;
-            Biome.river.theBiomeDecorator.waterlilyPerChunk = 0;
-            seedBiome.decorate(world, rand, chunkX, chunkY);
-            Biome.river.theBiomeDecorator.reedsPerChunk = previousReeds;
-            Biome.river.theBiomeDecorator.waterlilyPerChunk = previousLilies;
+            int previousReeds = Biomes.RIVER.theBiomeDecorator.reedsPerChunk;
+            int previousLilies = Biomes.RIVER.theBiomeDecorator.waterlilyPerChunk;
+            Biomes.RIVER.theBiomeDecorator.reedsPerChunk = 4;
+            Biomes.RIVER.theBiomeDecorator.waterlilyPerChunk = 0;
+            seedBiome.decorate(world, rand, new BlockPos(chunkX, 0, chunkY));
+            Biomes.RIVER.theBiomeDecorator.reedsPerChunk = previousReeds;
+            Biomes.RIVER.theBiomeDecorator.waterlilyPerChunk = previousLilies;
         }
         else {
             rOreGenSeedBiome(world, rand, chunkX, chunkY, simplex, cell, strength, river, seedBiome);

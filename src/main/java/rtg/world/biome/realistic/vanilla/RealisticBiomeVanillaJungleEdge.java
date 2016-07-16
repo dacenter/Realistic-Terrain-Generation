@@ -1,6 +1,5 @@
 package rtg.world.biome.realistic.vanilla;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
@@ -15,18 +14,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaJungleEdge;
 
 public class RealisticBiomeVanillaJungleEdge extends RealisticBiomeVanillaBase
 {
-    
-    public static Block topBlock = Biomes.jungleEdge.topBlock;
-    public static Block fillerBlock = Biomes.jungleEdge.fillerBlock;
+    public static Biome biome = Biomes.JUNGLE_EDGE;
+    public static Biome river = Biomes.RIVER;
     
     public RealisticBiomeVanillaJungleEdge(BiomeConfig config)
     {
-    
-        super(config, 
-            Biome.jungleEdge,
-            Biome.river,
+        super(config, biome, river,
             new TerrainVanillaJungleEdge(),
-            new SurfaceVanillaJungleEdge(config, topBlock, fillerBlock)
+            new SurfaceVanillaJungleEdge(config, biome.topBlock, biome.fillerBlock)
         );
 
 		/**
@@ -46,10 +41,8 @@ public class RealisticBiomeVanillaJungleEdge extends RealisticBiomeVanillaBase
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionNoise = 0f;
 		decoFallenTree.logConditionChance = 6;
-		decoFallenTree.logBlock = Blocks.log;
-		decoFallenTree.logMeta = (byte)3;
-		decoFallenTree.leavesBlock = Blocks.leaves;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG.getStateFromMeta(3);
+		decoFallenTree.leavesBlock = Blocks.LEAVES.getStateFromMeta(3);
 		decoFallenTree.minSize = 3;
 		decoFallenTree.maxSize = 6;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaJungleEdge.decorationLogsId));

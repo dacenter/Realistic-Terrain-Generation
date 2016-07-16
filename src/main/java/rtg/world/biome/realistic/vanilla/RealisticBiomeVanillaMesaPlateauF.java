@@ -7,6 +7,7 @@ import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.ChunkPrimer;
 
 import rtg.api.biome.BiomeConfig;
 import rtg.util.CellNoise;
@@ -26,17 +27,14 @@ import rtg.world.gen.terrain.vanilla.TerrainVanillaMesaPlateauF;
 
 public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeVanillaBase
 {	
+    public static Biome biome = Biomes.MESA_CLEAR_ROCK;
+    public static Biome river = Biomes.RIVER;
     
-    public static Block topBlock = Biomes.mesaPlateau_F.topBlock;
-	public static Block fillerBlock = Biomes.mesaPlateau_F.fillerBlock;
-	
 	public RealisticBiomeVanillaMesaPlateauF(BiomeConfig config)
 	{
-        super(config,
-    			Biome.mesaPlateau_F,
-    			Biome.river,
-                new TerrainVanillaMesaPlateauF(true, 35f, 160f, 60f, 40f, 69f),
-                new SurfaceVanillaMesaPlateauF(config, Blocks.sand, (byte)1, Blocks.sand, (byte)1, 0)
+	    super(config, biome, river,
+            new TerrainVanillaMesaPlateauF(true, 35f, 160f, 60f, 40f, 69f),
+            new SurfaceVanillaMesaPlateauF(config, Blocks.SAND.getStateFromMeta(1), Blocks.SAND.getStateFromMeta(1), 0)
         );
         this.noLakes = true;
 
@@ -46,7 +44,7 @@ public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeVanillaBase
 
         DecoCactus decoCactus = new DecoCactus();
         decoCactus.strengthFactor = 25f;
-        decoCactus.soilBlock = Blocks.sand;
+        decoCactus.soilBlock = Blocks.SAND.getStateFromMeta(1);
         decoCactus.soilMeta = (byte)1;
         decoCactus.sandOnly = false;
         decoCactus.maxRiver = 0.8f;
@@ -74,13 +72,11 @@ public class RealisticBiomeVanillaMesaPlateauF extends RealisticBiomeVanillaBase
     }
 
     @Override
-    public void rReplace(Block[] blocks, byte[] metadata, int i, int j, int x, int y, int depth, World world, Random rand,
-                         OpenSimplexNoise simplex, CellNoise cell, float[] noise, float river, Biome[] base)
+    public void rReplace(ChunkPrimer primer, int i, int j, int x, int y, int depth, World world, Random rand, OpenSimplexNoise simplex, CellNoise cell, float[] noise, float river, Biome[] base)
     {
-
-        this.getSurface().paintTerrain(blocks, metadata, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
+        this.getSurface().paintTerrain(primer, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
 
         SurfaceBase riverSurface = new SurfaceRiverOasis(this.config);
-        riverSurface.paintTerrain(blocks, metadata, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
+        riverSurface.paintTerrain(primer, i, j, x, y, depth, world, rand, simplex, cell, noise, river, base);
     }
 }
