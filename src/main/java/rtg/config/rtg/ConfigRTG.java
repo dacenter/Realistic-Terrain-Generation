@@ -77,6 +77,10 @@ public class ConfigRTG
     
     public static boolean generateMineshafts = true;
     
+    /* ==================== Ocean Monuments ==================== */
+    
+    public static boolean generateOceanMonuments = true;
+    
     /* ==================== Ore Gen ==================== */
     
     public static boolean generateOreCoal = true;
@@ -332,6 +336,10 @@ public class ConfigRTG
             /* ==================== Mineshafts ==================== */
             
             generateMineshafts = config.getBoolean("Generate Mineshafts", "Mineshafts", generateMineshafts, "");
+            
+            /* ==================== Ocean Monuments ==================== */
+            
+            generateMineshafts = config.getBoolean("Generate Ocean Monuments", "Ocean Monuments", generateOceanMonuments, "");
             
             /* ==================== Ore Gen ==================== */
             

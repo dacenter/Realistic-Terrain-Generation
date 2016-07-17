@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.init.Biomes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeCache;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
 import rtg.config.rtg.ConfigRTG;
+import rtg.util.BiomeUtils;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
 import rtg.util.SimplexCellularNoise;
@@ -23,7 +25,7 @@ import rtg.util.VoronoiCellNoise;
 import rtg.world.biome.realistic.RealisticBiomeBase;
 import rtg.world.biome.realistic.RealisticBiomePatcher;
 
-public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeProvider
+public class WorldChunkManagerRTG extends BiomeProvider implements RTGBiomeProvider
 {
     /** A GenLayer containing the indices into Biome.biomeList[] */
     private GenLayer genBiomes;
@@ -56,13 +58,13 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
 
         this();
         long seed = par1World.getSeed();
-        if (par1World.provider.dimensionId !=0) throw new RuntimeException();
+        if (par1World.provider.getDimension() !=0) throw new RuntimeException();
 
         simplex = new OpenSimplexNoise(seed);
         cell = new SimplexCellularNoise(seed);
         //simplexCell = new SimplexCellularNoise(seed);
         river = new VoronoiCellNoise(seed);
-        GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(seed, worldType);
+        GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(seed, worldType, par1World.getWorldInfo().getGeneratorOptions());
         agenlayer = getModdedBiomeGenerators(worldType, seed, agenlayer);
         this.genBiomes = agenlayer[0]; //maybe this will be needed
         this.biomeIndexLayer = agenlayer[1];
@@ -78,7 +80,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
         {
             for (int j = 0; j < par4; j++)
             {
-                d[j * par3  + i] = getBiomeGenAt(par1 + i, par2 + j).biomeID;
+                d[j * par3  + i] = BiomeUtils.getId(getBiomeGenAt(par1 + i, par2 + j));
             }
         }
         return d;
@@ -112,11 +114,11 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
             
             try {
                 if (biome>255) throw new RuntimeException(biomeIndexLayer.toString());
-                f = (float) RealisticBiomeBase.getBiome(biome).baseBiome.getIntRainfall() / 65536.0F;
+                f = (float) RealisticBiomeBase.getBiome(biome).baseBiome.getRainfall() / 65536.0F;
             } catch (Exception e) {
                 if (biome>255) throw new RuntimeException(biomeIndexLayer.toString());
                 if (RealisticBiomeBase.getBiome(biome)== null) {
-                    f = (float) biomePatcher.getPatchedRealisticBiome("Problem with biome "+biome+" from "+e.getMessage()).baseBiome.getIntRainfall() / 65536.0F;
+                    f = (float) biomePatcher.getPatchedRealisticBiome("Problem with biome "+biome+" from "+e.getMessage()).baseBiome.getRainfall() / 65536.0F;
                 }
             }
 
@@ -130,22 +132,14 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
     }
 
     @Override
-    public Biome[] loadBlockGeneratorData(Biome[] par1ArrayOfBiomeGenBase, int par2, int par3, int par4, int par5)
-    {
-
-        return this.getBiomeGenAt(par1ArrayOfBiomeGenBase, par2, par3, par4, par5, true);
-    }
-
-    @Override
     public Biome getBiomeGenAt(int par1, int par2) {
-        Biome result;
 
-        result = this.biomeCache.getBiomeGenAt(par1, par2);
-
+        Biome result = this.biomeCache.getBiomeCacheBlock(par1, par2).getBiome(par1, par2);
+        
         if (result == null) {
             result = biomePatcher.getPatchedBaseBiome("Biome cache contains NULL biome at " + par1 + "," + par2);
         }
-
+        
         return result;
     }
 
@@ -176,7 +170,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
         }*/
         RealisticBiomeBase output;
 
-        output = RealisticBiomeBase.getBiome(this.getBiomeGenAt(par1, par2).biomeID);
+        output = RealisticBiomeBase.getBiome(BiomeUtils.getId(this.getBiomeGenAt(par1, par2)));
         if (output == null) output = biomePatcher.getPatchedRealisticBiome("No biome " + par1 + " " + par2);
 
         /*if (biomeDataMap.size() > 4096) {
@@ -274,7 +268,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
         {
             for (by = -2; by <= 2; by++)
             {
-                borderNoise[getBiomeDataAt(x + bx * 16, y + by * 16).baseBiome.biomeID] += 0.04f;
+                borderNoise[BiomeUtils.getId(getBiomeDataAt(x + bx * 16, y + by * 16).baseBiome)] += 0.04f;
             }
         }
         
@@ -375,7 +369,7 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
     }
     
     @Override
-    public ChunkPosition findBiomePosition(int p_150795_1_, int p_150795_2_, int p_150795_3_, List p_150795_4_, Random p_150795_5_)
+    public BlockPos findBiomePosition(int p_150795_1_, int p_150795_2_, int p_150795_3_, List p_150795_4_, Random p_150795_5_)
     {
         IntCache.resetIntCache();
         int l = p_150795_1_ - p_150795_3_ >> 2;
@@ -385,18 +379,18 @@ public class WorldChunkManagerRTG extends WorldChunkManager implements RTGBiomeP
         int l1 = j1 - l + 1;
         int i2 = k1 - i1 + 1;
         int[] aint = this.genBiomes.getInts(l, i1, l1, i2);
-        ChunkPosition chunkposition = null;
+        BlockPos chunkposition = null;
         int j2 = 0;
 
         for (int k2 = 0; k2 < l1 * i2; ++k2)
         {
             int l2 = l + k2 % l1 << 2;
             int i3 = i1 + k2 / l1 << 2;
-            Biome biomegenbase = Biomes.getBiome(aint[k2]);
+            Biome biomegenbase = Biome.getBiome(aint[k2]);
 
             if (p_150795_4_.contains(biomegenbase) && (chunkposition == null || p_150795_5_.nextInt(j2 + 1) == 0))
             {
-                chunkposition = new ChunkPosition(l2, 0, i3);
+                chunkposition = new BlockPos(l2, 0, i3);
                 ++j2;
             }
         }

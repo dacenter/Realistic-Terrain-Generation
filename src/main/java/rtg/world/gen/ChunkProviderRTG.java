@@ -2,6 +2,7 @@ package rtg.world.gen;
 
 import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.CAVE;
 import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.MINESHAFT;
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.OCEAN_MONUMENT;
 import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.RAVINE;
 import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.SCATTERED_FEATURE;
 import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.STRONGHOLD;
@@ -18,10 +19,14 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
@@ -36,6 +41,7 @@ import net.minecraft.world.gen.structure.MapGenMineshaft;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
+import net.minecraft.world.gen.structure.StructureOceanMonument;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
@@ -43,7 +49,6 @@ import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import rtg.api.biome.BiomeConfig;
 import rtg.config.rtg.ConfigRTG;
@@ -82,6 +87,7 @@ public class ChunkProviderRTG implements IChunkGenerator
     private final MapGenMineshaft mineshaftGenerator;
     private final MapGenVillage villageGenerator;
     private final MapGenScatteredFeature scatteredFeatureGenerator;
+    private final StructureOceanMonument oceanMonumentGenerator;
     private boolean mapFeaturesEnabled;
     private final int worldHeight;
     private final boolean isRTGWorld;
@@ -90,7 +96,7 @@ public class ChunkProviderRTG implements IChunkGenerator
     private BiomeAnalyzer analyzer = new BiomeAnalyzer();
     private int [] xyinverted = analyzer.xyinverted();
     
-    private Block bedrockBlock = GameData.getBlockRegistry().getObject(ConfigRTG.bedrockBlockId);
+    private Block bedrockBlock = Block.getBlockFromName(ConfigRTG.bedrockBlockId);
     private byte bedrockByte = (byte)ConfigRTG.bedrockBlockByte;
 
     private Random rand;
@@ -143,7 +149,7 @@ public class ChunkProviderRTG implements IChunkGenerator
     public ChunkProviderRTG(World world, long l)
     {
         worldObj = world;
-        cmr = (WorldChunkManagerRTG) worldObj.getWorldChunkManager();
+        cmr = (WorldChunkManagerRTG) worldObj.getBiomeProvider();
         worldHeight = worldObj.provider.getActualHeight();
 
         rand = new Random(l);
@@ -180,6 +186,7 @@ public class ChunkProviderRTG implements IChunkGenerator
 		strongholdGenerator = (MapGenStronghold) TerrainGen.getModdedMapGen(new MapGenStronghold(), STRONGHOLD);
 		mineshaftGenerator = (MapGenMineshaft) TerrainGen.getModdedMapGen(new MapGenMineshaft(), MINESHAFT);
 		scatteredFeatureGenerator = (MapGenScatteredFeature) TerrainGen.getModdedMapGen(new MapGenScatteredFeature(), SCATTERED_FEATURE);
+		oceanMonumentGenerator = (StructureOceanMonument) TerrainGen.getModdedMapGen(new StructureOceanMonument(), OCEAN_MONUMENT);
 
 		CanyonColour.init(l);
 
@@ -255,7 +262,7 @@ public class ChunkProviderRTG implements IChunkGenerator
             // we are having a problem with Forge complaining about double entity registration
             // so we'll unload any loaded entities
             if (available != null) {
-                List [] entityLists = available.entityLists;
+                List [] entityLists = (List[]) available.getEntityLists();
                 for (int i = 0; i< entityLists.length; i++) {
                     Iterator iterator = entityLists[i].iterator();
                     while (iterator.hasNext()) {
@@ -274,25 +281,24 @@ public class ChunkProviderRTG implements IChunkGenerator
         
         TimeTracker.manager.start(rtgTerrain);
     	rand.setSeed((long)cx * 0x4f9939f508L + (long)cy * 0x1ef1565bd5L);
-        Block[] blocks = new Block[65536];
-        byte[] metadata = new byte[65536];
+        IBlockState[] blocks = new IBlockState[65536];
         int k;
 
         ChunkLandscape landscape = landscapeGenerator.landscape(cmr, cx *16, cy*16);
 
-        generateTerrain(cmr, cx, cy, blocks, metadata, landscape.biome, landscape.noise);
+        generateTerrain(cmr, cx, cy, blocks, landscape.biome, landscape.noise);
         // that routine can change the blocks.
         //get standard biome Data
 
         for (int ci = 0; ci < 256; ci++) {
-            biomesGeneratedInChunk[landscape.biome[ci].baseBiome.biomeID] = true;
+            biomesGeneratedInChunk[BiomeUtils.getId(landscape.biome[ci].baseBiome)] = true;
         }
 
         for(k = 0; k < 256; k++)
         {
             if(biomesGeneratedInChunk[k] )
             {
-                RealisticBiomeBase.getBiome(k).generateMapGen(blocks, metadata, worldSeed, worldObj, cmr, mapRand, cx, cy, simplex, cell, landscape.noise);
+                RealisticBiomeBase.getBiome(k).generateMapGen(blocks, worldSeed, worldObj, cmr, mapRand, cx, cy, simplex, cell, landscape.noise);
                 biomesGeneratedInChunk[k] = false;
             }
             try {
@@ -390,7 +396,7 @@ public class ChunkProviderRTG implements IChunkGenerator
         //this.doPopulate(world, cx, cy);
     }
 
-    public void generateTerrain(RTGBiomeProvider cmr, int cx, int cy, Block[] blocks, byte[] metadata, RealisticBiomeBase biomes[], float[] noise)
+    public void generateTerrain(RTGBiomeProvider cmr, int cx, int cy, IBlockState[] blocks, RealisticBiomeBase biomes[], float[] noise)
     {
     	int p, h;
     	for(int i = 0; i < 16; i++)
@@ -406,16 +412,16 @@ public class ChunkProviderRTG implements IChunkGenerator
     				{
     					if(k < 63)
         				{
-        					blocks[p] = Blocks.water;
+        					blocks[p] = Blocks.WATER.getDefaultState();
         				}
         				else
         				{
-        					blocks[p] = Blocks.air;
+        					blocks[p] = Blocks.AIR.getDefaultState();
         				}
     				}
     				else
     				{
-    					blocks[p] = Blocks.stone;
+    					blocks[p] = Blocks.STONE.getDefaultState();
     				}
     			}
     		}
@@ -611,7 +617,7 @@ public class ChunkProviderRTG implements IChunkGenerator
                 Chunk existing;
                 existing = availableChunks.get(location);
                 if (existing != null) {
-                    if (!existing.isTerrainPopulated) {
+                    if (!existing.isTerrainPopulated()) {
                         //continue; // not populated so let more "normal" systems handle it
                     }
                 }
@@ -652,7 +658,7 @@ public class ChunkProviderRTG implements IChunkGenerator
         }
     }
 
-    private void doPopulate(IChunkProvider ichunkprovider, int chunkX, int chunkZ)
+    private void doPopulate(IChunkGenerator ichunkprovider, int chunkX, int chunkZ)
     {
         // don't populate if already done
 
@@ -764,7 +770,7 @@ public class ChunkProviderRTG implements IChunkGenerator
          */
 
         TimeTracker.manager.start("Decorations");
-        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(worldObj, rand, worldX, worldZ));
+        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(worldObj, rand, new BlockPos(worldX, 0, worldZ)));
 
         //Initialise variables.
         float river = -cmr.getRiverStrength(worldX + 16, worldZ + 16);
@@ -815,7 +821,7 @@ public class ChunkProviderRTG implements IChunkGenerator
                     }
                 }
 
-                if(realisticBiome.baseBiome.temperature < 0.15f)
+                if(realisticBiome.baseBiome.getTemperature() < 0.15f)
                 {
                 	snow -= 0.6f * borderNoise[bn];
                 }
@@ -827,7 +833,7 @@ public class ChunkProviderRTG implements IChunkGenerator
         	}
         }
         
-        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(worldObj, rand, worldX, worldZ));
+        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(worldObj, rand, new BlockPos(worldX, 0, worldZ)));
 
         TimeTracker.manager.stop("Decorations");
         /**
@@ -846,7 +852,7 @@ public class ChunkProviderRTG implements IChunkGenerator
 	    			int l21 = worldX + rand.nextInt(16);// + 8;
 	    			int k23 = rand.nextInt(rand.nextInt(worldHeight - 16) + 10);
 	    			int l24 = worldZ + rand.nextInt(16);// + 8;
-	    			(new WorldGenLiquids(Blocks.flowing_water)).generate(worldObj, rand, l21, k23, l24);
+	    			(new WorldGenLiquids(Blocks.FLOWING_WATER)).generate(worldObj, rand, new BlockPos(l21, k23, l24));
 	    		}
 	        }
         }
@@ -859,7 +865,7 @@ public class ChunkProviderRTG implements IChunkGenerator
 	    			int i22 = worldX + rand.nextInt(16);// + 8;
 	    			int l23 = rand.nextInt(worldHeight / 2);
 	    			int i25 = worldZ + rand.nextInt(16);// + 8;
-	    			(new WorldGenLiquids(Blocks.flowing_lava)).generate(worldObj, rand, i22, l23, i25);
+	    			(new WorldGenLiquids(Blocks.FLOWING_LAVA)).generate(worldObj, rand, new BlockPos(i22, l23, i25));
 	    		}
 	        }
         }
@@ -869,9 +875,8 @@ public class ChunkProviderRTG implements IChunkGenerator
         probe.setX(chunkX);
         probe.setZ(chunkZ);
         //if (everDecorated.contains(probe)) throw new RuntimeException();
-        if (TerrainGen.populate(this, worldObj, rand, chunkX, chunkZ, hasPlacedVillageBlocks, PopulateChunkEvent.Populate.EventType.ANIMALS))
-        {
-            SpawnerAnimals.performWorldGenSpawning(this.worldObj, worldObj.getBiomeGenForCoords(worldX + 16, worldZ + 16), worldX, worldZ, 16, 16, this.rand);
+        if (TerrainGen.populate(this, this.worldObj, rand, chunkX, chunkZ, hasPlacedVillageBlocks, PopulateChunkEvent.Populate.EventType.ANIMALS)) {
+            WorldEntitySpawner.performWorldGenSpawning(this.worldObj, this.worldObj.getBiome(new BlockPos(worldX + 16, 0, worldZ + 16)), worldX + 8, worldZ + 8, 16, 16, this.rand);
         }
 
         TimeTracker.manager.stop("Entities");
@@ -888,14 +893,14 @@ public class ChunkProviderRTG implements IChunkGenerator
                 
                 for(l1 = 0; l1 < 16; ++l1) {
                     
-                    i2 = this.worldObj.getPrecipitationHeight(worldX + k1, worldZ + l1);
+                    i2 = this.worldObj.getPrecipitationHeight(new BlockPos(worldX + k1, 0, worldZ + l1)).getY();
 
-                    if(this.worldObj.isBlockFreezable(k1 + worldX, i2 - 1, l1 + worldZ)) {
-                        this.worldObj.setBlock(k1 + worldX, i2 - 1, l1 + worldZ, Blocks.ice, 0, 2);
+                    if(this.worldObj.canBlockFreezeWater(new BlockPos(k1 + worldX, i2 - 1, l1 + worldZ))) {
+                        this.worldObj.setBlockState(new BlockPos(k1 + worldX, i2 - 1, l1 + worldZ), Blocks.ICE.getDefaultState(), 2);
                     }
 
-                    if (ConfigRTG.enableSnowLayers && this.worldObj.func_147478_e(k1 + worldX, i2, l1 + worldZ, true)) {
-                        this.worldObj.setBlock(k1 + worldX, i2, l1 + worldZ, Blocks.snow_layer, 0, 2);
+                    if (ConfigRTG.enableSnowLayers && this.worldObj.canSnowAtBody(new BlockPos(k1 + worldX, i2, l1 + worldZ), true)) {
+                        this.worldObj.setBlockState(new BlockPos(k1 + worldX, i2, l1 + worldZ), Blocks.SNOW_LAYER.getDefaultState(), 2);
                     }
                 }
             }
@@ -973,73 +978,11 @@ public class ChunkProviderRTG implements IChunkGenerator
 
     /**
      * @see IChunkProvider
-     *
-     * Returns a list of creatures of the specified type that can spawn at the given location.
-     */
-    public List getPossibleCreatures(EnumCreatureType par1EnumCreatureType, int par2, int par3, int par4)
-    {
-        Biome var5 = this.worldObj.getBiomeGenForCoords(par2, par4);
-        return var5 == null ? null : var5.getSpawnableList(par1EnumCreatureType);
-    }
-
-    /**
-     * @see IChunkProvider
-     */
-    public ChunkPosition func_147416_a(World par1World, String par2Str, int par3, int par4, int par5)
-    {
-        if (!ConfigRTG.generateStrongholds) {
-            return null;
-        }
-        
-        return "Stronghold".equals(par2Str) && this.strongholdGenerator != null ? this.strongholdGenerator.func_151545_a(par1World, par3, par4, par5) : null;
-    }
-
-    /**
-     * @see IChunkProvider
      */
     public int getLoadedChunkCount()
     {
         return 0;
     }
-
-    /**
-     * @see IChunkProvider
-     */
-    public void recreateStructures(int par1, int par2)
-    {
-
-        if (mapFeaturesEnabled) {
-            
-            if (ConfigRTG.generateMineshafts) {
-                mineshaftGenerator.func_151539_a(this, worldObj, par1, par2, (Block[])null);
-            }
-            
-            if (ConfigRTG.generateStrongholds) {
-                strongholdGenerator.func_151539_a(this, worldObj, par1, par2, (Block[])null);
-            }
-            
-            if (ConfigRTG.generateVillages) {
-                
-                if (ConfigRTG.villageCrashFix) {
-                    
-                    try {
-                        villageGenerator.func_151539_a(this, this.worldObj, par1, par2, (Block[])null);
-                    }
-                    catch (Exception e) {
-                        // Do nothing.
-                    }
-                    
-                }
-                else {
-                    villageGenerator.func_151539_a(this, this.worldObj, par1, par2, (Block[])null);
-                }
-            }
-            
-            if (ConfigRTG.generateScatteredFeatures) {
-                scatteredFeatureGenerator.func_151539_a(this, this.worldObj, par1, par2, (Block[])null);
-            }
-        }
-	}
 
     /**
      * @see IChunkProvider
@@ -1054,7 +997,7 @@ public class ChunkProviderRTG implements IChunkGenerator
     private AnvilChunkLoader chunkLoader() {
         if (chunkLoader == null) {
             ChunkProviderServer server = (ChunkProviderServer)(worldObj.getChunkProvider());
-            chunkLoader = (AnvilChunkLoader)(server.currentChunkLoader);
+            chunkLoader = (AnvilChunkLoader)(server.chunkLoader);
         }
         return chunkLoader;
     }
@@ -1062,15 +1005,89 @@ public class ChunkProviderRTG implements IChunkGenerator
     public Set<Long> serverLoadingChunks() {
         if (this.serverLoadingChunks == null) {
             ChunkProviderServer server = (ChunkProviderServer)(worldObj.getChunkProvider());
-            chunkLoader = (AnvilChunkLoader)(server.currentChunkLoader);
+            chunkLoader = (AnvilChunkLoader)(server.chunkLoader);
             serverLoadingChunks = forServerLoadingChunks.get(server);
         }
         return serverLoadingChunks;
     }
 
-	@Override
-	public Chunk getLoadedChunk(int x, int z) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public boolean generateStructures(Chunk chunkIn, int x, int z) {
+        return false;
+    }
+
+    /**
+     * @see IChunkProvider
+     * <p/>
+     * Returns a list of creatures of the specified type that can spawn at the given location.
+     */
+    @Override
+    public List getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
+        Biome var5 = this.worldObj.getBiome(pos);
+        if (this.mapFeaturesEnabled) {
+            if (creatureType == EnumCreatureType.MONSTER && this.scatteredFeatureGenerator.isSwampHut(pos)) {
+                return this.scatteredFeatureGenerator.getScatteredFeatureSpawnList();
+            }
+
+            if (creatureType == EnumCreatureType.MONSTER && ConfigRTG.generateOceanMonuments && this.oceanMonumentGenerator.isPositionInStructure(this.worldObj, pos)) {
+                return this.oceanMonumentGenerator.getScatteredFeatureSpawnList();
+            }
+        }
+        return var5 == null ? null : var5.getSpawnableList(creatureType);
+    }
+
+    /**
+     * @see IChunkProvider
+     */
+    @Override
+    public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position)
+    {
+        if (!ConfigRTG.generateStrongholds) {
+            return null;
+        }
+
+        return "Stronghold".equals(structureName) && this.strongholdGenerator != null ? this.strongholdGenerator.getClosestStrongholdPos(worldIn, position) : null;
+    }
+
+    /**
+     * @see IChunkProvider
+     */
+    @Override
+    public void recreateStructures(Chunk chunkIn, int x, int z)
+    {
+
+        if (mapFeaturesEnabled) {
+
+            if (ConfigRTG.generateMineshafts) {
+                mineshaftGenerator.generate(this.worldObj, x, z, null);
+            }
+
+            if (ConfigRTG.generateStrongholds) {
+                strongholdGenerator.generate(this.worldObj, x, z, null);
+            }
+
+            if (ConfigRTG.generateVillages) {
+
+                if (ConfigRTG.villageCrashFix) {
+
+                    try {
+                        villageGenerator.generate(this.worldObj, x, z, null);
+                    } catch (Exception e) {
+                        // Do nothing.
+                    }
+
+                } else {
+                    villageGenerator.generate(this.worldObj, x, z, null);
+                }
+            }
+
+            if (ConfigRTG.generateScatteredFeatures) {
+                scatteredFeatureGenerator.generate(this.worldObj, x, z, null);
+            }
+
+            if (ConfigRTG.generateOceanMonuments) {
+                oceanMonumentGenerator.generate(this.worldObj, x, z, null);
+            }
+        }
+    }
 }

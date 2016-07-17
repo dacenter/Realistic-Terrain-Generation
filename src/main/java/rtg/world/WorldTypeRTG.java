@@ -2,7 +2,9 @@ package rtg.world;
 
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.ChunkProviderOverworld;
 
 import rtg.RTG;
 import rtg.world.biome.WorldChunkManagerRTG;
@@ -40,28 +42,28 @@ public class WorldTypeRTG extends WorldType
 	}
 	
 	@Override
-    public WorldChunkManager getChunkManager(World world)
+    public BiomeProvider getBiomeProvider(World world)
     {
-        if (world.provider.dimensionId == 0) {
+        if (world.provider.getDimension() == 0) {
            if (chunkManager == null) {
                chunkManager = new WorldChunkManagerRTG(world,this);
                RTG.instance.runOnNextServerCloseOnly(clearChunkManager());
            }
            return chunkManager;
         } else {
-            return new WorldChunkManager(world);
+            return new BiomeProvider(world.getWorldInfo());
         }
     }
 
     @Override
-    public IChunkProvider getChunkGenerator(World world, String generatorOptions)
+    public IChunkGenerator getChunkGenerator(World world, String generatorOptions)
     {
-        if (world.provider.dimensionId == 0) {
+        if (world.provider.getDimension() == 0) {
             if (chunkProvider == null) {
                 chunkProvider = new ChunkProviderRTG(world, world.getSeed());
                RTG.instance.runOnNextServerCloseOnly(clearChunkProvider());
         // inform the event manager about the ChunkEvent.Load event
-               RTG.eventMgr.setDimensionChunkLoadEvent(world.provider.dimensionId, chunkProvider.delayedDecorator);
+               RTG.eventMgr.setDimensionChunkLoadEvent(world.provider.getDimension(), chunkProvider.delayedDecorator);
                RTG.instance.runOnNextServerCloseOnly(chunkProvider.clearOnServerClose());
                return chunkProvider;
             }
@@ -72,7 +74,7 @@ public class WorldTypeRTG extends WorldType
             // no server close because it's not supposed to decorate
             //return chunkProvider;
         } else {
-            return new ChunkProviderGenerate(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled());
+            return new ChunkProviderOverworld(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
         }
     }
 	
