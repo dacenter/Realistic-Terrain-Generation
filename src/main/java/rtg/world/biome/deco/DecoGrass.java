@@ -32,7 +32,7 @@ public class DecoGrass extends DecoBase
 	public int loops;
 	public int chance;
 	public int notEqualsZerochance;
-	private IBlockState block;
+	public IBlockState block;
 	public IBlockState[] randomGrassBlocks;
 	public byte[] randomGrassMetas;
 	protected boolean useRandomGrass;

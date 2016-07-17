@@ -40,10 +40,8 @@ public class RealisticBiomeVanillaSwamplandM extends RealisticBiomeVanillaBase
 		 */
         
 		TreeRTG myrtilloidesTree = new TreeRTGSalixMyrtilloides();
-		myrtilloidesTree.logBlock = Blocks.log;
-		myrtilloidesTree.logMeta = (byte)0;
-		myrtilloidesTree.leavesBlock = Blocks.leaves;
-		myrtilloidesTree.leavesMeta = (byte)0;
+		myrtilloidesTree.logBlock = Blocks.LOG.getDefaultState();
+		myrtilloidesTree.leavesBlock = Blocks.LEAVES.getDefaultState();
 		this.addTree(myrtilloidesTree);
         
 		DecoTree decoTrees = new DecoTree(myrtilloidesTree);
@@ -59,10 +57,8 @@ public class RealisticBiomeVanillaSwamplandM extends RealisticBiomeVanillaBase
 		this.addDeco(decoTrees);
 		
 		TreeRTG ponderosaTree = new TreeRTGPinusPonderosa();
-		ponderosaTree.logBlock = Blocks.log;
-		ponderosaTree.logMeta = (byte)0;
-		ponderosaTree.leavesBlock = Blocks.leaves;
-		ponderosaTree.leavesMeta = (byte)0;
+		ponderosaTree.logBlock = Blocks.LOG.getDefaultState();
+		ponderosaTree.leavesBlock = Blocks.LEAVES.getDefaultState();
 		ponderosaTree.minTrunkSize = 3;
 		ponderosaTree.maxTrunkSize = 6;
 		ponderosaTree.minCrownSize = 6;
@@ -89,10 +85,8 @@ public class RealisticBiomeVanillaSwamplandM extends RealisticBiomeVanillaBase
 		decoFallenTree.logCondition = LogCondition.NOISE_GREATER_AND_RANDOM_CHANCE;
 		decoFallenTree.logConditionNoise = 0f;
 		decoFallenTree.logConditionChance = 6;
-		decoFallenTree.logBlock = Blocks.log2;
-		decoFallenTree.logMeta = (byte)1;
-		decoFallenTree.leavesBlock = Blocks.leaves2;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+		decoFallenTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
 		decoFallenTree.minSize = 3;
 		decoFallenTree.maxSize = 6;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaSwamplandM.decorationLogsId));

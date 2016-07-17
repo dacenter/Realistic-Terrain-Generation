@@ -1,7 +1,6 @@
 
 package rtg.util;
 
-import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 
 import rtg.world.biome.realistic.RealisticBiomeBase;
@@ -14,15 +13,15 @@ public class RealisticBiomePresenceTester {
 
     public static void doBiomeCheck()
     {
-        Biome[] b = Biomes.getBiomeGenArray();
+        Biome[] b = BiomeUtils.getRegisteredBiomes();
         
         for (int i = 0; i < 256; i++)
         {
             if (b[i] != null)
             {
                 Biome biome = b[i];
-                int biomeId = b[i].biomeID;
-                String biomeName = b[i].biomeName;
+                int biomeId = b[i].getIdForBiome(biome);
+                String biomeName = b[i].getBiomeName();
                 String biomeClass = b[i].getBiomeClass().getName();
                 
                 switch (biomeId) {

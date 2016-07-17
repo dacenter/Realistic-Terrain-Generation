@@ -41,32 +41,28 @@ public class RealisticBiomeVanillaSavannaPlateau extends RealisticBiomeVanillaBa
         this.addDecoCollection(new DecoCollectionDesertRiver());
         
 		DecoBoulder decoBoulder1 = new DecoBoulder();
-		decoBoulder1.boulderBlock = Blocks.cobblestone;
+		decoBoulder1.boulderBlock = Blocks.COBBLESTONE.getDefaultState();
 		decoBoulder1.maxY = 80;
 		decoBoulder1.chance = 24;
 		this.addDeco(decoBoulder1);
 		
 		DecoBoulder decoBoulder2 = new DecoBoulder();
-		decoBoulder2.boulderBlock = Blocks.cobblestone;
+		decoBoulder2.boulderBlock = Blocks.COBBLESTONE.getDefaultState();
 		decoBoulder1.minY = 110;
 		decoBoulder2.chance = 24;
 		this.addDeco(decoBoulder2);
         
         DecoShrub acaciaShrub = new DecoShrub();
-        acaciaShrub.logBlock = Blocks.log2;
-        acaciaShrub.logMeta = (byte)0;
-        acaciaShrub.leavesBlock = Blocks.leaves2;
-        acaciaShrub.leavesMeta = (byte)0;
+        acaciaShrub.logBlock = Blocks.LOG2.getDefaultState();
+        acaciaShrub.leavesBlock = Blocks.LEAVES2.getDefaultState();
         acaciaShrub.maxY = 160;
         acaciaShrub.strengthFactor = 3f;
         acaciaShrub.chance = 9;
 		this.addDeco(acaciaShrub);
 
 		TreeRTG acaciaTree = new TreeRTGAcaciaBucheri();
-		acaciaTree.logBlock = Blocks.log2;
-		acaciaTree.logMeta = (byte)0;
-		acaciaTree.leavesBlock = Blocks.leaves2;
-		acaciaTree.leavesMeta = (byte)0;
+		acaciaTree.logBlock = Blocks.LOG2.getDefaultState();
+		acaciaTree.leavesBlock = Blocks.LEAVES2.getDefaultState();
 		acaciaTree.minTrunkSize = 12;
 		acaciaTree.maxTrunkSize = 16;
 		this.addTree(acaciaTree);

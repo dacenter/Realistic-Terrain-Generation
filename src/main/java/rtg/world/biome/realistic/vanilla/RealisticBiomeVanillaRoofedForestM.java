@@ -43,17 +43,15 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeVanillaBas
 		 */
         
 		DecoBoulder decoBoulder = new DecoBoulder();
-		decoBoulder.boulderBlock = Blocks.mossy_cobblestone;
+		decoBoulder.boulderBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 		decoBoulder.chance = 20;
 		decoBoulder.maxY = 80;
 		decoBoulder.strengthFactor = 2f;
 		this.addDeco(decoBoulder);
 
 		TreeRTG mucronataTree = new TreeRTGRhizophoraMucronata(3, 4, 13f, 0.32f, 0.1f);
-		mucronataTree.logBlock = Blocks.log2;
-		mucronataTree.logMeta = (byte)1;
-		mucronataTree.leavesBlock = Blocks.leaves2;
-		mucronataTree.leavesMeta = (byte)1;
+		mucronataTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+		mucronataTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
 		mucronataTree.minTrunkSize = 3;
 		mucronataTree.maxTrunkSize = 4;
 		mucronataTree.minCrownSize = 7;
@@ -76,10 +74,8 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeVanillaBas
 		decoFallenTree.logCondition = LogCondition.ALWAYS_GENERATE;
 		decoFallenTree.logConditionChance = 1;
 		decoFallenTree.loops = 4;
-		decoFallenTree.logBlock = Blocks.log2;
-		decoFallenTree.logMeta = (byte)1;
-		decoFallenTree.leavesBlock = Blocks.leaves2;
-		decoFallenTree.leavesMeta = (byte)-1;
+		decoFallenTree.logBlock = Blocks.LOG2.getStateFromMeta(1);
+		decoFallenTree.leavesBlock = Blocks.LEAVES2.getStateFromMeta(1);
 		decoFallenTree.minSize = 4;
 		decoFallenTree.maxSize = 9;
 		this.addDeco(decoFallenTree, this.config._boolean(BiomeConfigVanillaRoofedForestM.decorationLogsId));
@@ -107,7 +103,8 @@ public class RealisticBiomeVanillaRoofedForestM extends RealisticBiomeVanillaBas
 		decoGrass.chance = 2;
         this.addDeco(decoGrass);
         
-		DecoGrass decoFern = new DecoGrass(2);
+		DecoGrass decoFern = new DecoGrass();
+		decoFern.block = Blocks.TALLGRASS.getStateFromMeta(2);
 		decoFern.maxY = 128;
 		decoFern.strengthFactor = 4f;
 		decoFern.chance = 2;
