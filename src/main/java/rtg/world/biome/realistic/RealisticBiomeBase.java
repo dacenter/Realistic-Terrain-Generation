@@ -273,7 +273,7 @@ public class RealisticBiomeBase
         }
     }
     
-    public void rPopulatePostDecorate(IChunkProvider ichunkprovider, World worldObj, Random rand, int chunkX, int chunkZ, boolean flag)
+    public void rPopulatePostDecorate(IChunkGenerator ichunkprovider, World worldObj, Random rand, int chunkX, int chunkZ, boolean flag)
     {
 
     }
