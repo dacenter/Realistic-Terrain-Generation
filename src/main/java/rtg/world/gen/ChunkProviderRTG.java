@@ -49,6 +49,7 @@ import rtg.api.biome.BiomeConfig;
 import rtg.config.rtg.ConfigRTG;
 import rtg.util.Acceptor;
 import rtg.util.Accessor;
+import rtg.util.BiomeUtils;
 import rtg.util.CanyonColour;
 import rtg.util.CellNoise;
 import rtg.util.Compass;
@@ -438,7 +439,7 @@ public class ChunkProviderRTG implements IChunkGenerator
 
     public String description(float [] biomeArray) {
         String result = "";
-        for (int i = 0 ; i < Biome.getBiomeGenArray().length; i ++) {
+        for (int i = 0 ; i < BiomeUtils.getRegisteredBiomes().length; i ++) {
             if (biomeArray[i]>0) {
                 result += " " + i + " " + biomeArray[i];
             }

@@ -5,6 +5,7 @@ import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 
 import rtg.config.rtg.ConfigRTG;
+import rtg.util.BiomeUtils;
 import rtg.util.CircularSearchCreator;
 import rtg.world.biome.realistic.RealisticBiomeBase;
 
@@ -49,8 +50,8 @@ public class BiomeAnalyzer {
     }
 
     private void determineRiverBiomes() {
-        riverBiome = new boolean[Biome.getBiomeGenArray().length];
-        for (int index = 0; index < Biome.getBiomeGenArray().length; index++) {
+        riverBiome = new boolean[BiomeUtils.getRegisteredBiomes().length];
+        for (int index = 0; index < BiomeUtils.getRegisteredBiomes().length; index++) {
             if (Biome.getBiome(index) == null) continue;
             if (Biome.getBiome(index).biomeName == null) continue;
             if (Biome.getBiome(index).biomeName.toLowerCase().contains("river")) {
@@ -60,8 +61,8 @@ public class BiomeAnalyzer {
     }
 
     private void determineOceanBiomes() {
-        oceanBiome = new boolean[Biome.getBiomeGenArray().length];
-        for (int index = 0; index < Biome.getBiomeGenArray().length; index++) {
+        oceanBiome = new boolean[BiomeUtils.getRegisteredBiomes().length];
+        for (int index = 0; index < BiomeUtils.getRegisteredBiomes().length; index++) {
             if (Biome.getBiome(index) == null) continue;
             if (Biome.getBiome(index).biomeName == null) continue;
             if (Biome.getBiome(index).biomeName.toLowerCase().contains("ocean")) {
@@ -78,8 +79,8 @@ public class BiomeAnalyzer {
     }
 
     private void determineSwampBiomes() {
-        swampBiome = new boolean[Biome.getBiomeGenArray().length];
-        for (int index = 0; index < Biome.getBiomeGenArray().length; index++) {
+        swampBiome = new boolean[BiomeUtils.getRegisteredBiomes().length];
+        for (int index = 0; index < BiomeUtils.getRegisteredBiomes().length; index++) {
             if (Biome.getBiome(index) == null) continue;
             if (Biome.getBiome(index).biomeName == null) continue;
             if (Biome.getBiome(index).biomeName.toLowerCase().contains("swamp")) {
@@ -136,8 +137,8 @@ public class BiomeAnalyzer {
         }
     }
     private void determineLandBiomes() {
-        landBiome = new boolean[Biome.getBiomeGenArray().length];
-        for (int index = 0; index < Biome.getBiomeGenArray().length; index++) {
+        landBiome = new boolean[BiomeUtils.getRegisteredBiomes().length];
+        for (int index = 0; index < BiomeUtils.getRegisteredBiomes().length; index++) {
             if (!oceanBiome[index]) {
                 if (!riverBiome[index]) {
                      if (Biome.getBiome(index) == null) continue;
@@ -153,8 +154,8 @@ public class BiomeAnalyzer {
     }
 
     private void determineBeachBiomes() {
-        beachBiome = new boolean[Biome.getBiomeGenArray().length];
-        for (int index = 0; index < Biome.getBiomeGenArray().length; index++) {
+        beachBiome = new boolean[BiomeUtils.getRegisteredBiomes().length];
+        for (int index = 0; index < BiomeUtils.getRegisteredBiomes().length; index++) {
             if (Biome.getBiome(index) == null) continue;
             if (Biome.getBiome(index).biomeName == null) continue;
             if (Biome.getBiome(index).biomeName.toLowerCase().contains("beach")) {
@@ -167,8 +168,8 @@ public class BiomeAnalyzer {
     }
 
     private void determinePreferredBeaches() {
-        preferredBeach = new int[Biome.getBiomeGenArray().length];
-        for (int index = 0; index < Biome.getBiomeGenArray().length; index++){
+        preferredBeach = new int[BiomeUtils.getRegisteredBiomes().length];
+        for (int index = 0; index < BiomeUtils.getRegisteredBiomes().length; index++){
             if (Biome.getBiome(index) == null) continue;
             if (Biome.getBiome(index).biomeName == null) continue;
             RealisticBiomeBase realisticVersion = RealisticBiomeBase.getBiome(index);

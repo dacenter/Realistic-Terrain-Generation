@@ -1,8 +1,7 @@
 
 package rtg.world.gen;
 
-import net.minecraft.world.biome.Biome;
-
+import rtg.util.BiomeUtils;
 import rtg.util.CellNoise;
 import rtg.util.OpenSimplexNoise;
 import rtg.util.PlaneLocation;
@@ -23,7 +22,7 @@ public class LandscapeGenerator {
     private float[] [] weightings;
     private final OpenSimplexNoise simplex;
     private final CellNoise cell;
-    private float [] weightedBiomes = new float [Biome.getBiomeGenArray().length];
+    private float [] weightedBiomes = new float [BiomeUtils.getRegisteredBiomes().length];
     private BiomeAnalyzer analyzer = new BiomeAnalyzer();
     private TimedHashMap<PlaneLocation,ChunkLandscape> storage = new TimedHashMap<PlaneLocation,ChunkLandscape>(60*1000);
     
@@ -74,7 +73,7 @@ public class LandscapeGenerator {
         int chunkX = worldX&15;
         int chunkY = worldY&15;
         ChunkLandscape target = this.landscape(cmr, worldX-chunkX, worldY-chunkY);
-        return target.biome[chunkX*16+chunkY].baseBiome.biomeID;
+        return BiomeUtils.getId(target.biome[chunkX*16+chunkY].baseBiome);
     }
     
     public synchronized ChunkLandscape landscape(RTGBiomeProvider cmr, int worldX, int worldY) {
@@ -97,7 +96,7 @@ public class LandscapeGenerator {
     	{
     		for(int j = -sampleSize; j < sampleSize + 5; j++)
     		{
-    			biomeData[(i + sampleSize) * sampleArraySize + (j + sampleSize)] = cmr.getBiomeDataAt(x + ((i * 8)), y + ((j * 8))).baseBiome.biomeID;
+    			biomeData[(i + sampleSize) * sampleArraySize + (j + sampleSize)] = BiomeUtils.getId(cmr.getBiomeDataAt(x + ((i * 8)), y + ((j * 8))).baseBiome);
     		}
     	}
 
