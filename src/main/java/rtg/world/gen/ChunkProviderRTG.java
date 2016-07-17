@@ -560,12 +560,14 @@ public class ChunkProviderRTG implements IChunkGenerator
      *
      * Populates chunk with ores etc etc
      */
-    public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ){
+    @Override
+    public void populate(int chunkX, int chunkZ)
+    {
         // check if this is the master provider
         if (WorldTypeRTG.chunkProvider != this) return;
         //if (this.alreadyDecorated.contains(new PlaneLocation.Invariant(chunkX, chunkZ))) return;
-        if (this.neighborsDone(ichunkprovider, chunkX, chunkZ)) {
-            this.doPopulate(ichunkprovider, chunkX, chunkZ);
+        if (this.neighborsDone(this.worldObj.getChunkProvider(), chunkX, chunkZ)) {
+            this.doPopulate(this, chunkX, chunkZ);
         }
         clearDecorations(0);
     }
@@ -589,7 +591,7 @@ public class ChunkProviderRTG implements IChunkGenerator
                 removeFromDecorationList(location);
             }
             for (PlaneLocation location: toProcess) {
-                doPopulate(ichunkprovider,location.x(),location.z());
+                doPopulate(this,location.x(),location.z());
             }
             // and loop because the decorating might have created other chunks to decorate;
             toProcess = doableLocations(0);
@@ -604,7 +606,7 @@ public class ChunkProviderRTG implements IChunkGenerator
                 removeFromDecorationList(location);
             }
         for (PlaneLocation location: toProcess) {
-            doPopulate(ichunkprovider,location.x(),location.z());
+            doPopulate(this,location.x(),location.z());
         }
     }
 

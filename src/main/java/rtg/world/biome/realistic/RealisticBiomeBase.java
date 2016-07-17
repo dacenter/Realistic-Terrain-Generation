@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenMinable;
